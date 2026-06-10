@@ -1,0 +1,9 @@
+data/raw/
+data/processed/
+*.pt
+*.onnx
+__pycache__/
+*.pyc
+.env
+runs/
+fasalguard_env/
