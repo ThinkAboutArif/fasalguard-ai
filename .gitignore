@@ -9,3 +9,31 @@ runs/
 fasalguard_env/
 progress-log/
 files/
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+*.egg-info/
+
+# Data
+data/
+*.zip
+
+# Model weights
+*.pth
+*.onnx
+
+# Uploads
+app/uploads/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
