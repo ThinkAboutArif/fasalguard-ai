@@ -37,3 +37,8 @@ app/uploads/
 # OS
 .DS_Store
 Thumbs.db
+
+notepad .gitignore
+
+*.zip
+data/
