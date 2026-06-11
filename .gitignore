@@ -7,3 +7,5 @@ __pycache__/
 .env
 runs/
 fasalguard_env/
+progress-log/
+files/

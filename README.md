@@ -1,10 +1,6 @@
 \# FasalGuard AI
 
-
-
 AI-Powered Pest \& Disease Detection for KPK Crops, Pakistan.
-
-
 
 \## Crops Covered
 
@@ -15,8 +11,6 @@ AI-Powered Pest \& Disease Detection for KPK Crops, Pakistan.
 \- Cotton
 
 \- Tomato
-
-
 
 \## Classes Detected
 
@@ -40,8 +34,6 @@ AI-Powered Pest \& Disease Detection for KPK Crops, Pakistan.
 
 10\. Cotton Leaf Curl Virus
 
-
-
 \## Setup (Laptop)
 
 1\. Install Python 3.10
@@ -51,8 +43,6 @@ AI-Powered Pest \& Disease Detection for KPK Crops, Pakistan.
 3\. Activate: `fasalguard\_env\\Scripts\\activate`
 
 4\. Install libraries: `pip install -r requirements\_laptop.txt`
-
-
 
 \## Project Structure
 

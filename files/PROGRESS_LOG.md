@@ -1,6 +1,6 @@
 # FasalGuard AI — Progress Log
 
-> **AI Assistant Instructions:**  
+> **AI Assistant Instructions:**
 > Read this file at the start of every session. It tells you exactly what has been completed, what failed, and what to do next. After completing any step, update the relevant section immediately. Never skip updating this log.
 
 ---
@@ -9,107 +9,141 @@
 
 | Phase | Name | Status | Machine |
 |---|---|---|---|
-| Phase 0 | Environment Setup | ⬜ NOT STARTED | LAPTOP |
-| Phase 1 | Dataset Download & Organisation | ⬜ NOT STARTED | LAPTOP |
+| Phase 0 | Environment Setup | ✅ COMPLETE | LAPTOP |
+| Phase 1 | Dataset Download & Organisation | 🔄 IN PROGRESS | LAPTOP |
 | Phase 2 | Data Cleaning | ⬜ NOT STARTED | LAPTOP |
-| Phase 3 | Data Verification | ⬜ NOT STARTED | LAPTOP |
+| Phase 3 | Data Verification & Split | ⬜ NOT STARTED | LAPTOP |
 | Phase 4 | Model Training | ⬜ NOT STARTED | GPU SYSTEM |
 | Phase 5 | Model Export & Transfer | ⬜ NOT STARTED | GPU SYSTEM → LAPTOP |
 | Phase 6 | Flask Web App | ⬜ NOT STARTED | LAPTOP |
-| Phase 7 | Integration & Testing | ⬜ NOT STARTED | LAPTOP |
-| Phase 8 | GitHub & Final Commit | ⬜ NOT STARTED | LAPTOP |
+| Phase 7 | Model Integration & Testing | ⬜ NOT STARTED | LAPTOP |
+| Phase 8 | GitHub Final Commit | ⬜ NOT STARTED | LAPTOP |
 
 **Status Key:** ⬜ Not Started | 🔄 In Progress | ✅ Complete | ❌ Blocked
 
 ---
 
-## Current Session
+## What To Do Next (Read This First)
 
-**Date:** ___________  
-**Machine:** ___________  
-**Working On:** ___________  
-**Resume Point:** ___________
-
----
-
-## Phase 0: Environment Setup [LAPTOP]
-
-**Status:** ⬜ NOT STARTED
-
-### Steps Checklist
-- [ ] Python 3.10 installed and verified (`python --version` shows 3.10.x)
-- [ ] pip verified (`pip --version`)
-- [ ] Project folder created at: ___________
-- [ ] Virtual environment created (`fasalguard_env`)
-- [ ] Virtual environment activated
-- [ ] requirements_laptop.txt created
-- [ ] All laptop libraries installed with no errors
-- [ ] Git installed and verified (`git --version`)
-- [ ] GitHub account ready (username: ___________)
-- [ ] Repository created: `fasalguard-ai`
-- [ ] Local repo initialised and connected to GitHub
-- [ ] Initial commit pushed
-
-### Notes / Errors Encountered
-```
-(record any errors and how they were fixed here)
-```
+**Current phase:** Phase 1 — Dataset Organisation  
+**Current machine:** LAPTOP  
+**Next action:** Run `organise_data.py` to rename the 38 PlantVillage folders into clean class names and copy images into `data/processed/` — then run `check_balance.py` to see image counts per class.
 
 ---
 
-## Phase 1: Dataset Download & Organisation [LAPTOP]
+## Phase 0: Environment Setup [LAPTOP] — ✅ COMPLETE
 
-**Status:** ⬜ NOT STARTED
+### What Was Done
+- Python installed and working
+- Project folder: `C:\Users\dhhdb\Desktop\fasalguard\`
+- Virtual environment created and named: `fasalguard_env`
+- Virtual environment is activated (prompt shows `(fasalguard_env)`)
+- GitHub repository created: https://github.com/ThinkAboutArif/fasalguard-ai.git
+- Local repo connected to GitHub
+- 2 commits already pushed to GitHub
 
-### Steps Checklist
+### Notes
+- No errors encountered in Phase 0
 
-#### PlantVillage Dataset
-- [ ] Kaggle account created / logged in
-- [ ] Kaggle API token downloaded (kaggle.json)
-- [ ] PlantVillage dataset downloaded (URL: https://www.kaggle.com/datasets/abdallahalidev/plantvillage-dataset)
-- [ ] Extracted to: `data/raw/plantvillage/`
-- [ ] Verified folder count inside: ___________ folders
-- [ ] Identified correct class folders:
-  - [ ] Tomato___Early_blight → found, image count: ___
-  - [ ] Tomato___Late_blight → found, image count: ___
-  - [ ] Tomato___Tomato_Yellow_Leaf_Curl_Virus → found, image count: ___
-  - [ ] Tomato___Spider_mites Two-spotted_spider_mite → found, image count: ___
-  - [ ] Corn_(maize)___Common_rust_ → found, image count: ___
-  - [ ] Corn_(maize)___Northern_Leaf_Blight → found, image count: ___
-  - [ ] Tomato___healthy → found, image count: ___
-  - [ ] Corn_(maize)___healthy → found, image count: ___
+---
 
-#### Roboflow Datasets
-- [ ] Roboflow account created at roboflow.com
-- [ ] Wheat rust dataset found and downloaded (YOLO format)
-  - Dataset name used: ___________
-  - Image count: ___________
-- [ ] Aphid dataset found and downloaded (YOLO format)
-  - Dataset name used: ___________
-  - Image count: ___________
-- [ ] Cotton leaf curl dataset found and downloaded (YOLO format)
-  - Dataset name used: ___________
-  - Image count: ___________
-- [ ] All Roboflow datasets extracted to `data/raw/roboflow_*/`
+## Phase 1: Dataset Download & Organisation [LAPTOP] — 🔄 IN PROGRESS
 
-#### Folder Organisation
-- [ ] `harmonise_data.py` script written
-- [ ] Script run successfully — all images copied to `data/processed/` with correct class names
-- [ ] Verified all 10 class folders exist in `data/processed/`
+### What Was Done
+- PlantVillage dataset downloaded from Kaggle
+- Extracted to: `C:\Users\dhhdb\Desktop\fasalguard\data\raw\plantvillage\`
+- All 38 class folders confirmed present
 
-### Class Image Counts After Organisation
-| Class | Count | Enough? (need 200+) |
+### 38 Folders Confirmed Present
+```
+Apple___Apple_scab
+Apple___Black_rot
+Apple___Cedar_apple_rust
+Apple___healthy
+Blueberry___healthy
+Cherry_(including_sour)___healthy
+Cherry_(including_sour)___Powdery_mildew
+Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot
+Corn_(maize)___Common_rust_
+Corn_(maize)___healthy
+Corn_(maize)___Northern_Leaf_Blight
+Grape___Black_rot
+Grape___Esca_(Black_Measles)
+Grape___healthy
+Grape___Leaf_blight_(Isariopsis_Leaf_Spot)
+Orange___Haunglongbing_(Citrus_greening)
+Peach___Bacterial_spot
+Peach___healthy
+Pepper,_bell___Bacterial_spot
+Pepper,_bell___healthy
+Potato___Early_blight
+Potato___healthy
+Potato___Late_blight
+Raspberry___healthy
+Soybean___healthy
+Squash___Powdery_mildew
+Strawberry___healthy
+Strawberry___Leaf_scorch
+Tomato___Bacterial_spot
+Tomato___Early_blight
+Tomato___healthy
+Tomato___Late_blight
+Tomato___Leaf_Mold
+Tomato___Septoria_leaf_spot
+Tomato___Spider_mites Two-spotted_spider_mite
+Tomato___Target_Spot
+Tomato___Tomato_mosaic_virus
+Tomato___Tomato_Yellow_Leaf_Curl_Virus
+```
+
+### What Is Still Needed to Complete Phase 1
+- [ ] `scripts/organise_data.py` written and run — copies+renames images to `data/processed/`
+- [ ] `scripts/check_balance.py` written and run — shows image count per class
+- [ ] All 38 class folders confirmed in `data/processed/`
+- [ ] Image counts per class recorded in the table below
+- [ ] GitHub commit: `data: plantvillage dataset organised into processed folder`
+
+### Class Image Counts (Fill After organise_data.py Runs)
+| Class Name | Image Count | Enough? (200+ needed) |
 |---|---|---|
-| healthy | ___ | ___ |
-| tomato_early_blight | ___ | ___ |
-| tomato_late_blight | ___ | ___ |
-| tomato_yellow_leaf_curl_virus | ___ | ___ |
+| apple_scab | ___ | ___ |
+| apple_black_rot | ___ | ___ |
+| apple_cedar_rust | ___ | ___ |
+| apple_healthy | ___ | ___ |
+| blueberry_healthy | ___ | ___ |
+| cherry_healthy | ___ | ___ |
+| cherry_powdery_mildew | ___ | ___ |
+| maize_cercospora | ___ | ___ |
 | maize_common_rust | ___ | ___ |
+| maize_healthy | ___ | ___ |
 | maize_northern_blight | ___ | ___ |
-| wheat_rust_yellow | ___ | ___ |
-| aphid | ___ | ___ |
-| spider_mite | ___ | ___ |
-| cotton_leaf_curl_virus | ___ | ___ |
+| grape_black_rot | ___ | ___ |
+| grape_esca | ___ | ___ |
+| grape_healthy | ___ | ___ |
+| grape_leaf_blight | ___ | ___ |
+| orange_citrus_greening | ___ | ___ |
+| peach_bacterial_spot | ___ | ___ |
+| peach_healthy | ___ | ___ |
+| pepper_bacterial_spot | ___ | ___ |
+| pepper_healthy | ___ | ___ |
+| potato_early_blight | ___ | ___ |
+| potato_healthy | ___ | ___ |
+| potato_late_blight | ___ | ___ |
+| raspberry_healthy | ___ | ___ |
+| soybean_healthy | ___ | ___ |
+| squash_powdery_mildew | ___ | ___ |
+| strawberry_healthy | ___ | ___ |
+| strawberry_leaf_scorch | ___ | ___ |
+| tomato_bacterial_spot | ___ | ___ |
+| tomato_early_blight | ___ | ___ |
+| tomato_healthy | ___ | ___ |
+| tomato_late_blight | ___ | ___ |
+| tomato_leaf_mold | ___ | ___ |
+| tomato_septoria | ___ | ___ |
+| tomato_spider_mite | ___ | ___ |
+| tomato_target_spot | ___ | ___ |
+| tomato_mosaic_virus | ___ | ___ |
+| tomato_yellow_leaf_curl | ___ | ___ |
 
 ### Notes / Errors Encountered
 ```
@@ -118,34 +152,60 @@
 
 ---
 
-## Phase 2: Data Cleaning [LAPTOP]
-
-**Status:** ⬜ NOT STARTED
+## Phase 2: Data Cleaning [LAPTOP] — ⬜ NOT STARTED
 
 ### Steps Checklist
-- [ ] `scripts/clean_data.py` written
-- [ ] Corrupt image removal run — removed: ___ images
-- [ ] Small image removal run (under 100x100px) — removed: ___ images
-- [ ] Blurry image removal run — removed: ___ images
-- [ ] Duplicate removal run — removed: ___ images
-- [ ] `scripts/check_balance.py` run — chart generated
-- [ ] Class balance reviewed — any classes under 200 images? List: ___________
-- [ ] Augmentation run for underrepresented classes (if needed)
-- [ ] Final image counts recorded (see table below)
+- [ ] `scripts/clean_data.py` written and run
+  - Corrupt images removed: ___
+  - Images under 100x100px removed: ___
+  - Blurry images removed: ___
+- [ ] `scripts/check_balance.py` run after cleaning — bar chart saved
+- [ ] Any class under 200 images after cleaning? List: ___________
+- [ ] If yes: augmentation script written and run for those classes
+- [ ] Final counts recorded in table below
+- [ ] GitHub commit: `data: cleaning scripts and verified class balance`
 
-### Final Clean Dataset Counts
-| Class | Before Cleaning | After Cleaning | Augmented To |
+### Clean Dataset Counts (Fill After Cleaning)
+| Class | Before | After Cleaning | Status |
 |---|---|---|---|
-| healthy | ___ | ___ | ___ |
-| tomato_early_blight | ___ | ___ | ___ |
-| tomato_late_blight | ___ | ___ | ___ |
-| tomato_yellow_leaf_curl_virus | ___ | ___ | ___ |
+| apple_scab | ___ | ___ | ___ |
+| apple_black_rot | ___ | ___ | ___ |
+| apple_cedar_rust | ___ | ___ | ___ |
+| apple_healthy | ___ | ___ | ___ |
+| blueberry_healthy | ___ | ___ | ___ |
+| cherry_healthy | ___ | ___ | ___ |
+| cherry_powdery_mildew | ___ | ___ | ___ |
+| maize_cercospora | ___ | ___ | ___ |
 | maize_common_rust | ___ | ___ | ___ |
+| maize_healthy | ___ | ___ | ___ |
 | maize_northern_blight | ___ | ___ | ___ |
-| wheat_rust_yellow | ___ | ___ | ___ |
-| aphid | ___ | ___ | ___ |
-| spider_mite | ___ | ___ | ___ |
-| cotton_leaf_curl_virus | ___ | ___ | ___ |
+| grape_black_rot | ___ | ___ | ___ |
+| grape_esca | ___ | ___ | ___ |
+| grape_healthy | ___ | ___ | ___ |
+| grape_leaf_blight | ___ | ___ | ___ |
+| orange_citrus_greening | ___ | ___ | ___ |
+| peach_bacterial_spot | ___ | ___ | ___ |
+| peach_healthy | ___ | ___ | ___ |
+| pepper_bacterial_spot | ___ | ___ | ___ |
+| pepper_healthy | ___ | ___ | ___ |
+| potato_early_blight | ___ | ___ | ___ |
+| potato_healthy | ___ | ___ | ___ |
+| potato_late_blight | ___ | ___ | ___ |
+| raspberry_healthy | ___ | ___ | ___ |
+| soybean_healthy | ___ | ___ | ___ |
+| squash_powdery_mildew | ___ | ___ | ___ |
+| strawberry_healthy | ___ | ___ | ___ |
+| strawberry_leaf_scorch | ___ | ___ | ___ |
+| tomato_bacterial_spot | ___ | ___ | ___ |
+| tomato_early_blight | ___ | ___ | ___ |
+| tomato_healthy | ___ | ___ | ___ |
+| tomato_late_blight | ___ | ___ | ___ |
+| tomato_leaf_mold | ___ | ___ | ___ |
+| tomato_septoria | ___ | ___ | ___ |
+| tomato_spider_mite | ___ | ___ | ___ |
+| tomato_target_spot | ___ | ___ | ___ |
+| tomato_mosaic_virus | ___ | ___ | ___ |
+| tomato_yellow_leaf_curl | ___ | ___ | ___ |
 | **TOTAL** | ___ | ___ | ___ |
 
 ### Notes / Errors Encountered
@@ -155,19 +215,18 @@
 
 ---
 
-## Phase 3: Data Verification [LAPTOP]
-
-**Status:** ⬜ NOT STARTED
+## Phase 3: Data Verification & Split [LAPTOP] — ⬜ NOT STARTED
 
 ### Steps Checklist
-- [ ] `scripts/split_data.py` run — 80/10/10 split done
-- [ ] Train folder image count: ___
-- [ ] Val folder image count: ___
-- [ ] Test folder image count: ___
-- [ ] `data.yaml` file created and verified
-- [ ] Spot check done — manually viewed 5 images per class, labels look correct: YES / NO
+- [ ] `scripts/split_data.py` written and run — 80/10/10 split created
+- [ ] Train image count: ___
+- [ ] Val image count: ___
+- [ ] Test image count: ___
+- [ ] `training/class_names.json` created with all 38 class names in order
+- [ ] Manual spot check: 5 random images per class reviewed visually — OK? YES / NO
 - [ ] Data folder zipped for transfer to GPU system
 - [ ] Zip file size: ___ GB
+- [ ] GitHub commit: `data: train/val/test split complete, class_names.json added`
 
 ### Notes / Errors Encountered
 ```
@@ -176,54 +235,31 @@
 
 ---
 
-## Phase 4: Model Training [GPU SYSTEM]
-
-**Status:** ⬜ NOT STARTED
+## Phase 4: Model Training [GPU SYSTEM] — ⬜ NOT STARTED
 
 ### Steps Checklist
 - [ ] Logged in to GPU system at school
-- [ ] Python 3.10 verified on GPU system
-- [ ] PyTorch with CUDA installed — verified GPU is detected
-- [ ] GPU name detected: ___________
-- [ ] Ultralytics YOLOv8 installed
+- [ ] GPU detected — name: ___________
+- [ ] Python 3.10+ confirmed on GPU system
+- [ ] PyTorch with CUDA installed — GPU confirmed working in PyTorch
 - [ ] Data zip transferred to GPU system
-- [ ] Data extracted to correct folder
-- [ ] `data.yaml` path verified — points to correct folders
-- [ ] `training/train.py` script run
+- [ ] Data extracted, paths verified
+- [ ] `training/train.py` written
 - [ ] Training started — first epoch completed without error
-- [ ] Training completed — total epochs: ___
-- [ ] Training time: ___
-- [ ] Best weights saved at: `runs/train/fasalguard_v1/weights/best.pt`
+- [ ] Training completed
+  - Total epochs run: ___
+  - Training time: ___
+- [ ] Best model saved at: `training/runs/fasalguard_v1/best_model.pt`
 
 ### Training Results
-| Metric | Value | Acceptable? |
+| Metric | Value | Acceptable (≥85%)? |
 |---|---|---|
-| mAP50 | ___ | ___ |
-| mAP50-95 | ___ | ___ |
-| Precision | ___ | ___ |
-| Recall | ___ | ___ |
+| Final Validation Accuracy | ___ | ___ |
+| Best Validation Accuracy | ___ | ___ |
+| Final Training Loss | ___ | — |
 
-**mAP50 ≥ 70%?** YES / NO  
-**If NO:** Action taken: ___________
-
-### Notes / Errors Encountered
-```
-(record any errors and how they were fixed here)
-```
-
----
-
-## Phase 5: Model Export & Transfer [GPU SYSTEM → LAPTOP]
-
-**Status:** ⬜ NOT STARTED
-
-### Steps Checklist
-- [ ] Model exported to ONNX format (`best.onnx`)
-- [ ] ONNX file size: ___ MB
-- [ ] ONNX file transferred to laptop (method used: ___________)
-- [ ] ONNX file placed at: `app/model/best.onnx`
-- [ ] Test inference run on laptop with one image — works? YES / NO
-- [ ] Inference time on laptop CPU: ___ seconds
+**Accuracy ≥ 85%?** YES / NO  
+**If NO — action taken:** ___________
 
 ### Notes / Errors Encountered
 ```
@@ -232,19 +268,37 @@
 
 ---
 
-## Phase 6: Flask Web App [LAPTOP]
-
-**Status:** ⬜ NOT STARTED
+## Phase 5: Model Export & Transfer [GPU SYSTEM → LAPTOP] — ⬜ NOT STARTED
 
 ### Steps Checklist
-- [ ] `app/app.py` created
-- [ ] `app/templates/index.html` created (upload page)
-- [ ] `app/templates/result.html` created (results page)
-- [ ] `app/static/style.css` created
-- [ ] Flask app runs with `python app.py` — no errors
+- [ ] Model exported to TorchScript format: `fasalguard_model.pt`
+- [ ] `training/class_names.json` confirmed present alongside model
+- [ ] Test inference on GPU system with one image — correct prediction? YES / NO
+- [ ] Model file size: ___ MB
+- [ ] Transfer method used: ___________
+- [ ] Model placed on laptop at: `app/model/fasalguard_model.pt`
+- [ ] `class_names.json` placed at: `app/model/class_names.json`
+- [ ] Test inference on laptop CPU — works? YES / NO
+- [ ] CPU inference time: ___ seconds
+
+### Notes / Errors Encountered
+```
+(record any errors and how they were fixed here)
+```
+
+---
+
+## Phase 6: Flask Web App [LAPTOP] — ⬜ NOT STARTED
+
+### Steps Checklist
+- [ ] `app/app.py` created — Flask routing only, no model yet
+- [ ] Flask runs: `python app.py` — no errors
+- [ ] `app/templates/index.html` created — upload page
 - [ ] Upload page loads at http://localhost:5000
-- [ ] Can select and upload an image
-- [ ] Results page displays (even before model connected)
+- [ ] `app/static/style.css` created — green agriculture theme
+- [ ] `app/templates/result.html` created — results page
+- [ ] Results page renders correctly with dummy data
+- [ ] GitHub commit: `app: flask web app pages and styling complete`
 
 ### Notes / Errors Encountered
 ```
@@ -253,28 +307,33 @@
 
 ---
 
-## Phase 7: Integration & Testing [LAPTOP]
-
-**Status:** ⬜ NOT STARTED
+## Phase 7: Model Integration & Testing [LAPTOP] — ⬜ NOT STARTED
 
 ### Steps Checklist
-- [ ] ONNX model loading code added to app.py
+- [ ] Model loading code added to `app.py`
 - [ ] Inference function written and tested
-- [ ] Bounding box drawing on image working
+- [ ] Grad-CAM heatmap generation working
 - [ ] Severity calculation working
-- [ ] Treatment lookup returning correct text
-- [ ] End-to-end test: upload real tomato image → correct prediction
-- [ ] End-to-end test: upload real wheat image → correct prediction
-- [ ] End-to-end test: upload healthy leaf → "healthy" result
-- [ ] Tested with a bad image (no crop) — app doesn't crash
-- [ ] Inference time under 15 seconds on CPU: YES / NO
+- [ ] Treatment lookup returning correct text for all classes
+- [ ] End-to-end test with 10 demo images (see table below)
+- [ ] All 10 images give correct or sensible predictions
+- [ ] Inference time under 10 seconds on CPU: YES / NO
+- [ ] App does not crash on unexpected image: YES / NO
+- [ ] GitHub commit: `app: model integrated, grad-cam working, end-to-end tested`
 
-### Test Results
-| Image Used | Expected Result | Actual Result | Correct? |
-|---|---|---|---|
-| | | | |
-| | | | |
-| | | | |
+### Demo Image Test Results
+| # | Image | Expected | Actual | Correct? |
+|---|---|---|---|---|
+| 1 | tomato late blight | tomato_late_blight | ___ | ___ |
+| 2 | tomato healthy | tomato_healthy | ___ | ___ |
+| 3 | maize common rust | maize_common_rust | ___ | ___ |
+| 4 | potato late blight | potato_late_blight | ___ | ___ |
+| 5 | apple scab | apple_scab | ___ | ___ |
+| 6 | tomato yellow leaf curl | tomato_yellow_leaf_curl | ___ | ___ |
+| 7 | pepper bacterial spot | pepper_bacterial_spot | ___ | ___ |
+| 8 | grape black rot | grape_black_rot | ___ | ___ |
+| 9 | tomato spider mite | tomato_spider_mite | ___ | ___ |
+| 10 | maize northern blight | maize_northern_blight | ___ | ___ |
 
 ### Notes / Errors Encountered
 ```
@@ -283,20 +342,16 @@
 
 ---
 
-## Phase 8: GitHub & Final Commit [LAPTOP]
-
-**Status:** ⬜ NOT STARTED
+## Phase 8: GitHub Final Commit [LAPTOP] — ⬜ NOT STARTED
 
 ### Steps Checklist
-- [ ] .gitignore verified — no large files being tracked
-- [ ] README.md written with: project description, how to run, screenshots
-- [ ] All Python scripts committed
-- [ ] Web app files committed
-- [ ] data.yaml committed
-- [ ] requirements files committed
-- [ ] Final commit pushed to GitHub
-- [ ] GitHub repo URL: ___________
-- [ ] Repo is public and accessible
+- [ ] `.gitignore` verified — no datasets, no model weights, no pycache tracked
+- [ ] `README.md` written with description, setup steps, class list, screenshots
+- [ ] All scripts committed
+- [ ] All app files committed
+- [ ] Final commit pushed: `final: readme updated, project complete`
+- [ ] GitHub repo verified public and accessible
+- [ ] Repo URL confirmed: https://github.com/ThinkAboutArif/fasalguard-ai.git
 
 ### Notes / Errors Encountered
 ```
@@ -315,8 +370,6 @@
 
 ## Session History
 
-| Date | Machine | Phases Worked On | Completed Steps | Notes |
+| Date | Machine | Phase Worked On | Steps Completed | Notes |
 |---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
+| Wed | Laptop | 0 + Phase 1 start | Env setup, GitHub, PlantVillage download | 2 commits made |

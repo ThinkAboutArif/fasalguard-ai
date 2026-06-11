@@ -1,87 +1,87 @@
 # FasalGuard AI — Phase-by-Phase AI Prompts
 
-> **How to use this file:**  
-> Each section below contains the exact prompt to give to your AI assistant at the start of that phase. Copy the entire prompt including the lines above and below it. Start a new chat if your current one is getting too long — just paste the new phase prompt and attach FasalGuard_PRD.md and PROGRESS_LOG.md.
+> **How to use this file:**
+> Each section contains the exact prompt to paste into a new AI chat for that phase.
+> Always attach BOTH `FasalGuard_PRD.md` AND `PROGRESS_LOG.md` when starting any chat.
+> Copy the full prompt including all the lines inside the code block.
 
 ---
 
-## How to Start Any New Chat Session
+## HOW TO START ANY NEW CHAT SESSION
 
-Paste this at the very beginning of every new chat:
+Paste this at the very beginning of every new chat, then attach both files:
 
 ```
-I am working on a project called FasalGuard AI — an AI crop pest detection system. 
+I am working on a project called FasalGuard AI — an AI-powered crop disease detection web app.
 I am attaching two files:
-1. FasalGuard_PRD.md — the full project plan and architecture
-2. PROGRESS_LOG.md — what has been done so far and what is next
+1. FasalGuard_PRD.md — full project plan, architecture, all code references
+2. PROGRESS_LOG.md — exact record of what is done and what is next
 
-Please read both files carefully before saying anything. Then tell me:
-- What phase we are currently on
-- What the next step is
+Please read BOTH files fully before saying anything.
+Then tell me:
+- Which phase we are currently on
+- What the very next step is
 - Which machine I should be on (LAPTOP or GPU SYSTEM)
 
-Wait for me to confirm I am ready before giving any instructions.
-Remember: I am a first-time ML student. Explain everything step by step. 
-Do not move to the next step until I confirm the current one is working.
+Do not start any instructions until I confirm I am ready.
+
+My setup:
+- Laptop: Windows, CPU only, virtual environment called fasalguard_env
+- Project folder: C:\Users\dhhdb\Desktop\fasalguard\
+- GitHub: https://github.com/ThinkAboutArif/fasalguard-ai.git
+- School GPU system: NVIDIA GPU (model unknown), used for training only
+
+Rules you must follow for this entire conversation:
+1. One step at a time. Never give the next step until I confirm the current one works.
+2. Click-by-click instructions — tell me which folder to open, which command to run, what to look for.
+3. Put every command in a code block and explain what it does before I run it.
+4. After every step ask me to paste the output or confirm it worked.
+5. If I report an error, stop and fix it before anything else.
+6. After each completed phase, give me the exact git commit command to run.
+7. After each completed step, tell me exactly what to update in PROGRESS_LOG.md.
+8. Never assume a library is installed — always check first.
 ```
 
 ---
 
-## PHASE 0 PROMPT — Environment Setup [LAPTOP]
+## PHASE 1 PROMPT — Dataset Organisation [LAPTOP]
 
 ```
-I am starting Phase 0 of FasalGuard AI: Environment Setup.
-I am on my LAPTOP. It runs Windows [tell the AI if you use Mac or Linux instead].
-I have never set up a Python project before.
+I am continuing FasalGuard AI. I am on my LAPTOP.
 
-Here is what Phase 0 requires (from the PRD):
-- Install Python 3.10
-- Create the project folder structure
-- Set up a virtual environment
-- Install laptop libraries
-- Set up Git and GitHub
-- Create the fasalguard-ai repository
-- Make the first commit
+Phase 0 is complete. Phase 1 is in progress.
 
-Rules you must follow:
-1. One step at a time. Do not give me Step 2 until I confirm Step 1 is done.
-2. Give click-by-click instructions — tell me which website to open, which button to click, what to type.
-3. After each step, ask me to paste the output or confirm it worked before continuing.
-4. If I get an error, stop and help me fix it before moving on.
-5. After each completed step, tell me exactly what to write in PROGRESS_LOG.md.
+What is done so far in Phase 1:
+- PlantVillage dataset downloaded and extracted
+- Location: C:\Users\dhhdb\Desktop\fasalguard\data\raw\plantvillage\
+- All 38 folders are confirmed present
 
-Start with checking if Python is already installed. Give me the exact command to run.
-```
+What still needs to be done in Phase 1:
+1. Write and run organise_data.py — this should copy images from each of the 38
+   raw PlantVillage folders into data\processed\ using our clean class names
+   (the mapping of original folder names to clean class names is in FasalGuard_PRD.md
+   under "All 38 Classes")
+2. Write and run check_balance.py — show image count per class as a bar chart
+3. Record all image counts in PROGRESS_LOG.md
+4. Git commit when done
 
----
+Rules:
+1. One script at a time. Write organise_data.py first.
+2. Explain every single line of the script with a comment.
+3. Before I run it, tell me exactly what it will do and what the output should look like.
+4. After it runs, tell me how to verify it worked correctly.
+5. Do not write check_balance.py until organise_data.py is confirmed working.
+6. After both scripts work, tell me the exact git commit command to run.
+7. Tell me exactly what to fill in PROGRESS_LOG.md after each script.
 
-## PHASE 1 PROMPT — Dataset Download & Organisation [LAPTOP]
-
-```
-I am starting Phase 1 of FasalGuard AI: Dataset Download and Organisation.
-I am on my LAPTOP.
-Phase 0 is complete (environment and GitHub are set up).
-
-I need to download these datasets:
-1. PlantVillage from Kaggle
-2. Three datasets from Roboflow Universe (wheat rust, aphid, cotton leaf curl)
-
-Then I need to run a script to rename and organise all images into the correct 
-folder structure for training.
-
-The 10 classes I am targeting are listed in FasalGuard_PRD.md under "Target Classes".
-
-Rules you must follow:
-1. One step at a time. One dataset at a time.
-2. Click-by-click instructions — tell me exactly which website, which button, what to download.
-3. For Roboflow: tell me exactly what to search, which dataset to pick, and which export 
-   format to choose (it must be YOLOv8 format).
-4. After each download, tell me how to verify the files are correct before moving on.
-5. Write the harmonise_data.py script for me. Explain every line with a comment.
-6. After the script runs, tell me how to count the images per class to verify.
-7. Update PROGRESS_LOG.md — tell me exactly what to fill in after each dataset.
-
-Start with checking if I have a Kaggle account. Ask me.
+Start by showing me the complete organise_data.py script.
+The script must:
+- Read from: C:\Users\dhhdb\Desktop\fasalguard\data\raw\plantvillage\
+- Write to: C:\Users\dhhdb\Desktop\fasalguard\data\processed\
+- Create one subfolder per class using our clean names (e.g. tomato_early_blight)
+- Copy (not move) images so the raw data stays untouched
+- Print progress so I can see it working
+- At the end, print the count of images copied per class
 ```
 
 ---
@@ -89,58 +89,70 @@ Start with checking if I have a Kaggle account. Ask me.
 ## PHASE 2 PROMPT — Data Cleaning [LAPTOP]
 
 ```
-I am starting Phase 2 of FasalGuard AI: Data Cleaning.
-I am on my LAPTOP.
-Phases 0 and 1 are complete. All images are in data/processed/ organised by class.
+I am continuing FasalGuard AI. I am on my LAPTOP.
+Phases 0 and 1 are complete. Starting Phase 2: Data Cleaning.
 
-I need you to write me 3 Python scripts:
-1. clean_data.py — removes corrupt, blurry, and too-small images automatically
-2. check_balance.py — counts images per class and shows a bar chart
-3. (if needed) augment_data.py — increases image count for underrepresented classes
+Data is organised in: C:\Users\dhhdb\Desktop\fasalguard\data\processed\
+There are 38 class folders.
 
-Rules you must follow:
-1. Write one script at a time. Explain every single line with a comment above it.
-2. Before I run any script, tell me exactly what it will do and what output I should expect.
-3. After I run each script, ask me to paste the output so you can verify it worked.
-4. If any class has fewer than 200 images after cleaning, automatically write the 
-   augmentation script and tell me to run it.
-5. Never delete original files — scripts should move bad images to a 'rejected/' folder, 
-   not permanently delete them.
-6. After all cleaning is done, tell me exactly what to fill in PROGRESS_LOG.md.
+I need 3 scripts written one at a time:
+1. clean_data.py — automatically removes bad images (corrupt, too small, blurry)
+2. check_balance.py — counts images per class and shows a bar chart  
+3. augment_data.py — only needed if any class has fewer than 200 images after cleaning
 
-Start by asking me to run check_balance.py first so we can see the current state 
-before cleaning anything.
+Rules:
+1. Write clean_data.py first. Do not write the others until this one works.
+2. Explain every line with a comment.
+3. The script must MOVE bad images to a data\rejected\ folder — never permanently delete.
+   This way if something goes wrong we still have the originals.
+4. Print a summary at the end: how many images were moved out per class and why.
+5. After clean_data.py works, write check_balance.py.
+6. After check_balance.py runs, show me the counts.
+   If any class is under 200 images, immediately write augment_data.py for those classes.
+7. After all cleaning is done, tell me the exact git commit command.
+8. Tell me exactly what to fill in PROGRESS_LOG.md after each script.
+
+Thresholds to use in clean_data.py:
+- Minimum image size: 100 x 100 pixels (remove anything smaller)
+- Blur threshold: Laplacian variance below 50 (remove if blurrier than this)
+- Corrupt check: try to open with PIL, if it fails the image is corrupt — remove it
+
+Start by showing me the complete clean_data.py script.
 ```
 
 ---
 
-## PHASE 3 PROMPT — Data Verification & Split [LAPTOP]
+## PHASE 3 PROMPT — Data Split & Verification [LAPTOP]
 
 ```
-I am starting Phase 3 of FasalGuard AI: Data Verification and Train/Val/Test Split.
-I am on my LAPTOP.
-Phases 0, 1, and 2 are complete. Clean images are in data/processed/.
+I am continuing FasalGuard AI. I am on my LAPTOP.
+Phases 0, 1, and 2 are complete. Starting Phase 3: Data Split and Verification.
+
+Clean data is in: C:\Users\dhhdb\Desktop\fasalguard\data\processed\
+38 class folders, all with 200+ images.
 
 I need to:
-1. Split data into train (80%), val (10%), test (10%) folders
-2. Create the data.yaml file that tells YOLOv8 about our 10 classes
-3. Verify everything looks correct before transferring to the GPU system
-4. Zip the entire processed data folder for transfer
+1. Run split_data.py — splits each class into train (80%), val (10%), test (10%)
+   Result must be:
+   data\processed\train\<classname>\
+   data\processed\val\<classname>\
+   data\processed\test\<classname>\
+2. Create training\class_names.json — a JSON file listing all 38 class names
+   in the exact numbered order from FasalGuard_PRD.md (0 = apple_scab, 1 = apple_black_rot, etc.)
+3. Zip the entire data\processed\ folder for transfer to the GPU system
+4. Git commit
 
-Rules you must follow:
-1. Write the split_data.py script for me with comments on every line.
-2. After the split, show me the exact count per folder so I can verify.
-3. Write the data.yaml file for me — show me the exact content.
-4. Tell me how to do a manual spot check — I will open 5 images per class myself 
-   and confirm the labels match.
-5. Tell me how to zip the folder (exact command).
-6. Tell me what to fill in PROGRESS_LOG.md after each step.
+Rules:
+1. Write split_data.py first. Explain every line.
+2. The split must be RANDOM but REPRODUCIBLE — use random seed 42.
+3. After the split, print the count per folder (train/val/test) so I can verify.
+4. Then create class_names.json — show me the exact file content before I create it.
+5. Tell me the exact command to zip the data folder on Windows.
+6. After everything is done, tell me exactly what to fill in PROGRESS_LOG.md.
+7. Tell me the exact git commit command.
 
-Important: The bounding box labels (from Roboflow datasets) must be in the 
-labels/ folder mirroring the images/ folder structure. Verify this is correct.
-
-Start by asking me to show you the current folder structure 
-(I will run: tree data/processed/ or dir data/processed/ and paste the output).
+After this phase, I will transfer the zip to the school GPU system.
+Remind me to save the zip to a USB drive or upload to Google Drive.
 ```
 
 ---
@@ -148,36 +160,35 @@ Start by asking me to show you the current folder structure
 ## PHASE 4 PROMPT — Model Training [GPU SYSTEM]
 
 ```
-I am starting Phase 4 of FasalGuard AI: Model Training.
-I am now on the SCHOOL GPU SYSTEM (not my laptop).
-Phases 0-3 are complete on my laptop. I have a zip file of the cleaned dataset.
-
-This computer has an NVIDIA GPU. I do not know the exact model.
+I am continuing FasalGuard AI. I am now on the SCHOOL GPU SYSTEM.
+This is a Windows or Linux computer with an NVIDIA GPU.
 I have never trained a machine learning model before.
+
+Phases 0–3 are complete on my laptop. I have transferred the data zip to this machine.
 
 I need to:
 1. Verify the GPU is working
-2. Install Python, PyTorch with CUDA, and Ultralytics YOLOv8
-3. Extract my dataset zip
-4. Create the training script
-5. Run training and monitor it
-6. Understand the results
+2. Install Python, PyTorch with CUDA, and required libraries
+3. Extract the data zip
+4. Write and run the training script (EfficientNet-B0 on 38 classes)
+5. Monitor training and understand the output numbers
+6. Save the best model weights
 
-Rules you must follow:
-1. Start by helping me check what GPU this computer has (exact command).
+Rules:
+1. Start by helping me check what GPU this system has. Give me the exact command.
 2. One installation step at a time — verify each one before the next.
-3. Before starting training, verify the data.yaml paths are correct for THIS computer.
-4. Show me how to start training and what the output should look like.
-5. Explain what the numbers mean during training (mAP, precision, recall, loss).
-6. If training crashes, ask me to paste the error immediately.
-7. Tell me what counts as a good result and what to do if results are bad.
-8. After training, tell me where the best.pt file is saved.
-9. Tell me exactly what to fill in PROGRESS_LOG.md.
+3. Explain what each number means during training (loss, accuracy, epoch).
+4. If training crashes, ask me to paste the full error before anything else.
+5. Tell me what good results look like (we need validation accuracy ≥ 85%).
+6. If results are below 85%, tell me exactly what to change and how to retrain.
+7. After training, tell me exactly where the best model file is saved.
+8. Tell me exactly what to fill in PROGRESS_LOG.md.
 
-Important: If GPU runs out of memory, reduce batch size from 16 to 8. 
-Tell me how to do this.
+Training model: EfficientNet-B0 (pretrained on ImageNet, fine-tuned on our 38 classes)
+The full training configuration is in FasalGuard_PRD.md under "Training Configuration".
 
-Start by asking me to paste the output of: nvidia-smi
+Start by asking me to run: nvidia-smi
+Then paste the output and we will go from there.
 ```
 
 ---
@@ -185,30 +196,29 @@ Start by asking me to paste the output of: nvidia-smi
 ## PHASE 5 PROMPT — Model Export & Transfer [GPU SYSTEM → LAPTOP]
 
 ```
-I am starting Phase 5 of FasalGuard AI: Model Export and Transfer.
-I am on the SCHOOL GPU SYSTEM.
-Training is complete. The best.pt file is saved in runs/train/fasalguard_v1/weights/
+I am continuing FasalGuard AI. I am on the SCHOOL GPU SYSTEM.
+Training is complete. The best model is saved as best_model.pt.
+Validation accuracy achieved: [FILL IN YOUR RESULT]
 
 I need to:
-1. Export the trained model from .pt format to ONNX format
-   (ONNX runs on CPU — this is what my laptop will use)
-2. Verify the ONNX export worked
-3. Test inference with one image on the GPU system
-4. Transfer the ONNX file to my laptop
+1. Export the trained model to TorchScript format so it runs on CPU
+2. Test the exported model with one image on this machine
+3. Transfer two files to my laptop:
+   - fasalguard_model.pt (the exported model)
+   - class_names.json (the 38 class names in order)
+4. Test inference on my laptop CPU to confirm it works
 
-Rules you must follow:
-1. Write the export script for me with explanations.
-2. After export, tell me how to verify the file is valid.
-3. Give me a quick test script to run inference on one image — 
-   tell me what the output should look like.
-4. Tell me the best method to transfer the file 
-   (USB drive, Google Drive, or email — ask me which I prefer).
-5. After transfer, tell me how to verify it works on my laptop CPU.
-6. Tell me what to fill in PROGRESS_LOG.md.
+Rules:
+1. Write the export script with comments on every line.
+2. After export, show me how to do a quick test inference on this machine first.
+3. Tell me the exact two files I need to copy and where they go on my laptop:
+   - Model goes to: app\model\fasalguard_model.pt
+   - Class names go to: app\model\class_names.json
+4. After I transfer and test on laptop, tell me what a successful inference output looks like.
+5. Tell me the CPU inference time I should expect (should be under 10 seconds).
+6. Tell me exactly what to fill in PROGRESS_LOG.md.
 
-The ONNX file should end up at: app/model/best.onnx on my laptop.
-
-Start by showing me the exact export command.
+Start by showing me the complete export script.
 ```
 
 ---
@@ -216,33 +226,30 @@ Start by showing me the exact export command.
 ## PHASE 6 PROMPT — Flask Web App [LAPTOP]
 
 ```
-I am starting Phase 6 of FasalGuard AI: Building the Flask Web Application.
-I am on my LAPTOP.
-The trained model (best.onnx) is in app/model/
+I am continuing FasalGuard AI. I am back on my LAPTOP.
+Phases 0–5 are complete. The trained model is at app\model\fasalguard_model.pt
 
-I need to build a simple website where:
-- Page 1: Upload a crop image (drag and drop or browse)
-- Page 2: See the result with bounding box image, pest name, severity, and treatment
+I need to build the Flask web application. This is a Python web app with two pages:
+Page 1 (index.html): Upload a crop leaf image
+Page 2 (result.html): Show the prediction, Grad-CAM heatmap, severity, and treatment
 
-Tech: Flask (Python), plain HTML/CSS/JavaScript. No React, no complicated frameworks.
+The full design spec is in FasalGuard_PRD.md under "Web App Pages".
+The treatment dictionary for all 38 classes is in FasalGuard_PRD.md under "Treatment Dictionary".
 
-Rules you must follow:
-1. Build one file at a time. Show me the complete file content.
-2. After each file, tell me how to test that specific part before moving on.
-3. The design should look clean and professional — use green as main colour 
-   (agriculture theme).
-4. Explain what each section of code does.
-5. Do not use any CSS framework (no Bootstrap) — write plain CSS.
-6. The app must work fully offline after setup.
-7. Tell me what to fill in PROGRESS_LOG.md after each file.
+Rules:
+1. Build one file at a time in this exact order:
+   a. app\app.py (Flask routes only, no model yet — just to confirm Flask works)
+   b. app\templates\index.html
+   c. app\static\style.css
+   d. app\templates\result.html
+2. After each file, tell me how to test that specific file before moving to the next.
+3. Show me the complete file content every time — no partial code.
+4. Design must use dark green (#1a5c2e) as the main colour — agriculture theme.
+5. No CSS frameworks like Bootstrap — plain CSS only.
+6. After all 4 files are done and tested, give me the git commit command.
+7. Tell me exactly what to fill in PROGRESS_LOG.md after each file.
 
-Build in this order:
-1. app.py (Flask server, no model yet — just routing)
-2. index.html (upload page)
-3. style.css (styling)
-4. result.html (results page)
-
-Start with app.py. Show me the complete file.
+Start with app\app.py. Show me the complete file.
 ```
 
 ---
@@ -250,120 +257,142 @@ Start with app.py. Show me the complete file.
 ## PHASE 7 PROMPT — Model Integration & Testing [LAPTOP]
 
 ```
-I am starting Phase 7 of FasalGuard AI: Model Integration and Testing.
-I am on my LAPTOP.
-The Flask web app is built and running. The model is at app/model/best.onnx.
-The treatment dictionary is in FasalGuard_PRD.md.
+I am continuing FasalGuard AI. I am on my LAPTOP.
+The Flask web app is built and running at http://localhost:5000
+The model is at app\model\fasalguard_model.pt
+The class names are at app\model\class_names.json
 
-I need to:
-1. Add the ONNX model loading code to app.py
-2. Write the inference function (run the image through the model)
-3. Write the bounding box drawing function
-4. Write the severity calculation function
-5. Connect everything so uploading an image shows a real prediction
+I now need to connect the model to the web app so uploading an image gives a real prediction.
 
-Rules you must follow:
+I need these functions added to app.py:
+1. Model loading (runs once when Flask starts)
+2. Image preprocessing (resize, normalise to match training transforms)
+3. Inference function (runs image through EfficientNet-B0, returns class + confidence)
+4. Grad-CAM heatmap generation (creates heatmap image showing where model looked)
+5. Severity calculation (based on confidence score — logic in FasalGuard_PRD.md)
+6. Treatment lookup (use the full dictionary from FasalGuard_PRD.md)
+
+Rules:
 1. Add one function at a time. Test each before adding the next.
-2. Use OpenCV for image processing and drawing bounding boxes.
-3. Use onnxruntime for running the ONNX model.
-4. For each function, explain what goes in and what comes out.
-5. Give me specific test images to download to test each class.
-6. If the model gives wrong predictions, tell me how to diagnose why.
-7. After integration, give me a testing checklist of 10 images to upload.
-8. Tell me what to fill in PROGRESS_LOG.md after each successful test.
+2. Show me the complete updated app.py after each addition — not just the new part.
+3. Use pytorch-grad-cam library for Grad-CAM (install it first, verify installation).
+4. After full integration, give me the 10 test images to download from Google Images
+   (listed in FasalGuard_PRD.md under "Presentation & Live Demo Plan").
+5. Walk me through testing each image one by one.
+6. If any prediction is wrong, help me diagnose why before moving on.
+7. After all 10 tests pass, give me the git commit command.
+8. Tell me exactly what to fill in PROGRESS_LOG.md after each function and each test.
 
-The severity logic should be:
-- Low: 1 detection, confidence < 60%
-- Medium: 1-2 detections, confidence 60-80%  
-- High: 3+ detections OR confidence > 80%
-
-Start by showing me the updated app.py with model loading added.
+Start by showing me the updated app.py with just the model loading function added first.
 ```
 
 ---
 
-## PHASE 8 PROMPT — GitHub Final Commit [LAPTOP]
+## PHASE 8 PROMPT — Final GitHub Commit [LAPTOP]
 
 ```
-I am starting Phase 8 of FasalGuard AI: Final GitHub Commit and Cleanup.
-I am on my LAPTOP.
-The full system is working. I need to clean up and make the final submission commit.
+I am on the final phase of FasalGuard AI. I am on my LAPTOP.
+Everything is working. I need to clean up and make the final submission commit.
 
 I need to:
-1. Verify .gitignore is correct (no large files, no model weights, no datasets)
-2. Write a good README.md for the GitHub repo
-3. Clean up any unnecessary files
-4. Make the final commit with a good commit message
-5. Push to GitHub and verify the repo looks good
+1. Verify .gitignore is correct — no datasets, model weights, or pycache getting committed
+2. Write a professional README.md for the GitHub repo
+3. Make the final commit and push everything
+4. Do a final walkthrough check for the presentation
 
-Rules you must follow:
-1. Show me the .gitignore file first — I will verify before any commit.
+Rules:
+1. Show me the .gitignore content first — I verify before any commit.
 2. Write a complete README.md that includes:
-   - Project title and description
-   - What it does (with one screenshot placeholder)
-   - How to install and run it (step by step)
-   - The 10 classes it detects
+   - Project title with a one-line description
+   - What it does (3-4 sentences)
+   - Screenshot placeholder section
+   - Step-by-step setup and run instructions (so anyone can run it)
+   - List of all 38 detectable diseases
    - Tech stack
-   - My name and university
-3. After the final push, tell me how to verify the repo is correct on GitHub.
-4. Give me a final checklist of everything that should be working for the presentation.
-5. Mark all phases as Complete in PROGRESS_LOG.md.
+   - My name: Arif, CECOS University Peshawar
+3. After final push, give me a 10-point presentation checklist.
+4. Mark all phases as Complete (✅) in PROGRESS_LOG.md.
+5. Final commit message: "final: readme updated, project complete"
 
-Start by showing me the final .gitignore content.
+Start by showing me the .gitignore file content.
 ```
 
 ---
 
 ## EMERGENCY PROMPTS
 
-### If You Get Stuck Mid-Phase
+### If You Get an Error at Any Step
 
 ```
-I am stuck in Phase [NUMBER] of FasalGuard AI. Here is the error I am getting:
+I am stuck in Phase [NUMBER] of FasalGuard AI on my [LAPTOP / GPU SYSTEM].
 
-[PASTE ERROR HERE]
+I was trying to: [DESCRIBE WHAT YOU WERE DOING IN ONE SENTENCE]
+The last command I ran was:
+[PASTE COMMAND HERE]
 
-I was trying to: [DESCRIBE WHAT YOU WERE DOING]
-The last command I ran was: [PASTE COMMAND]
+The error I got is:
+[PASTE FULL ERROR MESSAGE HERE]
 
-Please help me fix this error before we continue. 
-Do not move on until this is resolved.
+Please help me fix this error. Do not move on to anything else until it is resolved.
 ```
 
-### If You Need to Start a New Chat (Long Session)
+---
+
+### If Training Accuracy Is Below 85%
 
 ```
-My previous chat got too long. I am continuing FasalGuard AI.
+My FasalGuard AI training finished but accuracy is too low.
+
+Results:
+- Final Validation Accuracy: [VALUE]
+- Best Validation Accuracy: [VALUE]
+- Number of epochs trained: [VALUE]
+
+My class counts after cleaning were:
+[PASTE THE CLASS COUNTS FROM PROGRESS_LOG.md]
+
+Please diagnose why accuracy is low and tell me:
+1. The most likely cause
+2. Exactly what to change (epochs, learning rate, batch size, or data issue)
+3. The exact changes to make in train.py
+4. Whether I need to go back and fix data first
+
+Do not just say "try more epochs" — give me specific numbers and reasons.
+```
+
+---
+
+### If the Grad-CAM Heatmap Is Not Showing
+
+```
+I am in Phase 7 of FasalGuard AI. The model inference is working correctly
+but the Grad-CAM heatmap is not generating properly.
+
+The error or problem is:
+[DESCRIBE OR PASTE ERROR]
+
+My model is EfficientNet-B0, saved as TorchScript.
+The library I installed is pytorch-grad-cam.
+
+Please help me fix the heatmap generation. Show me the corrected code.
+```
+
+---
+
+### Starting a New Chat After a Long Session
+
+```
+My previous chat got too long. I am continuing FasalGuard AI from where I left off.
+
 I am attaching:
 1. FasalGuard_PRD.md — full project plan
-2. PROGRESS_LOG.md — what is done and what is next
+2. PROGRESS_LOG.md — record of everything done so far
 
-Read both files. Tell me:
-- Current phase
-- Last completed step  
-- What the next step is
+Please read both files. Then tell me:
+- Which phase we are currently on
+- The last completed step
+- The very next step
 - Which machine I should be on
 
-Then continue from where we left off.
-```
-
-### If Training Results Are Bad (mAP50 below 60%)
-
-```
-My FasalGuard AI training finished but the results are poor.
-mAP50 is: [VALUE]
-Precision: [VALUE]
-Recall: [VALUE]
-
-Here is my data.yaml:
-[PASTE CONTENT]
-
-Here are my class counts:
-[PASTE CHECK_BALANCE OUTPUT]
-
-Please diagnose why the results are low and tell me:
-1. What is likely causing the poor results
-2. What I should change
-3. Whether I need more data or different training settings
-4. The exact changes to make before retraining
+Then continue from exactly where we left off. Do not repeat anything already done.
 ```
