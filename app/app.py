@@ -368,8 +368,13 @@ def predict():
         with torch.no_grad():
             output = model(input_tensor)
 
+        # Apply temperature scaling to fix overconfidence
+        # Higher temperature = softer probabilities (more realistic confidence)
+        temperature = 2.1
+        scaled_output = output[0] / temperature
+
         # Convert to probabilities
-        probabilities = F.softmax(output[0], dim=0)
+        probabilities = F.softmax(scaled_output, dim=0)
         predicted_idx = torch.argmax(probabilities).item()
         confidence = probabilities[predicted_idx].item() * 100
 
@@ -398,19 +403,19 @@ def predict():
             "prevention": "Monitor regularly and maintain good crop hygiene."
         })
 
-        # Build result
+                # Build result
         result = {
             'filename': unique_filename,
             'original_image': filepath,
             'predicted_class': predicted_class,
             'common_name': treatment['common_name'],
-            'confidence': round(confidence, 2),
+            'confidence': int(confidence) if confidence == int(confidence) else round(confidence, 1),
             'severity': severity,
             'severity_color': severity_color,
             'action': treatment['action'],
             'chemical': treatment['chemical'],
             'prevention': treatment['prevention'],
-            'heatmap_path': None  # Will add Grad-CAM later
+            'heatmap_path': None
         }
 
         return render_template('result.html', result=result)

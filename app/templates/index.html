@@ -5,21 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FasalGuard AI — Crop Disease Detection</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <!-- Google Fonts for professional typography -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Navigation bar -->
+    <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
-            <div class="logo">
-                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <a href="/" class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M12 2L2 7l10 5 10-5-10-5z"/>
                     <path d="M2 17l10 5 10-5"/>
                     <path d="M2 12l10 5 10-5"/>
                 </svg>
                 <span class="logo-text">FasalGuard</span>
-            </div>
+            </a>
             <div class="nav-links">
                 <a href="/">Home</a>
                 <a href="/about">About</a>
@@ -27,55 +26,62 @@
         </div>
     </nav>
 
-    <!-- Main content -->
+    <!-- Main Content -->
     <main class="main-container">
-        <!-- Hero section -->
+        <!-- Hero -->
         <section class="hero">
-            <h1 class="hero-title">AI-Powered Crop Disease Detection</h1>
+            <div class="hero-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22c4.97-4.97 4.97-13.03 0-18-4.97 4.97-4.97 13.03 0 18z"/>
+                    <path d="M12 22c-4.97-4.97-4.97-13.03 0-18 4.97 4.97 4.97 13.03 0 18z"/>
+                </svg>
+                AI-Powered Agriculture
+            </div>
+            <h1 class="hero-title">Detect Crop Diseases<br>in Seconds</h1>
             <p class="hero-subtitle">
-                Upload a photo of any crop leaf and instantly identify diseases, 
-                pests, and nutrient deficiencies with expert treatment recommendations.
+                Upload a photo of any crop leaf and our AI will instantly identify 
+                diseases, pests, and provide expert treatment guidance.
             </p>
         </section>
 
-        <!-- Upload section -->
+        <!-- Upload -->
         <section class="upload-section">
             <div class="upload-card">
                 <div class="upload-header">
-                    <div class="upload-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <div class="upload-icon-wrap">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                            <polyline points="17,8 12,3 7,8"/>
+                            <polyline points="17 8 12 3 7 8"/>
                             <line x1="12" y1="3" x2="12" y2="15"/>
                         </svg>
                     </div>
                     <h2>Upload Leaf Image</h2>
-                    <p>Drag and drop or click to browse</p>
+                    <p>Drag & drop or click to browse your files</p>
                 </div>
 
-                <!-- Upload form -->
                 <form action="/predict" method="post" enctype="multipart/form-data" id="uploadForm">
                     <div class="upload-zone" id="dropZone">
                         <input type="file" name="image" id="fileInput" accept=".png,.jpg,.jpeg" required>
+                        
                         <div class="upload-placeholder">
-                            <svg class="upload-illustration" viewBox="0 0 64 64" fill="none">
-                                <rect x="8" y="12" width="48" height="40" rx="4" stroke="#c8e6c9" stroke-width="2"/>
-                                <circle cx="24" cy="28" r="6" stroke="#c8e6c9" stroke-width="2"/>
-                                <path d="M8 44l12-12 8 8 12-12 12 12" stroke="#c8e6c9" stroke-width="2"/>
+                            <svg class="upload-illustration" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="8" y="12" width="48" height="40" rx="6"/>
+                                <circle cx="24" cy="28" r="5"/>
+                                <path d="M8 44l10-10 8 8 10-10 12 12"/>
                             </svg>
                             <p class="upload-text"><strong>Click to upload</strong> or drag and drop</p>
-                            <p class="upload-hint">PNG, JPG, JPEG — Max 10MB</p>
+                            <p class="upload-hint">Supports PNG, JPG, JPEG</p>
                         </div>
-                        <div class="file-selected" id="fileSelected" style="display: none;">
-                            <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+
+                        <div class="file-selected" id="fileSelected">
+                            <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                <polyline points="14,2 14,8 20,8"/>
+                                <polyline points="14 2 14 8 20 8"/>
                             </svg>
                             <span id="fileName">No file selected</span>
                         </div>
                     </div>
 
-                    <!-- Flash messages -->
                     {% with messages = get_flashed_messages() %}
                         {% if messages %}
                             <div class="flash-messages">
@@ -87,7 +93,7 @@
                     {% endwith %}
 
                     <button type="submit" class="analyse-btn" id="analyseBtn">
-                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="11" cy="11" r="8"/>
                             <line x1="21" y1="21" x2="16.65" y2="16.65"/>
                         </svg>
@@ -97,62 +103,56 @@
             </div>
         </section>
 
-        <!-- Features section -->
+        <!-- Features -->
         <section class="features">
             <div class="feature-card">
                 <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M9 12l2 2 4-4"/>
                         <circle cx="12" cy="12" r="10"/>
                     </svg>
                 </div>
-                <h3>38 Diseases</h3>
-                <p>Detects across 14 crop types including tomato, potato, maize, apple, and grape</p>
+                <h3>38 Conditions</h3>
+                <p>Trained on 14 crop types including tomato, potato, maize, apple, and grape</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                         <circle cx="12" cy="12" r="3"/>
                     </svg>
                 </div>
                 <h3>Visual Heatmap</h3>
-                <p>See exactly where the AI detected the infection with Grad-CAM visualization</p>
+                <p>See exactly where the AI detected the infection with Grad-CAM overlay</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                     </svg>
                 </div>
                 <h3>Treatment Guide</h3>
-                <p>Get specific chemical recommendations, dosages, and prevention strategies</p>
+                <p>Get specific chemical names, dosages, and prevention strategies instantly</p>
             </div>
         </section>
     </main>
 
     <!-- Footer -->
     <footer class="footer">
-        <p> FasalGuard AI — CECOS University, Peshawar</p>
+        <p>FasalGuard AI — CECOS University, Peshawar</p>
     </footer>
 
-    <!-- JavaScript for drag-and-drop and file selection -->
     <script>
         const dropZone = document.getElementById('dropZone');
         const fileInput = document.getElementById('fileInput');
         const fileSelected = document.getElementById('fileSelected');
         const fileName = document.getElementById('fileName');
         const uploadPlaceholder = document.querySelector('.upload-placeholder');
-        const analyseBtn = document.getElementById('analyseBtn');
 
-        // Click anywhere on drop zone to open file picker
         dropZone.addEventListener('click', (e) => {
-            if (e.target !== fileInput) {
-                fileInput.click();
-            }
+            if (e.target !== fileInput) fileInput.click();
         });
 
-        // Handle file selection
         fileInput.addEventListener('change', () => {
             if (fileInput.files.length > 0) {
                 fileName.textContent = fileInput.files[0].name;
@@ -162,7 +162,6 @@
             }
         });
 
-        // Drag and drop effects
         dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
             dropZone.classList.add('dragover');
@@ -175,7 +174,6 @@
         dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
             dropZone.classList.remove('dragover');
-            
             const files = e.dataTransfer.files;
             if (files.length > 0) {
                 fileInput.files = files;
