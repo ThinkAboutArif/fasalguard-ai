@@ -22,10 +22,23 @@ import torch
 from torch import nn
 # transforms for image preprocessing
 from torchvision import transforms
+# models for EfficientNet architecture
+import torchvision.models as models
 # PIL for opening image files
 from PIL import Image
 # F for softmax function
 import torch.nn.functional as F
+
+# --- Grad-CAM imports ---
+# GradCAM generates heatmaps showing where the model looked
+from pytorch_grad_cam import GradCAM
+# This tells GradCAM which class to highlight
+from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
+# This overlays the heatmap on the original image
+from pytorch_grad_cam.utils.image import show_cam_on_image
+# numpy for image array operations
+import numpy as np
+
 
 # ============================================================
 # STEP 2: FLASK APP SETUP
@@ -39,7 +52,7 @@ app.secret_key = 'fasalguard-secret-key-2026'
 
 # Define the folder where uploaded images will be stored temporarily
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
 
 # Create the uploads folder if it doesn't already exist
 try:
@@ -62,7 +75,7 @@ def allowed_file(filename):
 # ============================================================
 
 # --- Define paths to model files ---
-MODEL_PATH = os.path.join(BASE_DIR, 'model', 'fasalguard_model.pt')
+CHECKPOINT_PATH = os.path.join(BASE_DIR, 'model', 'best_model.pt')
 CLASS_NAMES_PATH = os.path.join(BASE_DIR, 'model', 'class_names.json')
 
 # --- Load class names from JSON ---
@@ -74,17 +87,40 @@ NUM_CLASSES = len(class_names)
 print(f"Loaded {NUM_CLASSES} class names from {CLASS_NAMES_PATH}")
 print(f"First 5 classes: {class_names[:5]}")
 
-# --- Load the TorchScript model ---
-# TorchScript models are standalone — no architecture code needed
-model = torch.jit.load(MODEL_PATH, map_location='cpu')
+# --- Build EfficientNet-B0 architecture ---
+print("[MODEL] Building EfficientNet-B0 architecture...")
+model = models.efficientnet_b0(weights=None)  # No pretrained weights, we load our own
+
+# Replace the classifier for our 38 classes
+model.classifier[1] = nn.Linear(model.classifier[1].in_features, NUM_CLASSES)
+
+# --- Load checkpoint weights ---
+print(f"[MODEL] Loading checkpoint from {CHECKPOINT_PATH}...")
+checkpoint = torch.load(CHECKPOINT_PATH, map_location='cpu')
+model.load_state_dict(checkpoint['model_state_dict'])
 model.eval()
 
-print(f"Model loaded successfully from {MODEL_PATH}")
-print(f"Model is ready for inference on CPU.")
+print(f"[MODEL] Model loaded successfully!")
+print(f"[MODEL] Best validation accuracy from training: {checkpoint.get('val_acc', 'N/A')}%")
+print(f"[MODEL] Model is ready for inference on CPU.")
 
 # --- Device configuration ---
 device = torch.device('cpu')
 model = model.to(device)
+
+# --- Find the last Conv2d layer for Grad-CAM ---
+print("[MODEL] Finding target layer for Grad-CAM...")
+target_layer_name = None
+target_layer_module = None
+for name, module in model.named_modules():
+    if isinstance(module, nn.Conv2d):
+        target_layer_name = name
+        target_layer_module = module
+
+if target_layer_module:
+    print(f"[MODEL] Grad-CAM target layer: {target_layer_name}")
+else:
+    print("[MODEL] WARNING: No Conv2d layer found for Grad-CAM!")
 
 # --- Define image preprocessing (same as training) ---
 transform = transforms.Compose([
@@ -95,7 +131,64 @@ transform = transforms.Compose([
 
 
 # ============================================================
-# STEP 4: TREATMENT DICTIONARY
+# STEP 4: GRAD-CAM HEATMAP FUNCTION
+# ============================================================
+
+def generate_heatmap(image_path, predicted_idx, output_path):
+    """
+    Generates a Grad-CAM heatmap showing where the model focused.
+    
+    Parameters:
+        image_path: path to the original uploaded image
+        predicted_idx: the index of the predicted class (0-37)
+        output_path: where to save the heatmap image
+    
+    Returns:
+        True if successful, False if failed
+    """
+    try:
+        # Open the original image and resize to 224x224 for the model
+        pil_image = Image.open(image_path).convert('RGB').resize((224, 224))
+        
+        # Convert PIL image to numpy array (values 0-1)
+        rgb_img = np.array(pil_image) / 255.0
+        
+        # Preprocess for model input
+        input_tensor = transform(pil_image).unsqueeze(0).to(device)
+        
+        # Check if we have a valid target layer
+        if target_layer_module is None:
+            print("WARNING: No target layer available for Grad-CAM")
+            return False
+        
+        # Create GradCAM instance
+        cam = GradCAM(model=model, target_layers=[target_layer_module])
+        
+        # Specify which class to visualize (the predicted one)
+        targets = [ClassifierOutputTarget(predicted_idx)]
+        
+        # Generate the heatmap
+        grayscale_cam = cam(input_tensor=input_tensor, targets=targets)
+        
+        # Take the first (and only) image from the batch
+        grayscale_cam = grayscale_cam[0, :]
+        
+        # Overlay heatmap on original image
+        visualization = show_cam_on_image(rgb_img, grayscale_cam, use_rgb=True)
+        
+        # Convert back to PIL and save
+        heatmap_pil = Image.fromarray((visualization * 255).astype(np.uint8))
+        heatmap_pil.save(output_path)
+        
+        return True
+        
+    except Exception as e:
+        print(f"Grad-CAM generation failed: {e}")
+        return False
+
+
+# ============================================================
+# STEP 5: TREATMENT DICTIONARY
 # ============================================================
 
 TREATMENTS = {
@@ -331,7 +424,7 @@ TREATMENTS = {
 
 
 # ============================================================
-# STEP 5: ROUTES
+# STEP 6: ROUTES
 # ============================================================
 
 @app.route('/')
@@ -381,6 +474,14 @@ def predict():
         # Get predicted class name
         predicted_class = class_names[predicted_idx]
 
+        # --- Generate Grad-CAM heatmap ---
+        heatmap_filename = 'heatmap_' + unique_filename
+        heatmap_path = os.path.join(app.config['UPLOAD_FOLDER'], heatmap_filename)
+        heatmap_success = generate_heatmap(filepath, predicted_idx, heatmap_path)
+        
+        if not heatmap_success:
+            heatmap_path = None
+
         # Determine severity
         if 'healthy' in predicted_class:
             severity = 'None'
@@ -403,7 +504,7 @@ def predict():
             "prevention": "Monitor regularly and maintain good crop hygiene."
         })
 
-                # Build result
+        # Build result
         result = {
             'filename': unique_filename,
             'original_image': filepath,
@@ -415,7 +516,7 @@ def predict():
             'action': treatment['action'],
             'chemical': treatment['chemical'],
             'prevention': treatment['prevention'],
-            'heatmap_path': None
+            'heatmap_path': heatmap_filename if heatmap_success else None
         }
 
         return render_template('result.html', result=result)

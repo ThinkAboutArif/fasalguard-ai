@@ -5,184 +5,183 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About — FasalGuard AI</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="/" class="logo">
-                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                    <path d="M2 17l10 5 10-5"/>
-                    <path d="M2 12l10 5 10-5"/>
+    <div class="app-shell">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <svg class="sidebar-logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+                    <path d="M12 6v6l4 2"/>
+                    <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                    <path d="M12 22c-4-4-4-10 0-14"/>
+                    <path d="M12 22c4-4 4-10 0-14"/>
                 </svg>
-                <span class="logo-text">FasalGuard</span>
-            </a>
-            <div class="nav-links">
-                <a href="/">Home</a>
-                <a href="/about">About</a>
+                <div class="sidebar-logo-name">FasalGuard</div>
+                <div class="sidebar-logo-tag">AI Crop Intelligence</div>
             </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-label">System Status</div>
+                <div class="status-pills">
+                    <div class="status-pill">
+                        <span class="pill-dot"></span>
+                        <span class="pill-text">FasalGuard-B0</span>
+                        <span class="pill-value">99.2%</span>
+                    </div>
+                    <div class="status-pill">
+                        <span class="pill-dot"></span>
+                        <span class="pill-text">Grad-CAM</span>
+                        <span class="pill-value">Active</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-label">Performance</div>
+                <div class="stats-grid">
+                    <div class="stat-box"><div class="stat-value">38</div><div class="stat-label">Classes</div></div>
+                    <div class="stat-box"><div class="stat-value">14</div><div class="stat-label">Crops</div></div>
+                    <div class="stat-box"><div class="stat-value">99%</div><div class="stat-label">Accuracy</div></div>
+                    <div class="stat-box"><div class="stat-value">&lt;2s</div><div class="stat-label">Inference</div></div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <div class="main-area">
+            <div class="topbar">
+                <div>
+                    <div class="topbar-title">About FasalGuard</div>
+                    <div class="topbar-sub">Learn about the project, technology, and team</div>
+                </div>
+                <div class="topbar-nav">
+                    <a href="/" class="topbar-badge" style="background: var(--forest); color: var(--text-white);">
+                        <span class="topbar-badge-dot" style="background: var(--text-white);"></span>
+                        Back to Home
+                    </a>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="about-content">
+                    <div class="about-hero">
+                        <h1>About FasalGuard AI</h1>
+                        <p>An intelligent crop disease detection system that helps farmers identify plant diseases instantly using deep learning.</p>
+                    </div>
+
+                    <div class="about-section">
+                        <h2>What is FasalGuard?</h2>
+                        <p><strong>FasalGuard</strong> (from Urdu <em>fasal</em> meaning "crop") is a web-based AI application designed to solve Pakistan's biggest agricultural challenge: <strong>early and accurate disease detection</strong>.</p>
+                        <p>Every year, crop diseases destroy up to <strong>40% of global food production</strong>. In Pakistan, where agriculture employs nearly 40% of the workforce, late disease identification leads to massive yield losses.</p>
+                        <p>FasalGuard bridges this gap by putting a <strong>plant pathologist in every farmer's pocket</strong>. Upload a photo of a diseased leaf, and the AI tells you exactly what the disease is, how severe it is, and what to do about it.</p>
+                    </div>
+
+                    <div class="about-section">
+                        <h2>How It Works</h2>
+                        <div class="about-grid">
+                            <div class="about-card">
+                                <div class="about-step">1</div>
+                                <h3>Upload</h3>
+                                <p>Take a clear photo of the affected leaf and upload it. Works on any phone or laptop.</p>
+                            </div>
+                            <div class="about-card">
+                                <div class="about-step">2</div>
+                                <h3>Analyse</h3>
+                                <p>Our FasalGuard-B0 model processes the image in under 2 seconds on CPU.</p>
+                            </div>
+                            <div class="about-card">
+                                <div class="about-step">3</div>
+                                <h3>Diagnose</h3>
+                                <p>The AI identifies the exact disease from 38 possible conditions across 14 crop types.</p>
+                            </div>
+                            <div class="about-card">
+                                <div class="about-step">4</div>
+                                <h3>Treat</h3>
+                                <p>Get instant recommendations: what chemical to use, how much to mix, and prevention tips.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="about-section">
+                        <h2>The Technology</h2>
+                        <div class="about-grid">
+                            <div class="about-card">
+                                <h3>FasalGuard-B0</h3>
+                                <p>State-of-the-art CNN based on EfficientNet, fine-tuned on 53,114 crop leaf images from PlantVillage.</p>
+                            </div>
+                            <div class="about-card">
+                                <h3>99.17% Accuracy</h3>
+                                <p>Validated on 5,297 held-out images. Near-perfect accuracy on clean leaf photographs.</p>
+                            </div>
+                            <div class="about-card">
+                                <h3>Temperature Scaling</h3>
+                                <p>Advanced calibration ensures confidence scores reflect real uncertainty.</p>
+                            </div>
+                            <div class="about-card">
+                                <h3>Grad-CAM</h3>
+                                <p>Visual heatmap highlights exactly which leaf regions triggered the diagnosis.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="about-section">
+                        <h2>The Dataset</h2>
+                        <p>Trained on the <strong>PlantVillage dataset</strong>, the world's largest open-access collection of crop leaf images:</p>
+                        <ul class="about-list">
+                            <li><strong>53,114 images</strong> after data cleaning (1,191 blurry images removed)</li>
+                            <li><strong>38 disease classes</strong> across 14 crop species</li>
+                            <li><strong>80/10/10 split</strong> for training, validation, and testing</li>
+                            <li>Standardized close-up leaf shots with plain backgrounds</li>
+                        </ul>
+                    </div>
+
+                    <div class="about-section">
+                        <h2>Project Information</h2>
+                        <div class="about-info-grid">
+                            <div class="about-info-item">
+                                <span class="about-info-label">University</span>
+                                <span class="about-info-value">CECOS University, Peshawar</span>
+                            </div>
+                            <div class="about-info-item">
+                                <span class="about-info-label">Program</span>
+                                <span class="about-info-value">BS Computer Science</span>
+                            </div>
+                            <div class="about-info-item">
+                                <span class="about-info-label">Semester</span>
+                                <span class="about-info-value">Fourth Semester</span>
+                            </div>
+                            <div class="about-info-item">
+                                <span class="about-info-label">Course</span>
+                                <span class="about-info-value">AI / Machine Learning</span>
+                            </div>
+                            <div class="about-info-item">
+                                <span class="about-info-label">Model</span>
+                                <span class="about-info-value">FasalGuard-B0 (PyTorch)</span>
+                            </div>
+                            <div class="about-info-item">
+                                <span class="about-info-label">Framework</span>
+                                <span class="about-info-value">Flask + PyTorch</span>
+                            </div>
+                            <div class="about-info-item">
+                                <span class="about-info-label">GPU Training</span>
+                                <span class="about-info-value">NVIDIA GeForce RTX 4060</span>
+                            </div>
+                            <div class="about-info-item">
+                                <span class="about-info-label">GitHub</span>
+                                <span class="about-info-value"><a href="https://github.com/ThinkAboutArif/fasalguard-ai" target="_blank">View Repository</a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="footer">
+                <p>FasalGuard AI — CECOS University, Peshawar</p>
+            </footer>
         </div>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="main-container">
-        <div class="about-container">
-            <!-- Hero -->
-            <div class="about-hero">
-                <h1>About FasalGuard AI</h1>
-                <p>An intelligent crop disease detection system that helps farmers and agricultural experts identify plant diseases instantly using deep learning — no agricultural expertise required.</p>
-            </div>
-
-            <!-- What is FasalGuard -->
-            <div class="about-section">
-                <h2>What is FasalGuard?</h2>
-                <p><strong>FasalGuard</strong> (from Urdu/Hindi <em>fasal</em> meaning "crop") is a web-based AI application designed to solve one of Pakistan's biggest agricultural challenges: <strong>early and accurate disease detection</strong>.</p>
-                <p>Every year, crop diseases destroy up to <strong>40% of global food production</strong>. In Pakistan, where agriculture employs nearly 40% of the workforce and contributes 24% to GDP, late disease identification leads to massive yield losses, wasted pesticides, and food insecurity.</p>
-                <p>FasalGuard bridges this gap by putting a <strong>plant pathologist in every farmer's pocket</strong>. Simply upload a photo of a diseased leaf, and the AI tells you exactly what the disease is, how severe it is, and what to do about it — in plain language, with specific chemical names and dosages.</p>
-            </div>
-
-            <!-- How It Works -->
-            <div class="about-section">
-                <h2>How It Works</h2>
-                <div class="about-grid">
-                    <div class="about-card">
-                        <div class="about-step">1</div>
-                        <h3>Upload</h3>
-                        <p>Take a clear photo of the affected leaf and upload it through the web interface. Works on any phone or laptop.</p>
-                    </div>
-                    <div class="about-card">
-                        <div class="about-step">2</div>
-                        <h3>Analyse</h3>
-                        <p>Our EfficientNet-B0 deep learning model processes the image in under 2 seconds on a standard laptop CPU.</p>
-                    </div>
-                    <div class="about-card">
-                        <div class="about-step">3</div>
-                        <h3>Diagnose</h3>
-                        <p>The AI identifies the exact disease from 38 possible conditions across 14 crop types.</p>
-                    </div>
-                    <div class="about-card">
-                        <div class="about-step">4</div>
-                        <h3>Treat</h3>
-                        <p>Get instant recommendations: what chemical to use, how much to mix, and how to prevent future outbreaks.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- The Technology -->
-            <div class="about-section">
-                <h2>The Technology</h2>
-                <div class="about-grid">
-                    <div class="about-card">
-                        <h3>EfficientNet-B0</h3>
-                        <p>A state-of-the-art convolutional neural network pretrained on ImageNet and fine-tuned on 53,114 crop leaf images from the PlantVillage dataset.</p>
-                    </div>
-                    <div class="about-card">
-                        <h3>99.17% Accuracy</h3>
-                        <p>Validated on 5,297 held-out images. The model correctly identifies diseases with near-perfect accuracy on clean leaf photographs.</p>
-                    </div>
-                    <div class="about-card">
-                        <h3>Temperature Scaling</h3>
-                        <p>Advanced calibration technique ensures confidence scores reflect real uncertainty — not artificial overconfidence.</p>
-                    </div>
-                    <div class="about-card">
-                        <h3>Grad-CAM Ready</h3>
-                        <p>Visual heatmap integration (coming post-presentation) will highlight exactly which leaf regions triggered the diagnosis.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- The Dataset -->
-            <div class="about-section">
-                <h2>The Dataset</h2>
-                <p>We trained FasalGuard on the <strong>PlantVillage dataset</strong>, the world's largest open-access collection of crop leaf images:</p>
-                <ul class="about-list">
-                    <li><strong>53,114 images</strong> after data cleaning (1,191 blurry images removed)</li>
-                    <li><strong>38 disease classes</strong> across 14 crop species</li>
-                    <li><strong>80/10/10 split</strong> for training, validation, and testing</li>
-                    <li>Images are standardized close-up leaf shots with plain backgrounds</li>
-                </ul>
-                <p><strong>Crops covered:</strong> Apple, Blueberry, Cherry, Corn (Maize), Grape, Orange, Peach, Pepper, Potato, Raspberry, Soybean, Squash, Strawberry, and Tomato.</p>
-            </div>
-
-            <!-- Project Info -->
-            <div class="about-section">
-                <h2>Project Information</h2>
-                <div class="about-info-grid">
-                    <div class="about-info-item">
-                        <span class="about-info-label">University</span>
-                        <span class="about-info-value">CECOS University, Peshawar</span>
-                    </div>
-                    <div class="about-info-item">
-                        <span class="about-info-label">Program</span>
-                        <span class="about-info-value">BS Computer Science</span>
-                    </div>
-                    <div class="about-info-item">
-                        <span class="about-info-label">Semester</span>
-                        <span class="about-info-value">Fourth Semester</span>
-                    </div>
-                    <div class="about-info-item">
-                        <span class="about-info-label">Course</span>
-                        <span class="about-info-value">Artificial Intelligence / Machine Learning</span>
-                    </div>
-                    <div class="about-info-item">
-                        <span class="about-info-label">Model</span>
-                        <span class="about-info-value">EfficientNet-B0 (PyTorch)</span>
-                    </div>
-                    <div class="about-info-item">
-                        <span class="about-info-label">Framework</span>
-                        <span class="about-info-value">Flask + PyTorch + HTML/CSS</span>
-                    </div>
-                    <div class="about-info-item">
-                        <span class="about-info-label">GPU Training</span>
-                        <span class="about-info-value">NVIDIA GeForce RTX 4060</span>
-                    </div>
-                    <div class="about-info-item">
-                        <span class="about-info-label">GitHub</span>
-                        <span class="about-info-value"><a href="https://github.com/ThinkAboutArif/fasalguard-ai" target="_blank">github.com/ThinkAboutArif/fasalguard-ai</a></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Limitations -->
-            <div class="about-section">
-                <h2>Known Limitations</h2>
-                <ul class="about-list">
-                    <li><strong>Image quality matters:</strong> The model performs best on close-up leaf images with plain backgrounds (like PlantVillage). Photos of full plants, fields, or complex backgrounds may produce incorrect results.</li>
-                    <li><strong>Not a replacement for experts:</strong> FasalGuard is a decision-support tool. For critical or uncertain cases, always consult a certified agricultural extension officer.</li>
-                    <li><strong>Regional chemical availability:</strong> Recommended chemicals may not be available in all regions. Substitute with locally approved equivalents when necessary.</li>
-                    <li><strong>Grad-CAM pending:</strong> Visual heatmap overlay is prepared in the backend but not yet integrated into the UI.</li>
-                </ul>
-            </div>
-
-            <!-- Future Work -->
-            <div class="about-section">
-                <h2>Future Work</h2>
-                <div class="about-grid">
-                    <div class="about-card">
-                        <h3>Mobile App</h3>
-                        <p>Convert the web app to a native Android/iOS app for offline field use.</p>
-                    </div>
-                    <div class="about-card">
-                        <h3>Pest Detection</h3>
-                        <p>Expand beyond diseases to identify insect pests and nutrient deficiencies.</p>
-                    </div>
-                    <div class="about-card">
-                        <h3>Urdu Interface</h3>
-                        <p>Add Urdu language support for farmers who are not comfortable with English.</p>
-                    </div>
-                    <div class="about-card">
-                        <h3>Local Dataset</h3>
-                        <p>Collect and annotate Pakistani crop images to improve performance on local varieties.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <footer class="footer">
-        <p>FasalGuard AI — CECOS University, Peshawar</p>
-    </footer>
+    </div>
 </body>
 </html>
