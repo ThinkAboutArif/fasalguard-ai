@@ -1,44 +1,52 @@
+# ── Data (too large for GitHub) ──
+data/
 data/raw/
 data/processed/
-*.pt
-*.onnx
-__pycache__/
-*.pyc
-.env
-runs/
-fasalguard_env/
-progress-log/
-files/
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-env/
-venv/
-*.egg-info/
-
-# Data
-data/
 *.zip
 
-# Model weights
+# ── Model weights (generated after training, too large) ──
+*.pt
 *.pth
 *.onnx
 
-# Uploads
+# ── User uploads (images uploaded during app use) ──
 app/uploads/
 
-# IDE
+# ── Training outputs ──
+runs/
+progress-log/
+files/
+
+# ── Python cache ──
+__pycache__/
+*.pyc
+*.pyo
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+.Python
+
+# ── Virtual environments ──
+fasalguard_env/
+env/
+venv/
+
+# ── Environment files ──
+.env
+
+# ── IDE files ──
 .vscode/
 .idea/
 
-# OS
+# ── OS files ──
 .DS_Store
 Thumbs.db
 
-notepad .gitignore
-
-*.zip
-data/
+# ── Test / temporary scripts (not part of final project) ──
+app/model/fix_model.py
+app/model/test_cpu.py
+app/model/test_original_model.py
+app/model/test_real_image.py
+training/export_model.py
+app/static/uploads/
