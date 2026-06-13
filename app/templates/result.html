@@ -9,7 +9,8 @@
 </head>
 <body>
     <div class="app-shell">
-        <!-- Sidebar -->
+
+        <!-- ── SIDEBAR (unchanged) ── -->
         <aside class="sidebar">
             <div class="sidebar-logo">
                 <svg class="sidebar-logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -87,12 +88,12 @@
             </div>
         </aside>
 
-        <!-- Main -->
+        <!-- ── MAIN AREA ── -->
         <div class="main-area">
             <div class="topbar">
                 <div>
                     <div class="topbar-title">Analysis Result</div>
-                    <div class="topbar-sub">AI diagnosis complete — review details below</div>
+                    <div class="topbar-sub">AI diagnosis complete — review full advisory below</div>
                 </div>
                 <div class="topbar-nav">
                     <a href="/about" class="topbar-badge">
@@ -108,11 +109,8 @@
 
             <div class="content">
                 <div class="result-shell">
-                    <div class="result-header">
-                        <h1>Analysis Result</h1>
-                    </div>
 
-                    <!-- Images side by side -->
+                    <!-- ── SECTION 1: IMAGES ── -->
                     <div class="images-row">
                         <div class="img-card">
                             <div class="img-card-label">
@@ -123,7 +121,7 @@
                                 </svg>
                                 Uploaded Image
                             </div>
-                            <img src="{{ url_for('static', filename='uploads/' + result.filename) }}" 
+                            <img src="{{ url_for('static', filename='uploads/' + result.filename) }}"
                                  alt="Uploaded crop leaf"
                                  id="uploadedImage">
                         </div>
@@ -134,105 +132,188 @@
                                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                                     <circle cx="12" cy="12" r="3"/>
                                 </svg>
-                                AI Focus Area
+                                AI Focus Area (Grad-CAM)
                             </div>
                             {% if result.heatmap_path %}
-                                <img src="{{ url_for('static', filename='uploads/' + result.heatmap_path) }}" 
+                                <img src="{{ url_for('static', filename='uploads/' + result.heatmap_path) }}"
                                      alt="Grad-CAM heatmap">
                             {% else %}
                                 <div class="heatmap-placeholder">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                                         <circle cx="12" cy="12" r="3"/>
                                     </svg>
-                                    <p>Heatmap will appear here after Grad-CAM integration</p>
+                                    <p>Heatmap unavailable</p>
                                 </div>
                             {% endif %}
                         </div>
                     </div>
 
-                    <!-- Diagnosis -->
-                    <div class="details-card">
-                        <div class="detected-label">Detected Condition</div>
-                        <div class="detected-name">{{ result.common_name }}</div>
-
-                        <!-- Confidence -->
-                        <div class="confidence-block">
-                            <div class="confidence-top">
-                                <span>AI Confidence</span>
-                                <span>{{ result.confidence }}%</span>
-                            </div>
-                            <div class="confidence-track">
-                                <div class="confidence-fill" id="confidenceBar" data-confidence="{{ result.confidence }}"></div>
-                            </div>
+                    <!-- ── SECTION 2: DIAGNOSIS HEADER ── -->
+                    <div class="diagnosis-header">
+                        <div class="diagnosis-left">
+                            <div class="diagnosis-eyebrow">Detected Condition</div>
+                            <div class="diagnosis-name">{{ result.common_name }}</div>
+                            <div class="diagnosis-class-tag">{{ result.predicted_class }}</div>
                         </div>
-
-                        <!-- Severity -->
-                        <div class="severity-block">
+                        <div class="diagnosis-right">
+                            <!-- Severity badge -->
                             {% if result.severity == 'None' %}
-                                <div class="severity-badge sev-none">Healthy — No Action Needed</div>
+                                <div class="severity-badge sev-none">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                    Healthy — No Action Needed
+                                </div>
                             {% elif result.severity == 'Low' %}
-                                <div class="severity-badge sev-low">Low Severity — Monitor Closely</div>
+                                <div class="severity-badge sev-low">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                    Low Severity — Monitor Closely
+                                </div>
                             {% elif result.severity == 'Medium' %}
-                                <div class="severity-badge sev-medium">Medium Severity — Action Recommended</div>
+                                <div class="severity-badge sev-medium">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                                    Medium Severity — Act Soon
+                                </div>
                             {% elif result.severity == 'High' %}
-                                <div class="severity-badge sev-high">High Severity — Immediate Action Required</div>
+                                <div class="severity-badge sev-high">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                    High Severity — Immediate Action
+                                </div>
                             {% endif %}
-                        </div>
 
-                        <!-- Treatments -->
-                        <div class="treatment-grid">
-                            <div class="treatment-card">
-                                <div class="treatment-card-header">
-                                    <div class="treatment-card-icon">
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
-                                        </svg>
-                                    </div>
-                                    <h4>What to Do</h4>
+                            <!-- Confidence -->
+                            <div class="confidence-block">
+                                <div class="confidence-top">
+                                    <span>AI Confidence</span>
+                                    <span class="confidence-pct">{{ result.confidence }}%</span>
                                 </div>
-                                <p>{{ result.action }}</p>
-                            </div>
-
-                            <div class="treatment-card">
-                                <div class="treatment-card-header">
-                                    <div class="treatment-card-icon">
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                                            <line x1="12" y1="9" x2="12" y2="13"/>
-                                            <line x1="12" y1="17" x2="12.01" y2="17"/>
-                                        </svg>
-                                    </div>
-                                    <h4>Chemical Treatment</h4>
+                                <div class="confidence-track">
+                                    <div class="confidence-fill" id="confidenceBar" data-confidence="{{ result.confidence }}"></div>
                                 </div>
-                                <p>{{ result.chemical }}</p>
-                            </div>
-
-                            <div class="treatment-card">
-                                <div class="treatment-card-header">
-                                    <div class="treatment-card-icon">
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                                        </svg>
-                                    </div>
-                                    <h4>Prevention</h4>
-                                </div>
-                                <p>{{ result.prevention }}</p>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Fallback if treatment not found -->
-                        {% if result.common_name == result.predicted_class.replace('_', ' ').title() %}
-                        <div class="treatment-fallback">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"/>
-                                <line x1="12" y1="8" x2="12" y2="12"/>
-                                <line x1="12" y1="16" x2="12.01" y2="16"/>
-                            </svg>
-                            <p><strong>Limited information:</strong> Detailed treatment data for this specific condition is being expanded. Please consult a local agricultural extension officer for personalized guidance.</p>
+                    <!-- ── SECTION 3: PATHOGEN + URGENCY ROW ── -->
+                    {% if result.severity != 'None' %}
+                    <div class="info-row">
+                        {% if result.pathogen %}
+                        <div class="info-block info-block--pathogen">
+                            <div class="info-block-header">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                                </svg>
+                                <span>About This Disease</span>
+                            </div>
+                            <p>{{ result.pathogen }}</p>
                         </div>
                         {% endif %}
 
+                        {% if result.urgency and result.urgency != 'None.' %}
+                        <div class="info-block info-block--urgency {% if result.severity == 'High' %}urgency-critical{% endif %}">
+                            <div class="info-block-header">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                                </svg>
+                                <span>How Fast to Act</span>
+                            </div>
+                            <p>{{ result.urgency }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <!-- ── SECTION 4: SYMPTOMS + SPREAD (side by side, disease only) ── -->
+                    {% if result.severity != 'None' %}
+                    <div class="two-col-row">
+                        {% if result.symptoms %}
+                        <div class="detail-panel">
+                            <div class="detail-panel-header">
+                                <div class="detail-panel-icon icon-symptoms">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                </div>
+                                <h3>Visual Symptoms</h3>
+                            </div>
+                            <p>{{ result.symptoms }}</p>
+                        </div>
+                        {% endif %}
+
+                        {% if result.spread and result.spread != 'N/A' %}
+                        <div class="detail-panel">
+                            <div class="detail-panel-header">
+                                <div class="detail-panel-icon icon-spread">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                    </svg>
+                                </div>
+                                <h3>How It Spreads</h3>
+                            </div>
+                            <p>{{ result.spread }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <!-- ── SECTION 5: TREATMENT CARDS ── -->
+                    <div class="treatment-section-label">Treatment Advisory</div>
+                    <div class="treatment-grid">
+
+                        <div class="treatment-card tc-action">
+                            <div class="treatment-card-header">
+                                <div class="treatment-card-icon">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                                    </svg>
+                                </div>
+                                <h4>Immediate Action</h4>
+                            </div>
+                            <p>{{ result.action }}</p>
+                        </div>
+
+                        <div class="treatment-card tc-chemical">
+                            <div class="treatment-card-header">
+                                <div class="treatment-card-icon">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/>
+                                    </svg>
+                                </div>
+                                <h4>Chemical Treatment</h4>
+                            </div>
+                            <p>{{ result.chemical }}</p>
+                        </div>
+
+                        <div class="treatment-card tc-prevention">
+                            <div class="treatment-card-header">
+                                <div class="treatment-card-icon">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                    </svg>
+                                </div>
+                                <h4>Prevention</h4>
+                            </div>
+                            <p>{{ result.prevention }}</p>
+                        </div>
+
+                    </div>
+
+                    <!-- ── SECTION 6: HEALTHY EXTRA TIPS ── -->
+                    {% if result.severity == 'None' %}
+                    <div class="healthy-panel">
+                        <div class="healthy-panel-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <div class="healthy-panel-body">
+                            <div class="healthy-panel-title">Crop Looks Healthy</div>
+                            <p>{{ result.prevention }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- ── BACK BUTTON ── -->
+                    <div class="result-footer">
                         <a href="/" class="back-button">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <line x1="19" y1="12" x2="5" y2="12"/>
@@ -241,26 +322,29 @@
                             Analyse Another Image
                         </a>
                     </div>
-                </div>
-            </div>
+
+                </div><!-- end result-shell -->
+            </div><!-- end content -->
 
             <footer class="footer">
                 <p>FasalGuard AI — CECOS University, Peshawar</p>
             </footer>
-        </div>
-    </div>
+        </div><!-- end main-area -->
+    </div><!-- end app-shell -->
 
     <script>
+        // Image error fallback
         document.getElementById('uploadedImage').addEventListener('error', function() {
             this.src = 'https://via.placeholder.com/400x300/f0f4f1/5a7d6a?text=Image+Not+Found';
         });
 
+        // Animate confidence bar on load
         const confidenceBar = document.getElementById('confidenceBar');
         if (confidenceBar) {
             const confidence = confidenceBar.getAttribute('data-confidence');
             setTimeout(() => {
                 confidenceBar.style.width = confidence + '%';
-            }, 100);
+            }, 150);
         }
     </script>
 </body>

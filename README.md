@@ -1,18 +1,16 @@
 # FasalGuard AI
 
-> AI-powered crop disease detection for farmers — upload a leaf photo, get instant diagnosis, severity rating, and treatment advice.
+> AI-powered crop disease detection — upload a leaf photo, get instant diagnosis, severity rating, and treatment advice.
 
 ## What It Does
 
-FasalGuard AI is a web application that helps farmers and agricultural students identify crop diseases from a single leaf photograph. A user uploads an image, and a deep learning model (EfficientNet-B0) classifies it into one of 38 possible conditions across 14 crop types. The app returns the disease name, a confidence score, a severity estimate, a Grad-CAM heatmap showing where the AI focused, and step-by-step treatment recommendations including chemical names and dosages.
+FasalGuard AI is a web application that helps farmers and agricultural students identify crop diseases from a single leaf photograph. Upload an image and the deep learning model (EfficientNet-B0) classifies it into one of 38 possible conditions across 14 crop types. The app returns the disease name, a confidence score, a severity estimate, a Grad-CAM heatmap showing where the AI focused, and a full treatment advisory including what action to take, chemical names and dosages, and prevention strategies.
 
 ## Screenshots
 
 | Upload Page | Result Page |
 |---|---|
 | ![Upload](docs/screenshot_upload.png) | ![Result](docs/screenshot_result.png) |
-
-> Place your screenshots in a `docs/` folder and update the paths above.
 
 ## Tech Stack
 
@@ -24,7 +22,7 @@ FasalGuard AI is a web application that helps farmers and agricultural students 
 | Frontend | HTML5 + CSS3 |
 | Dataset | PlantVillage (38 classes, 53,000+ images) |
 
-## Setup & Run Instructions
+## Setup & Run
 
 ### 1. Clone the Repository
 
@@ -33,126 +31,91 @@ git clone https://github.com/ThinkAboutArif/fasalguard-ai.git
 cd fasalguard-ai
 ```
 
-### 2. Create a Virtual Environment
-
-```bash
-python -m venv fasalguard_env
-```
-
-### 3. Activate the Environment
+### 2. Create and Activate a Virtual Environment
 
 **Windows:**
 ```bash
+python -m venv fasalguard_env
 fasalguard_env\Scripts\activate
 ```
 
 **macOS / Linux:**
 ```bash
+python -m venv fasalguard_env
 source fasalguard_env/bin/activate
 ```
 
-### 4. Install Dependencies
+### 3. Install Dependencies
 
 ```bash
 pip install -r requirements_laptop.txt
 ```
 
-> **Note:** PyTorch will install the CPU version automatically. If you have a CUDA GPU, install the GPU version manually from [pytorch.org](https://pytorch.org).
+### 4. Add the Trained Model
 
-### 5. Add the Trained Model
+Place the following two files inside `app/model/`:
 
-Download the trained model file `fasalguard_model.pt` and place it in:
 ```
-app/model/fasalguard_model.pt
-```
-
-Also place `class_names.json` in:
-```
+app/model/best_model.pt
 app/model/class_names.json
 ```
 
-> The model is not included in the repository due to file size. Contact the author or train your own using `training/train.py`.
-
-### 6. Run the App
+### 5. Run the App
 
 ```bash
 cd app
 python app.py
 ```
 
-### 7. Open in Browser
+### 6. Open in Browser
 
-Go to: [http://localhost:5000](http://localhost:5000)
+[http://localhost:5000](http://localhost:5000)
 
 ---
 
-## 38 Detectable Diseases & Conditions
+## 38 Detectable Conditions
 
 ### Apple (4)
-- Apple Scab
-- Apple Black Rot
-- Apple Cedar Rust
-- Healthy Apple
+Apple Scab · Apple Black Rot · Apple Cedar Rust · Healthy
 
 ### Blueberry (1)
-- Healthy Blueberry
+Healthy
 
 ### Cherry (2)
-- Healthy Cherry
-- Cherry Powdery Mildew
+Cherry Powdery Mildew · Healthy
 
 ### Maize / Corn (4)
-- Maize Gray Leaf Spot (Cercospora)
-- Maize Common Rust
-- Healthy Maize
-- Maize Northern Leaf Blight
+Gray Leaf Spot · Common Rust · Northern Leaf Blight · Healthy
 
 ### Grape (4)
-- Grape Black Rot
-- Grape Esca (Black Measles)
-- Healthy Grape
-- Grape Leaf Blight
+Black Rot · Esca (Black Measles) · Leaf Blight · Healthy
 
 ### Orange (1)
-- Citrus Greening (Huanglongbing)
+Citrus Greening (Huanglongbing)
 
 ### Peach (2)
-- Peach Bacterial Spot
-- Healthy Peach
+Bacterial Spot · Healthy
 
 ### Pepper (2)
-- Pepper Bacterial Spot
-- Healthy Bell Pepper
+Bacterial Spot · Healthy
 
 ### Potato (3)
-- Potato Early Blight
-- Healthy Potato
-- Potato Late Blight
+Early Blight · Late Blight · Healthy
 
 ### Raspberry (1)
-- Healthy Raspberry
+Healthy
 
 ### Soybean (1)
-- Healthy Soybean
+Healthy
 
 ### Squash (1)
-- Squash Powdery Mildew
+Powdery Mildew
 
 ### Strawberry (2)
-- Healthy Strawberry
-- Strawberry Leaf Scorch
+Leaf Scorch · Healthy
 
 ### Tomato (10)
-- Tomato Bacterial Spot
-- Tomato Early Blight
-- Healthy Tomato
-- Tomato Late Blight
-- Tomato Leaf Mold
-- Tomato Septoria Leaf Spot
-- Tomato Spider Mite (Two-Spotted)
-- Tomato Target Spot
-- Tomato Mosaic Virus
-- Tomato Yellow Leaf Curl Virus
+Bacterial Spot · Early Blight · Late Blight · Leaf Mold · Septoria Leaf Spot · Spider Mite · Target Spot · Mosaic Virus · Yellow Leaf Curl Virus · Healthy
 
 ---
 
@@ -163,7 +126,7 @@ Go to: [http://localhost:5000](http://localhost:5000)
 | Validation Accuracy | 99.17% |
 | Test Accuracy | 99.27% |
 | Training Epochs | 5 |
-| Dataset | PlantVillage (53,114 images after cleaning) |
+| Dataset | PlantVillage (53,114 images) |
 | Classes | 38 |
 
 ---
@@ -173,46 +136,39 @@ Go to: [http://localhost:5000](http://localhost:5000)
 ```
 fasalguard/
 ├── app/
-│   ├── app.py                  # Flask server
+│   ├── app.py
 │   ├── model/
-│   │   ├── fasalguard_model.pt # Trained model (not in repo)
-│   │   └── class_names.json    # Class label mapping
+│   │   ├── best_model.pt
+│   │   └── class_names.json
 │   ├── templates/
-│   │   ├── index.html          # Upload page
-│   │   ├── result.html         # Results page
-│   │   └── about.html          # About page
+│   │   ├── index.html
+│   │   ├── result.html
+│   │   └── about.html
 │   └── static/
-│       └── style.css           # App styling
+│       └── style.css
 ├── training/
-│   ├── train.py                # Training script
-│   └── class_names.json        # Class names for training
+│   ├── train.py
+│   └── class_names.json
 ├── scripts/
-│   ├── organise_data.py        # Dataset organisation
-│   ├── clean_data.py           # Data cleaning
-│   ├── check_balance.py        # Class balance check
-│   └── split_data.py           # Train/val/test split
-├── requirements_laptop.txt     # Laptop dependencies
-├── requirements_gpu.txt        # GPU training dependencies
-└── README.md                   # This file
+│   ├── organise_data.py
+│   ├── clean_data.py
+│   ├── check_balance.py
+│   └── split_data.py
+├── requirements_laptop.txt
+├── requirements_gpu.txt
+└── README.md
 ```
 
 ---
 
 ## Author
 
-**Arif**  
-Fourth Semester Student  
-CECOS University, Peshawar, Pakistan
-
----
-
-## License
-
-This project was built for academic purposes as part of a university semester project.
+**Arif**
+Fourth Semester · CECOS University, Peshawar, Pakistan
 
 ## Acknowledgements
 
-- [PlantVillage Dataset](https://github.com/spMohanty/PlantVillage-Dataset) — open-source crop disease image dataset
-- [PyTorch](https://pytorch.org/) — deep learning framework
-- [Flask](https://flask.palletsprojects.com/) — web micro-framework
-- [pytorch-grad-cam](https://github.com/jacobgil/pytorch-grad-cam) — Grad-CAM implementation
+- [PlantVillage Dataset](https://github.com/spMohanty/PlantVillage-Dataset)
+- [PyTorch](https://pytorch.org/)
+- [Flask](https://flask.palletsprojects.com/)
+- [pytorch-grad-cam](https://github.com/jacobgil/pytorch-grad-cam)

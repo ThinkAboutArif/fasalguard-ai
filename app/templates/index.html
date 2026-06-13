@@ -9,7 +9,8 @@
 </head>
 <body>
     <div class="app-shell">
-        <!-- Sidebar -->
+
+        <!-- ── SIDEBAR (unchanged) ── -->
         <aside class="sidebar">
             <div class="sidebar-logo">
                 <svg class="sidebar-logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -87,12 +88,12 @@
             </div>
         </aside>
 
-        <!-- Main -->
+        <!-- ── MAIN ── -->
         <div class="main-area">
             <div class="topbar">
                 <div>
                     <div class="topbar-title">Crop Disease Analyser</div>
-                    <div class="topbar-sub">Upload a photo → get instant AI diagnosis + treatment plan</div>
+                    <div class="topbar-sub">Upload a photo → get instant AI diagnosis + full treatment advisory</div>
                 </div>
                 <div class="topbar-nav">
                     <a href="/about" class="topbar-badge">
@@ -109,9 +110,10 @@
             <div class="content">
                 <div class="page-header">
                     <h1>Diagnose Your <span>Crop</span></h1>
-                    <p>Upload a clear photo of any crop leaf and our AI will identify diseases, pests, and provide expert treatment guidance in seconds.</p>
+                    <p>Upload a clear photo of any crop leaf. Our AI identifies the disease, shows where it detected it, rates severity, and gives you a full treatment plan — in seconds.</p>
                 </div>
 
+                <!-- Upload card — structure unchanged, form unchanged -->
                 <div class="upload-card">
                     <div class="upload-header">
                         <div class="upload-icon-ring">
@@ -128,7 +130,7 @@
                     <form action="/predict" method="post" enctype="multipart/form-data" id="uploadForm">
                         <div class="drop-zone" id="dropZone">
                             <input type="file" name="image" id="fileInput" accept=".png,.jpg,.jpeg" required>
-                            
+
                             <div class="drop-placeholder">
                                 <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                     <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -159,26 +161,17 @@
                         {% endwith %}
 
                         <button type="submit" class="analyse-btn" id="analyseBtn">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg id="btnIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="11" cy="11" r="8"/>
                                 <line x1="21" y1="21" x2="16.65" y2="16.65"/>
                             </svg>
-                            Analyse Image
+                            <span id="btnText">Analyse Image</span>
                         </button>
                     </form>
                 </div>
 
+                <!-- Feature cards — updated descriptions to match new 7-field output -->
                 <div class="features-grid">
-                    <div class="feature-box">
-                        <div class="feature-icon-box">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"/>
-                                <path d="M12 6v6l4 2"/>
-                            </svg>
-                        </div>
-                        <h3>38 Conditions</h3>
-                        <p>Trained on 14 crop types including tomato, potato, maize, apple, and grape</p>
-                    </div>
                     <div class="feature-box">
                         <div class="feature-icon-box">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -187,19 +180,27 @@
                                 <path d="M2 12l10 5 10-5"/>
                             </svg>
                         </div>
+                        <h3>Disease Intelligence</h3>
+                        <p>Identifies 38 conditions across 14 crops. Tells you what the disease is, what causes it, how it spreads, and how fast you need to act.</p>
+                    </div>
+                    <div class="feature-box">
+                        <div class="feature-icon-box">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </div>
                         <h3>Grad-CAM Heatmap</h3>
-                        <p>See exactly where the AI detected the infection with visual overlay</p>
+                        <p>A red-blue overlay shows exactly which part of the leaf the AI focused on when making its diagnosis — full transparency into the decision.</p>
                     </div>
                     <div class="feature-box">
                         <div class="feature-icon-box">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                                <path d="M12 8v4"/>
-                                <path d="M12 16h.01"/>
                             </svg>
                         </div>
-                        <h3>Treatment Guide</h3>
-                        <p>Get specific chemical names, dosages, and prevention strategies</p>
+                        <h3>Full Treatment Plan</h3>
+                        <p>Immediate action steps, specific chemical names and dosages, long-term prevention strategies, and a severity rating so you know how urgent the situation is.</p>
                     </div>
                 </div>
             </div>
@@ -211,25 +212,29 @@
     </div>
 
     <script>
-        const dropZone = document.getElementById('dropZone');
-        const fileInput = document.getElementById('fileInput');
-        const fileSelected = document.getElementById('fileSelected');
-        const fileName = document.getElementById('fileName');
+        const dropZone      = document.getElementById('dropZone');
+        const fileInput     = document.getElementById('fileInput');
+        const fileSelected  = document.getElementById('fileSelected');
+        const fileName      = document.getElementById('fileName');
         const dropPlaceholder = document.querySelector('.drop-placeholder');
+        const uploadForm    = document.getElementById('uploadForm');
+        const analyseBtn    = document.getElementById('analyseBtn');
+        const btnText       = document.getElementById('btnText');
+        const btnIcon       = document.getElementById('btnIcon');
 
+        // Click anywhere on drop zone triggers file picker
         dropZone.addEventListener('click', (e) => {
             if (e.target !== fileInput) fileInput.click();
         });
 
+        // File chosen via picker
         fileInput.addEventListener('change', () => {
             if (fileInput.files.length > 0) {
-                fileName.textContent = fileInput.files[0].name;
-                dropPlaceholder.style.display = 'none';
-                fileSelected.style.display = 'flex';
-                dropZone.classList.add('has-file');
+                showFile(fileInput.files[0].name);
             }
         });
 
+        // Drag events
         dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
             dropZone.classList.add('dragover');
@@ -245,12 +250,33 @@
             const files = e.dataTransfer.files;
             if (files.length > 0) {
                 fileInput.files = files;
-                fileName.textContent = files[0].name;
-                dropPlaceholder.style.display = 'none';
-                fileSelected.style.display = 'flex';
-                dropZone.classList.add('has-file');
+                showFile(files[0].name);
             }
         });
+
+        function showFile(name) {
+            fileName.textContent = name;
+            dropPlaceholder.style.display = 'none';
+            fileSelected.style.display = 'flex';
+            dropZone.classList.add('has-file');
+        }
+
+        // Loading state on submit — gives user feedback during inference
+        uploadForm.addEventListener('submit', () => {
+            analyseBtn.disabled = true;
+            analyseBtn.style.opacity = '0.75';
+            btnText.textContent = 'Analysing…';
+            // Swap icon to a spinner-like animation using CSS rotation
+            btnIcon.style.animation = 'spin 1s linear infinite';
+        });
     </script>
+
+    <style>
+        /* Spinner for the button icon during loading — scoped here, not in style.css */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+    </style>
 </body>
 </html>
