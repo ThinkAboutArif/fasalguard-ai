@@ -1223,3 +1223,26 @@ body {
     .about-grid,
     .about-info-grid { grid-template-columns: 1fr; }
 }
+
+/* ============================================
+   ADD THESE TO THE BOTTOM OF style.css
+   BEFORE the closing @media block
+   ============================================ */
+
+/* ── Remove sidebar scrollbar (all browsers) ── */
+.sidebar {
+    scrollbar-width: none;        /* Firefox */
+    -ms-overflow-style: none;     /* IE / Edge */
+}
+.sidebar::-webkit-scrollbar {
+    display: none;                /* Chrome / Safari */
+}
+
+/* ── Also hide class-list scrollbar ── */
+.class-list {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.class-list::-webkit-scrollbar {
+    display: none;
+}

@@ -8,530 +8,445 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
     <style>
-    /* ═══════════════════════════════════════════
-       DEMO MOCKUP — all scoped, no conflicts
-       ═══════════════════════════════════════════ */
-
-    .demo-section {
-        max-width: 860px;
-        margin: 0 auto 40px;
+    #particle-canvas {
+        position: fixed; inset: 0;
+        pointer-events: none; z-index: 0; opacity: 0.45;
     }
+    .content { position: relative; z-index: 1; }
 
-    .demo-label {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
+    /* ── Demo section ── */
+    .demo-section { max-width: 680px; margin: 0 auto 36px; }
+    .demo-label { text-align: center; margin-bottom: 16px; }
     .demo-label-eyebrow {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: var(--bg-mint);
-        border: 1px solid rgba(107,142,107,0.25);
-        border-radius: var(--radius-pill);
-        padding: 5px 14px;
-        font-size: 11px;
-        font-weight: 700;
-        color: var(--forest);
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        margin-bottom: 10px;
+        display: inline-flex; align-items: center; gap: 6px;
+        background: var(--bg-mint); border: 1px solid rgba(107,142,107,0.25);
+        border-radius: var(--radius-pill); padding: 4px 12px;
+        font-size: 10px; font-weight: 700; color: var(--forest);
+        text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;
     }
-
     .demo-label-eyebrow span {
-        width: 6px; height: 6px;
-        background: var(--leaf);
-        border-radius: 50%;
-        animation: pulse-dot 2s infinite;
+        width: 6px; height: 6px; background: var(--leaf);
+        border-radius: 50%; animation: pulse-dot 2s infinite;
     }
+    .demo-label h2 { font-family:'Playfair Display',serif; font-size:19px; font-weight:700; color:var(--text); margin-bottom:4px; }
+    .demo-label p  { font-size:12px; color:var(--text-muted); }
 
-    .demo-label h2 {
-        font-family: 'Playfair Display', serif;
-        font-size: 22px;
-        font-weight: 700;
-        color: var(--text);
-        margin-bottom: 6px;
-    }
-
-    .demo-label p {
-        font-size: 13px;
-        color: var(--text-muted);
-    }
-
-    /* Laptop shell */
-    .mockup-shell {
-        position: relative;
-        width: 100%;
-        max-width: 860px;
-        margin: 0 auto;
-    }
-
+    /* ── Laptop ── */
+    .mockup-shell { position:relative; width:100%; max-width:680px; margin:0 auto; filter:drop-shadow(0 20px 40px rgba(45,58,45,0.18)); }
     .laptop-outer {
-        background: #2a2a2e;
-        border-radius: 18px 18px 0 0;
-        padding: 14px 14px 0;
-        box-shadow: 0 24px 60px rgba(0,0,0,0.22), 0 4px 12px rgba(0,0,0,0.15);
-        position: relative;
+        background: linear-gradient(160deg,#32323a,#22222a);
+        border-radius:14px 14px 0 0; padding:10px 10px 0;
+        position:relative; border:1px solid #444;
     }
-
-    .laptop-camera-bar {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 10px;
+    .laptop-outer::before {
+        content:''; position:absolute; inset:-1px; border-radius:14px 14px 0 0;
+        background:linear-gradient(90deg,#4a7c59,#7fb069,#c4a35a,#c4705a,#7fb069,#4a7c59);
+        background-size:300% 100%; z-index:-1; opacity:0.6; animation:frame-glow 6s linear infinite;
     }
-
-    .laptop-camera {
-        width: 8px; height: 8px;
-        background: #444;
-        border-radius: 50%;
-    }
-
+    @keyframes frame-glow { 0%{background-position:0% 50%} 100%{background-position:300% 50%} }
+    .laptop-camera-bar { display:flex; justify-content:center; align-items:center; gap:6px; margin-bottom:8px; }
+    .laptop-camera { width:6px; height:6px; background:#3a3a42; border-radius:50%; border:1px solid #555; }
+    .laptop-dots { display:flex; gap:5px; position:absolute; left:18px; top:16px; }
+    .laptop-dot { width:8px; height:8px; border-radius:50%; }
+    .laptop-dot.red    { background:#ff5f57; }
+    .laptop-dot.yellow { background:#ffbd2e; }
+    .laptop-dot.green  { background:#28c940; }
     .laptop-screen {
-        background: #faf8f5;
-        border-radius: 8px 8px 0 0;
-        overflow: hidden;
-        aspect-ratio: 16 / 9;
-        position: relative;
+        background:#faf8f5; border-radius:6px 6px 0 0; overflow:hidden;
+        aspect-ratio:16/9; position:relative; border:1px solid #555; border-bottom:none;
     }
-
     .laptop-base {
-        background: linear-gradient(to bottom, #3a3a3e, #2e2e32);
-        height: 22px;
-        border-radius: 0 0 4px 4px;
-        position: relative;
+        background:linear-gradient(to bottom,#3a3a3e,#2a2a30); height:16px;
+        border-radius:0 0 3px 3px; position:relative; border:1px solid #444; border-top:none;
+    }
+    .laptop-base::after {
+        content:''; position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+        width:28%; height:3px; background:#1a1a1e; border-radius:0 0 3px 3px;
     }
 
-    .laptop-base::after {
+    /* ── Step dots ── */
+    .demo-steps { display:flex; justify-content:center; align-items:center; gap:8px; margin-top:14px; }
+    .demo-step-dot { width:7px; height:7px; border-radius:50%; background:var(--border); transition:all 0.4s ease; }
+    .demo-step-dot.active { background:var(--forest); width:20px; border-radius:4px; }
+    .demo-step-label { font-size:11px; color:var(--text-muted); text-align:center; margin-top:8px; height:16px; }
+
+    /* ── Frames ── */
+    .demo-frame {
+        position:absolute; inset:0; opacity:0; transition:opacity 0.55s ease;
+        padding:9px; display:flex; flex-direction:column; gap:6px;
+        background:#faf8f5; overflow:hidden;
+    }
+    .demo-frame.active { opacity:1; }
+    .m-topbar { background:#fff; border-radius:5px; border:1px solid #e5e0d8; padding:5px 10px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+    .m-topbar-left { display:flex; align-items:center; gap:5px; }
+    .m-topbar-dot { width:5px; height:5px; border-radius:50%; background:var(--leaf); animation:pulse-dot 2s infinite; }
+    .m-topbar-title { font-size:8px; font-weight:700; color:#2d3a2d; font-family:'Playfair Display',serif; }
+    .m-topbar-badge { background:#e8f0e8; border-radius:20px; padding:2px 7px; font-size:7px; font-weight:600; color:#4a7c59; transition:background 0.3s,color 0.3s; }
+    .m-topbar-badge.analysing { background:#f5f0d8; color:#8a7a3a; animation:badge-pulse 1s ease-in-out infinite; }
+    .m-topbar-badge.done { background:#e8f0e8; color:#4a7c59; }
+    @keyframes badge-pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+    .m-body { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; }
+    .m-heading { font-family:'Playfair Display',serif; font-size:11px; font-weight:700; color:#2d3a2d; text-align:center; }
+    .m-heading span { color:#4a7c59; }
+    .m-sub { font-size:7px; color:#9aaa9a; text-align:center; max-width:180px; line-height:1.5; }
+    .m-upload-box { background:#fff; border:1px solid #e5e0d8; border-radius:8px; width:210px; overflow:hidden; box-shadow:0 2px 8px rgba(45,58,45,0.06); }
+    .m-upload-header { padding:7px 10px 5px; text-align:center; border-bottom:1px solid #f0ebe3; }
+    .m-upload-icon { width:18px; height:18px; background:#e8f0e8; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 3px; color:#6b8e6b; }
+    .m-upload-icon svg { width:9px; height:9px; }
+    .m-upload-title { font-size:7.5px; font-weight:600; color:#2d3a2d; }
+    .m-drop-zone { margin:6px; border:1.5px dashed #e5e0d8; border-radius:5px; padding:10px 6px; text-align:center; background:#f8f4ed; transition:all 0.4s ease; position:relative; }
+    .m-drop-zone.highlight { border-color:#7fb069; background:#e8f0e8; }
+    .m-drop-icon { width:13px; height:13px; color:#9aaa9a; margin:0 auto 3px; opacity:0.6; display:block; }
+    .m-drop-text { font-size:6.5px; color:#9aaa9a; }
+    .m-file-chosen { display:none; align-items:center; justify-content:center; gap:3px; font-size:6.5px; color:#4a7c59; font-weight:600; }
+    .m-file-chosen svg { width:8px; height:8px; color:#7fb069; }
+    .m-analyse-btn { display:flex; align-items:center; justify-content:center; gap:3px; margin:0 6px 6px; padding:5px; background:linear-gradient(135deg,#4a7c59,#3a6347); color:#fff; border-radius:5px; font-size:7px; font-weight:600; transition:opacity 0.3s; }
+    .m-analyse-btn svg { width:8px; height:8px; }
+    .m-analyse-btn.loading { opacity:0.75; }
+    .m-analyse-btn.loading svg { animation:spin 1s linear infinite; }
+    .m-cursor { position:absolute; width:11px; height:11px; pointer-events:none; z-index:10; transition:top 0.75s cubic-bezier(0.4,0,0.2,1),left 0.75s cubic-bezier(0.4,0,0.2,1); filter:drop-shadow(0 1px 2px rgba(0,0,0,0.4)); }
+    .m-cursor svg { width:11px; height:11px; }
+    .m-ripple { position:absolute; width:16px; height:16px; border-radius:50%; background:rgba(74,124,89,0.35); transform:scale(0); pointer-events:none; z-index:9; }
+    .m-ripple.pop { animation:ripple-pop 0.45s ease forwards; }
+    @keyframes ripple-pop { 0%{transform:scale(0);opacity:1} 100%{transform:scale(2.8);opacity:0} }
+    .m-ai-overlay { position:absolute; inset:0; background:rgba(250,248,245,0.88); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; backdrop-filter:blur(2px); }
+    .m-ai-spinner { width:28px; height:28px; border:2px solid #e5e0d8; border-top-color:#4a7c59; border-right-color:#7fb069; border-radius:50%; animation:spin 0.9s linear infinite; }
+    .m-ai-text { font-size:8px; font-weight:600; color:#4a7c59; letter-spacing:0.05em; }
+    .m-ai-sub { font-size:6.5px; color:#9aaa9a; }
+    .m-progress-track { width:80px; height:3px; background:#e5e0d8; border-radius:10px; overflow:hidden; }
+    .m-progress-fill { height:100%; width:0; background:linear-gradient(90deg,#4a7c59,#7fb069); border-radius:10px; transition:width 1.6s cubic-bezier(0.4,0,0.2,1); }
+    .m-result-layout { display:grid; grid-template-columns:1fr 1fr; gap:5px; width:100%; max-width:280px; }
+    .m-img-card { background:#fff; border:1px solid #e5e0d8; border-radius:5px; padding:5px; text-align:center; }
+    .m-img-label { font-size:5.5px; font-weight:700; color:#9aaa9a; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px; }
+    .m-img-placeholder { border-radius:3px; height:38px; display:flex; align-items:center; justify-content:center; font-size:16px; position:relative; overflow:hidden; }
+    .m-img-leaf { background:linear-gradient(135deg,#c8e6c0,#e8f0e8); }
+    .m-img-heat { background:linear-gradient(135deg,#1565c044,#b71c1c44); }
+    .m-img-heat::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg,transparent 0%,rgba(183,0,0,0.15) 50%,transparent 100%); animation:heat-shimmer 2s ease-in-out infinite; }
+    @keyframes heat-shimmer { 0%,100%{transform:translateX(-100%)} 50%{transform:translateX(100%)} }
+    .m-diag-card { background:#fff; border:1px solid #e5e0d8; border-radius:5px; padding:6px; grid-column:1/-1; position:relative; overflow:hidden; }
+    .m-diag-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,#4a7c59,#7fb069,#c4a35a,#c4705a,#7fb069,#4a7c59); background-size:300% 100%; animation:frame-glow 4s linear infinite; }
+    .m-diag-name { font-family:'Playfair Display',serif; font-size:9px; font-weight:700; color:#2d3a2d; margin-bottom:3px; margin-top:2px; }
+    .m-sev-badge { display:inline-block; background:#f5e0d8; color:#a05040; border-radius:20px; padding:1px 6px; font-size:5.5px; font-weight:600; margin-bottom:4px; }
+    .m-conf-label { font-size:5.5px; color:#9aaa9a; margin-bottom:2px; display:flex; justify-content:space-between; }
+    .m-conf-label span:last-child { color:#4a7c59; font-weight:700; }
+    .m-conf-track { background:#f0ebe3; border-radius:20px; height:4px; overflow:hidden; margin-bottom:5px; }
+    .m-conf-fill { height:100%; background:linear-gradient(90deg,#6b8e6b,#7fb069); border-radius:20px; width:0; transition:width 1.4s cubic-bezier(0.4,0,0.2,1); }
+    .m-treatment-row { display:grid; grid-template-columns:repeat(3,1fr); gap:3px; }
+    .m-treat-card { border-radius:3px; padding:4px; border-top:1.5px solid transparent; }
+    .m-treat-card:nth-child(1){background:#fff8f4;border-top-color:#e8a87c}
+    .m-treat-card:nth-child(2){background:#f4f7fc;border-top-color:#7ca8d8}
+    .m-treat-card:nth-child(3){background:#f4f9f4;border-top-color:#7fb069}
+    .m-treat-card-title { font-size:5px; font-weight:700; color:#9aaa9a; text-transform:uppercase; margin-bottom:1px; }
+    .m-treat-card-text  { font-size:5px; color:#6b7a6b; line-height:1.4; }
+    .m-back-btn { display:inline-flex; align-items:center; gap:2px; padding:3px 8px; border:1px solid #e5e0d8; border-radius:4px; font-size:6px; font-weight:600; color:#4a7c59; background:#fff; margin-top:4px; cursor:default; transition:background 0.3s,color 0.3s,transform 0.2s; }
+    .m-back-btn.hovering { background:#4a7c59; color:#fff; transform:translateY(-1px); }
+    .m-back-btn svg { width:6px; height:6px; }
+    .m-scan-line { position:absolute; left:0; right:0; height:1.5px; background:linear-gradient(90deg,transparent,#4a7c59,#7fb069,#4a7c59,transparent); top:0; opacity:0; z-index:5; }
+    .m-scan-line.scanning { opacity:1; animation:scan-sweep 1s ease-in-out forwards; }
+    @keyframes scan-sweep { 0%{top:0;opacity:1} 80%{opacity:0.8} 100%{top:100%;opacity:0} }
+
+    /* ── Divider ── */
+    .demo-divider { display:flex; align-items:center; gap:14px; margin:28px auto 26px; max-width:480px; }
+    .demo-divider-line { flex:1; height:1px; background:linear-gradient(90deg,transparent,var(--border),transparent); }
+    .demo-divider-text { font-size:11px; font-weight:600; color:var(--text-light); white-space:nowrap; padding:4px 10px; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-pill); }
+
+    /* ── Upload card glow ── */
+    .upload-card { position:relative; transition:var(--transition),box-shadow 0.4s; }
+    .upload-card::after { content:''; position:absolute; inset:-2px; border-radius:calc(var(--radius) + 2px); background:linear-gradient(135deg,#4a7c5900,#7fb06933,#4a7c5900); opacity:0; transition:opacity 0.4s; pointer-events:none; z-index:-1; }
+    .upload-card:hover::after { opacity:1; }
+
+    @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+    /* ════════════════════════════════════════════
+       STAT CARDS — clickable
+       ════════════════════════════════════════════ */
+    .stat-box {
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 12px;
+        text-align: center;
+        transition: var(--transition);
+        user-select: none;
+    }
+
+    .stat-box::before {
         content: '';
         position: absolute;
-        bottom: 0; left: 50%;
-        transform: translateX(-50%);
-        width: 30%; height: 4px;
-        background: #222;
-        border-radius: 0 0 4px 4px;
+        inset: 0;
+        background: linear-gradient(135deg, var(--forest), var(--leaf));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 0;
     }
 
-    /* Step progress dots */
-    .demo-steps {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-        margin-top: 20px;
-    }
+    .stat-box:hover::before { opacity: 1; }
 
-    .demo-step-dot {
-        width: 8px; height: 8px;
-        border-radius: 50%;
-        background: var(--border);
-        transition: all 0.4s ease;
-        cursor: default;
-    }
+    .stat-box:hover .stat-value,
+    .stat-box:hover .stat-label { color: #fff; }
 
-    .demo-step-dot.active {
-        background: var(--forest);
-        width: 24px;
-        border-radius: 4px;
-    }
+    .stat-box .stat-value,
+    .stat-box .stat-label { position: relative; z-index: 1; transition: color 0.3s ease; }
 
-    .demo-step-label {
-        font-size: 12px;
-        color: var(--text-muted);
-        text-align: center;
-        margin-top: 10px;
-        height: 18px;
+    /* Click pulse */
+    .stat-box:active { transform: scale(0.94); }
+
+    /* Hint icon bottom right */
+    .stat-box::after {
+        content: '↗';
+        position: absolute;
+        bottom: 4px; right: 6px;
+        font-size: 8px;
+        color: var(--text-light);
+        opacity: 0;
         transition: opacity 0.3s;
+        z-index: 1;
     }
 
-    /* ── FRAMES ── */
-    .demo-frame {
+    .stat-box:hover::after { opacity: 1; color: rgba(255,255,255,0.7); }
+
+    /* ════════════════════════════════════════════
+       STAT MODAL
+       ════════════════════════════════════════════ */
+    .stat-modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(20, 30, 20, 0.55);
+        backdrop-filter: blur(6px);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.35s ease;
+    }
+
+    .stat-modal-backdrop.open {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    .stat-modal {
+        background: var(--bg-card);
+        border-radius: 24px;
+        width: min(520px, 90vw);
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 32px 80px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.08);
+        transform: translateY(32px) scale(0.96);
+        transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.35s ease;
+        opacity: 0;
+        scrollbar-width: none;
+    }
+
+    .stat-modal::-webkit-scrollbar { display: none; }
+
+    .stat-modal-backdrop.open .stat-modal {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+
+    /* Coloured top strip */
+    .stat-modal-hero {
+        padding: 36px 32px 28px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 24px 24px 0 0;
+    }
+
+    .stat-modal-hero::before {
+        content: '';
         position: absolute;
         inset: 0;
-        opacity: 0;
-        transition: opacity 0.6s ease;
-        padding: 12px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        background: #faf8f5;
-        overflow: hidden;
+        background: linear-gradient(135deg, var(--forest), var(--leaf));
+        z-index: 0;
     }
 
-    .demo-frame.active { opacity: 1; }
-
-    /* Mini topbar inside mockup */
-    .m-topbar {
-        background: #fff;
-        border-radius: 6px;
-        border: 1px solid #e5e0d8;
-        padding: 7px 12px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-shrink: 0;
+    /* Animated circles in hero */
+    .stat-modal-hero::after {
+        content: '';
+        position: absolute;
+        width: 200px; height: 200px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.06);
+        bottom: -60px; right: -40px;
+        z-index: 0;
     }
 
-    .m-topbar-title {
-        font-size: 9px;
-        font-weight: 700;
-        color: #2d3a2d;
+    .stat-modal-hero-inner { position: relative; z-index: 1; }
+
+    .stat-modal-icon {
+        width: 52px; height: 52px;
+        background: rgba(255,255,255,0.15);
+        border-radius: 16px;
+        display: flex; align-items: center; justify-content: center;
+        margin-bottom: 16px;
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .stat-modal-icon svg { width: 26px; height: 26px; color: #fff; }
+
+    .stat-modal-number {
         font-family: 'Playfair Display', serif;
+        font-size: 52px;
+        font-weight: 700;
+        color: #fff;
+        line-height: 1;
+        margin-bottom: 4px;
+        letter-spacing: -2px;
     }
 
-    .m-topbar-badge {
-        background: #e8f0e8;
-        border-radius: 20px;
-        padding: 3px 8px;
-        font-size: 8px;
+    .stat-modal-title {
+        font-size: 14px;
         font-weight: 600;
-        color: #4a7c59;
+        color: rgba(255,255,255,0.8);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
     }
 
-    /* Mini body area */
-    .m-body {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-    }
-
-    .m-heading {
-        font-family: 'Playfair Display', serif;
-        font-size: 13px;
-        font-weight: 700;
-        color: #2d3a2d;
-        text-align: center;
-    }
-
-    .m-heading span { color: #4a7c59; }
-
-    .m-sub {
-        font-size: 8px;
-        color: #9aaa9a;
-        text-align: center;
-        max-width: 200px;
-        line-height: 1.5;
-    }
-
-    /* Upload box in mockup */
-    .m-upload-box {
-        background: #fff;
-        border: 1px solid #e5e0d8;
-        border-radius: 10px;
-        width: 260px;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(45,58,45,0.06);
-    }
-
-    .m-upload-header {
-        padding: 10px 12px 6px;
-        text-align: center;
-        border-bottom: 1px solid #f0ebe3;
-    }
-
-    .m-upload-icon {
-        width: 24px; height: 24px;
-        background: #e8f0e8;
+    /* Close button */
+    .stat-modal-close {
+        position: absolute;
+        top: 16px; right: 16px;
+        width: 32px; height: 32px;
+        background: rgba(255,255,255,0.15);
+        border: 1px solid rgba(255,255,255,0.2);
         border-radius: 50%;
         display: flex; align-items: center; justify-content: center;
-        margin: 0 auto 4px;
-        color: #6b8e6b;
-    }
-
-    .m-upload-icon svg { width: 12px; height: 12px; }
-
-    .m-upload-title {
-        font-size: 9px;
-        font-weight: 600;
-        color: #2d3a2d;
-    }
-
-    .m-drop-zone {
-        margin: 8px;
-        border: 1.5px dashed #e5e0d8;
-        border-radius: 6px;
-        padding: 14px 8px;
-        text-align: center;
-        background: #f8f4ed;
-        transition: all 0.4s ease;
-        position: relative;
-    }
-
-    .m-drop-zone.highlight {
-        border-color: #7fb069;
-        background: #e8f0e8;
-    }
-
-    .m-drop-icon {
-        width: 16px; height: 16px;
-        color: #9aaa9a;
-        margin: 0 auto 4px;
-        opacity: 0.6;
-    }
-
-    .m-drop-text {
-        font-size: 7.5px;
-        color: #9aaa9a;
-    }
-
-    .m-file-chosen {
-        display: none;
-        align-items: center;
-        justify-content: center;
-        gap: 4px;
-        font-size: 7.5px;
-        color: #4a7c59;
-        font-weight: 600;
-    }
-
-    .m-file-chosen svg { width: 10px; height: 10px; color: #7fb069; }
-
-    .m-analyse-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 4px;
-        margin: 0 8px 8px;
-        padding: 7px;
-        background: linear-gradient(135deg, #4a7c59, #3a6347);
+        cursor: pointer;
         color: #fff;
-        border-radius: 6px;
-        font-size: 8px;
-        font-weight: 600;
+        font-size: 16px;
+        transition: background 0.2s;
+        z-index: 2;
+        line-height: 1;
     }
 
-    .m-analyse-btn svg { width: 10px; height: 10px; }
-    .m-analyse-btn.loading { opacity: 0.75; }
-    .m-analyse-btn.loading svg { animation: spin 1s linear infinite; }
+    .stat-modal-close:hover { background: rgba(255,255,255,0.28); }
 
-    /* Cursor */
-    .m-cursor {
-        position: absolute;
-        width: 12px; height: 12px;
-        pointer-events: none;
-        z-index: 10;
-        transition: top 0.8s cubic-bezier(0.4,0,0.2,1),
-                    left 0.8s cubic-bezier(0.4,0,0.2,1);
+    /* Body */
+    .stat-modal-body { padding: 24px 32px 32px; }
+
+    .stat-modal-desc {
+        font-size: 14px;
+        color: var(--text-muted);
+        line-height: 1.8;
+        margin-bottom: 24px;
     }
 
-    .m-cursor svg { width: 12px; height: 12px; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); }
+    /* Info rows */
+    .stat-modal-rows { display: flex; flex-direction: column; gap: 12px; }
 
-    /* Click ripple */
-    .m-ripple {
-        position: absolute;
-        width: 20px; height: 20px;
-        border-radius: 50%;
-        background: rgba(74,124,89,0.3);
-        transform: scale(0);
-        pointer-events: none;
-        z-index: 9;
-    }
-
-    .m-ripple.pop {
-        animation: ripple-pop 0.5s ease forwards;
-    }
-
-    @keyframes ripple-pop {
-        0%   { transform: scale(0); opacity: 1; }
-        100% { transform: scale(2.5); opacity: 0; }
-    }
-
-    /* ── FRAME 3: Result ── */
-    .m-result-layout {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 6px;
-        width: 100%;
-        max-width: 320px;
-    }
-
-    .m-img-card {
-        background: #fff;
-        border: 1px solid #e5e0d8;
-        border-radius: 6px;
-        padding: 6px;
-        text-align: center;
-    }
-
-    .m-img-label {
-        font-size: 6.5px;
-        font-weight: 700;
-        color: #9aaa9a;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 4px;
-    }
-
-    .m-img-placeholder {
-        border-radius: 4px;
-        height: 50px;
+    .stat-modal-row {
         display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 7px;
-        color: #9aaa9a;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 14px 16px;
+        background: var(--bg-warm);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        animation: row-in 0.4s ease both;
     }
 
-    .m-img-leaf { background: #e8f0e8; }
-    .m-img-heat { background: linear-gradient(135deg, #1a237e22, #b7000022); }
-
-    .m-diag-card {
-        background: #fff;
-        border: 1px solid #e5e0d8;
-        border-radius: 6px;
-        padding: 8px;
-        grid-column: 1 / -1;
+    @keyframes row-in {
+        from { opacity: 0; transform: translateX(-10px); }
+        to   { opacity: 1; transform: translateX(0); }
     }
 
-    .m-diag-name {
-        font-family: 'Playfair Display', serif;
-        font-size: 10px;
+    .stat-modal-row-icon {
+        width: 34px; height: 34px;
+        border-radius: 10px;
+        background: var(--bg-mint);
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0;
+        color: var(--forest);
+    }
+
+    .stat-modal-row-icon svg { width: 16px; height: 16px; }
+
+    .stat-modal-row-title {
+        font-size: 12px;
         font-weight: 700;
-        color: #2d3a2d;
-        margin-bottom: 4px;
-    }
-
-    .m-sev-badge {
-        display: inline-block;
-        background: #f5e0d8;
-        color: #a05040;
-        border-radius: 20px;
-        padding: 2px 7px;
-        font-size: 6.5px;
-        font-weight: 600;
-        margin-bottom: 5px;
-    }
-
-    .m-conf-label {
-        font-size: 6.5px;
-        color: #9aaa9a;
-        margin-bottom: 3px;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .m-conf-label span:last-child { color: #4a7c59; font-weight: 700; }
-
-    .m-conf-track {
-        background: #f0ebe3;
-        border-radius: 20px;
-        height: 5px;
-        overflow: hidden;
-        margin-bottom: 6px;
-    }
-
-    .m-conf-fill {
-        height: 100%;
-        background: linear-gradient(90deg, #6b8e6b, #7fb069);
-        border-radius: 20px;
-        width: 0;
-        transition: width 1.4s cubic-bezier(0.4,0,0.2,1);
-    }
-
-    .m-treatment-row {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 4px;
-    }
-
-    .m-treat-card {
-        background: #fdf9f3;
-        border: 1px solid #e5e0d8;
-        border-radius: 4px;
-        padding: 5px;
-    }
-
-    .m-treat-card-title {
-        font-size: 6px;
-        font-weight: 700;
-        color: #9aaa9a;
-        text-transform: uppercase;
+        color: var(--text);
         margin-bottom: 2px;
     }
 
-    .m-treat-card-text {
-        font-size: 6px;
-        color: #6b7a6b;
-        line-height: 1.4;
+    .stat-modal-row-text {
+        font-size: 12px;
+        color: var(--text-muted);
+        line-height: 1.6;
     }
 
-    .m-back-btn {
+    /* Tag grid for classes modal */
+    .stat-modal-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 16px;
+    }
+
+    .stat-modal-tag {
         display: inline-flex;
         align-items: center;
-        gap: 3px;
+        gap: 5px;
         padding: 4px 10px;
-        border: 1px solid #e5e0d8;
-        border-radius: 5px;
-        font-size: 7px;
-        font-weight: 600;
-        color: #4a7c59;
-        background: #fff;
-        margin-top: 6px;
-        cursor: default;
-        transition: background 0.3s, color 0.3s;
+        background: var(--bg-mint);
+        border: 1px solid rgba(107,142,107,0.2);
+        border-radius: var(--radius-pill);
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--forest);
+        animation: tag-pop 0.3s ease both;
     }
 
-    .m-back-btn.hovering {
-        background: #4a7c59;
-        color: #fff;
+    @keyframes tag-pop {
+        from { opacity:0; transform:scale(0.8); }
+        to   { opacity:1; transform:scale(1); }
     }
 
-    .m-back-btn svg { width: 8px; height: 8px; }
-
-    /* Scanning line on result */
-    .m-scan-line {
-        position: absolute;
-        left: 0; right: 0;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, #4a7c59, transparent);
-        top: 0;
-        opacity: 0;
+    .stat-modal-tag span {
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        background: var(--leaf);
+        display: inline-block;
     }
 
-    .m-scan-line.scanning {
-        opacity: 1;
-        animation: scan-sweep 1.2s ease-in-out forwards;
-    }
-
-    @keyframes scan-sweep {
-        0%   { top: 0; opacity: 0.8; }
-        100% { top: 100%; opacity: 0; }
-    }
-
-    @keyframes spin {
-        from { transform: rotate(0deg); }
-        to   { transform: rotate(360deg); }
-    }
-
-    /* Divider between demo and upload */
-    .demo-divider {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        margin: 36px 0 32px;
-        max-width: 560px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .demo-divider-line {
-        flex: 1;
-        height: 1px;
-        background: var(--border);
-    }
-
-    .demo-divider-text {
-        font-size: 12px;
-        font-weight: 600;
-        color: var(--text-light);
-        white-space: nowrap;
+    /* Topbar scroll */
+    .topbar {
+        will-change: transform, opacity;
+        transition: transform 0.5s cubic-bezier(0.16,1,0.3,1),
+                    opacity   0.4s cubic-bezier(0.16,1,0.3,1),
+                    box-shadow 0.4s ease;
     }
     </style>
 </head>
 <body>
+
+<canvas id="particle-canvas"></canvas>
+
+<!-- ════ STAT MODAL ════ -->
+<div class="stat-modal-backdrop" id="statModalBackdrop">
+    <div class="stat-modal" id="statModal">
+        <div class="stat-modal-hero" id="modalHero">
+            <button class="stat-modal-close" id="modalClose">✕</button>
+            <div class="stat-modal-hero-inner">
+                <div class="stat-modal-icon" id="modalIcon"></div>
+                <div class="stat-modal-number" id="modalNumber"></div>
+                <div class="stat-modal-title"  id="modalTitle"></div>
+            </div>
+        </div>
+        <div class="stat-modal-body">
+            <div class="stat-modal-desc"  id="modalDesc"></div>
+            <div class="stat-modal-rows"  id="modalRows"></div>
+            <div class="stat-modal-tags"  id="modalTags"></div>
+        </div>
+    </div>
+</div>
+
 <div class="app-shell">
 
     <!-- ── SIDEBAR ── -->
@@ -539,10 +454,8 @@
         <div class="sidebar-logo">
             <svg class="sidebar-logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
-                <path d="M12 6v6l4 2"/>
-                <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-                <path d="M12 22c-4-4-4-10 0-14"/>
-                <path d="M12 22c4-4 4-10 0-14"/>
+                <path d="M12 6v6l4 2"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                <path d="M12 22c-4-4-4-10 0-14"/><path d="M12 22c4-4 4-10 0-14"/>
             </svg>
             <div class="sidebar-logo-name">FasalGuard</div>
             <div class="sidebar-logo-tag">AI Crop Intelligence</div>
@@ -558,10 +471,22 @@
         <div class="sidebar-section">
             <div class="sidebar-label">Performance</div>
             <div class="stats-grid">
-                <div class="stat-box"><div class="stat-value">38</div><div class="stat-label">Classes</div></div>
-                <div class="stat-box"><div class="stat-value">14</div><div class="stat-label">Crops</div></div>
-                <div class="stat-box"><div class="stat-value">99%</div><div class="stat-label">Accuracy</div></div>
-                <div class="stat-box"><div class="stat-value">&lt;2s</div><div class="stat-label">Inference</div></div>
+                <div class="stat-box" data-stat="classes">
+                    <div class="stat-value">38</div>
+                    <div class="stat-label">Classes</div>
+                </div>
+                <div class="stat-box" data-stat="crops">
+                    <div class="stat-value">14</div>
+                    <div class="stat-label">Crops</div>
+                </div>
+                <div class="stat-box" data-stat="accuracy">
+                    <div class="stat-value">99%</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+                <div class="stat-box" data-stat="inference">
+                    <div class="stat-value">&lt;2s</div>
+                    <div class="stat-label">Inference</div>
+                </div>
             </div>
         </div>
         <div class="sidebar-section"><div class="sidebar-label">Supported Crops</div></div>
@@ -602,36 +527,34 @@
                 <p>Upload a clear photo of any crop leaf. Our AI identifies the disease, shows where it detected it, rates severity, and gives you a full treatment plan — in seconds.</p>
             </div>
 
-            <!-- ═══════════════════════════════════════
-                 ANIMATED DEMO MOCKUP
-                 ═══════════════════════════════════════ -->
+            <!-- ═══ DEMO MOCKUP ═══ -->
             <div class="demo-section">
                 <div class="demo-label">
                     <div class="demo-label-eyebrow"><span></span> Live Preview</div>
                     <h2>See How It Works</h2>
-                    <p>Watch the full detection process — from upload to diagnosis</p>
+                    <p>Watch the full detection process — upload to diagnosis</p>
                 </div>
-
                 <div class="mockup-shell">
                     <div class="laptop-outer">
+                        <div class="laptop-dots">
+                            <div class="laptop-dot red"></div>
+                            <div class="laptop-dot yellow"></div>
+                            <div class="laptop-dot green"></div>
+                        </div>
                         <div class="laptop-camera-bar"><div class="laptop-camera"></div></div>
-
                         <div class="laptop-screen" id="laptopScreen">
-
-                            <!-- FRAME 1: Upload ready -->
+                            <!-- FRAME 1 -->
                             <div class="demo-frame active" id="frame1">
                                 <div class="m-topbar">
-                                    <div class="m-topbar-title">FasalGuard AI</div>
-                                    <div class="m-topbar-badge">Online</div>
+                                    <div class="m-topbar-left"><div class="m-topbar-dot"></div><div class="m-topbar-title">FasalGuard AI</div></div>
+                                    <div class="m-topbar-badge" id="badge1">Online</div>
                                 </div>
                                 <div class="m-body">
                                     <div class="m-heading">Diagnose Your <span>Crop</span></div>
                                     <div class="m-sub">Upload a clear photo of any crop leaf for instant AI diagnosis</div>
                                     <div class="m-upload-box">
                                         <div class="m-upload-header">
-                                            <div class="m-upload-icon">
-                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                                            </div>
+                                            <div class="m-upload-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
                                             <div class="m-upload-title">Upload Leaf Image</div>
                                         </div>
                                         <div class="m-drop-zone" id="mDropZone">
@@ -648,18 +571,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Animated cursor -->
-                                <div class="m-cursor" id="mCursor" style="top:30%;left:60%;">
-                                    <svg viewBox="0 0 24 24" fill="white" stroke="#2d3a2d" stroke-width="1.5"><path d="M4 2l16 10-7 1-4 7z"/></svg>
-                                </div>
+                                <div class="m-cursor" id="mCursor" style="top:30%;left:62%;"><svg viewBox="0 0 24 24" fill="white" stroke="#2d3a2d" stroke-width="1.5"><path d="M4 2l16 10-7 1-4 7z"/></svg></div>
                                 <div class="m-ripple" id="mRipple"></div>
                             </div>
-
-                            <!-- FRAME 2: Analysing -->
+                            <!-- FRAME 2 -->
                             <div class="demo-frame" id="frame2">
                                 <div class="m-topbar">
-                                    <div class="m-topbar-title">FasalGuard AI</div>
-                                    <div class="m-topbar-badge">Analysing…</div>
+                                    <div class="m-topbar-left"><div class="m-topbar-dot" style="background:#c4a35a;"></div><div class="m-topbar-title">FasalGuard AI</div></div>
+                                    <div class="m-topbar-badge analysing">Processing…</div>
                                 </div>
                                 <div class="m-body">
                                     <div class="m-heading">Diagnose Your <span>Crop</span></div>
@@ -668,71 +587,49 @@
                                             <div class="m-upload-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
                                             <div class="m-upload-title">Upload Leaf Image</div>
                                         </div>
-                                        <div class="m-drop-zone highlight">
-                                            <div class="m-file-chosen" style="display:flex;">
-                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:10px;height:10px;color:#7fb069"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                                                tomato_leaf_01.jpg
+                                        <div class="m-drop-zone highlight" style="position:relative;">
+                                            <div class="m-file-chosen" style="display:flex;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:8px;height:8px;color:#7fb069"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>tomato_leaf_01.jpg</div>
+                                            <div class="m-ai-overlay" style="border-radius:4px;">
+                                                <div class="m-ai-spinner"></div>
+                                                <div class="m-ai-text">Running EfficientNet-B0</div>
+                                                <div class="m-progress-track"><div class="m-progress-fill" id="mProgressFill"></div></div>
+                                                <div class="m-ai-sub">Generating Grad-CAM heatmap…</div>
                                             </div>
                                         </div>
-                                        <div class="m-analyse-btn loading">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                                            Analysing…
-                                        </div>
+                                        <div class="m-analyse-btn loading"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Analysing…</div>
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- FRAME 3: Results -->
+                            <!-- FRAME 3 -->
                             <div class="demo-frame" id="frame3">
                                 <div class="m-scan-line" id="mScanLine"></div>
                                 <div class="m-topbar">
-                                    <div class="m-topbar-title">Analysis Result</div>
-                                    <div class="m-topbar-badge">Complete</div>
+                                    <div class="m-topbar-left"><div class="m-topbar-dot"></div><div class="m-topbar-title">Analysis Result</div></div>
+                                    <div class="m-topbar-badge done">✓ Complete</div>
                                 </div>
-                                <div class="m-body" style="justify-content:flex-start;padding-top:4px;">
+                                <div class="m-body" style="justify-content:flex-start;padding-top:3px;">
                                     <div class="m-result-layout">
-                                        <div class="m-img-card">
-                                            <div class="m-img-label">Uploaded Image</div>
-                                            <div class="m-img-placeholder m-img-leaf">🍃</div>
-                                        </div>
-                                        <div class="m-img-card">
-                                            <div class="m-img-label">AI Focus Area</div>
-                                            <div class="m-img-placeholder m-img-heat">🌡</div>
-                                        </div>
+                                        <div class="m-img-card"><div class="m-img-label">Uploaded Image</div><div class="m-img-placeholder m-img-leaf">🍃</div></div>
+                                        <div class="m-img-card"><div class="m-img-label">AI Focus Area</div><div class="m-img-placeholder m-img-heat">🔥</div></div>
                                         <div class="m-diag-card">
                                             <div class="m-diag-name">Tomato Late Blight</div>
-                                            <div class="m-sev-badge">⚠ High Severity</div>
+                                            <div class="m-sev-badge">⚠ High Severity — Immediate Action</div>
                                             <div class="m-conf-label"><span>AI Confidence</span><span>91%</span></div>
                                             <div class="m-conf-track"><div class="m-conf-fill" id="mConfFill"></div></div>
                                             <div class="m-treatment-row">
-                                                <div class="m-treat-card">
-                                                    <div class="m-treat-card-title">Action</div>
-                                                    <div class="m-treat-card-text">Remove infected plants immediately</div>
-                                                </div>
-                                                <div class="m-treat-card">
-                                                    <div class="m-treat-card-title">Chemical</div>
-                                                    <div class="m-treat-card-text">Ridomil Gold 2g/L every 5 days</div>
-                                                </div>
-                                                <div class="m-treat-card">
-                                                    <div class="m-treat-card-title">Prevention</div>
-                                                    <div class="m-treat-card-text">Avoid overhead irrigation</div>
-                                                </div>
+                                                <div class="m-treat-card"><div class="m-treat-card-title">Action</div><div class="m-treat-card-text">Remove all infected plants immediately</div></div>
+                                                <div class="m-treat-card"><div class="m-treat-card-title">Chemical</div><div class="m-treat-card-text">Ridomil Gold 2g/L every 5 days</div></div>
+                                                <div class="m-treat-card"><div class="m-treat-card-title">Prevention</div><div class="m-treat-card-text">Avoid overhead irrigation</div></div>
                                             </div>
-                                            <div class="m-back-btn" id="mBackBtn">
-                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-                                                Analyse Another Image
-                                            </div>
+                                            <div class="m-back-btn" id="mBackBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Analyse Another Image</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                        </div><!-- /laptop-screen -->
-                    </div><!-- /laptop-outer -->
+                        </div>
+                    </div>
                     <div class="laptop-base"></div>
                 </div>
-
-                <!-- Step indicator -->
                 <div class="demo-steps">
                     <div class="demo-step-dot active" id="dot0"></div>
                     <div class="demo-step-dot" id="dot1"></div>
@@ -740,23 +637,19 @@
                 </div>
                 <div class="demo-step-label" id="demoStepLabel">Upload a crop leaf image</div>
             </div>
-            <!-- ═══ END DEMO ═══ -->
 
-            <!-- Divider -->
             <div class="demo-divider">
                 <div class="demo-divider-line"></div>
-                <div class="demo-divider-text">Try it yourself below</div>
+                <div class="demo-divider-text">Try it yourself</div>
                 <div class="demo-divider-line"></div>
             </div>
 
-            <!-- ── UPLOAD CARD (unchanged) ── -->
+            <!-- ── UPLOAD CARD ── -->
             <div class="upload-card">
                 <div class="upload-header">
                     <div class="upload-icon-ring">
                         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                            <polyline points="17 8 12 3 7 8"/>
-                            <line x1="12" y1="3" x2="12" y2="15"/>
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
                         </svg>
                     </div>
                     <h2>Upload Leaf Image</h2>
@@ -767,17 +660,14 @@
                         <input type="file" name="image" id="fileInput" accept=".png,.jpg,.jpeg" required>
                         <div class="drop-placeholder">
                             <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="3" width="18" height="18" rx="2"/>
-                                <circle cx="8.5" cy="8.5" r="1.5"/>
-                                <path d="M21 15l-5-5L5 21"/>
+                                <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
                             </svg>
                             <h3>Drop crop image here</h3>
                             <p>or click to browse · Supports PNG, JPG, JPEG</p>
                         </div>
                         <div class="file-selected" id="fileSelected">
                             <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                <polyline points="14 2 14 8 20 8"/>
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
                             </svg>
                             <span id="fileName">No file selected</span>
                         </div>
@@ -793,8 +683,7 @@
                     {% endwith %}
                     <button type="submit" class="analyse-btn" id="analyseBtn">
                         <svg id="btnIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="11" cy="11" r="8"/>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
                         </svg>
                         <span id="btnText">Analyse Image</span>
                     </button>
@@ -804,53 +693,38 @@
             <!-- Feature cards -->
             <div class="features-grid">
                 <div class="feature-box">
-                    <div class="feature-icon-box">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
-                        </svg>
-                    </div>
+                    <div class="feature-icon-box"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
                     <h3>Disease Intelligence</h3>
                     <p>Identifies 38 conditions across 14 crops. Tells you what the disease is, what causes it, how it spreads, and how fast you need to act.</p>
                 </div>
                 <div class="feature-box">
-                    <div class="feature-icon-box">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-                        </svg>
-                    </div>
+                    <div class="feature-icon-box"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
                     <h3>Grad-CAM Heatmap</h3>
                     <p>A red-blue overlay shows exactly which part of the leaf the AI focused on when making its diagnosis — full transparency into the decision.</p>
                 </div>
                 <div class="feature-box">
-                    <div class="feature-icon-box">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                        </svg>
-                    </div>
+                    <div class="feature-icon-box"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
                     <h3>Full Treatment Plan</h3>
                     <p>Immediate action steps, specific chemical names and dosages, long-term prevention strategies, and a severity rating so you know how urgent the situation is.</p>
                 </div>
             </div>
         </div>
 
-        <footer class="footer">
-            <p>FasalGuard AI — CECOS University, Peshawar</p>
-        </footer>
+        <footer class="footer"><p>FasalGuard AI — CECOS University, Peshawar</p></footer>
     </div>
 </div>
 
-<!-- ── REAL UPLOAD SCRIPTS (unchanged) ── -->
+<!-- ── UPLOAD SCRIPTS ── -->
 <script>
-    const dropZone       = document.getElementById('dropZone');
-    const fileInput      = document.getElementById('fileInput');
-    const fileSelected   = document.getElementById('fileSelected');
-    const fileName       = document.getElementById('fileName');
-    const dropPlaceholder= document.querySelector('.drop-placeholder');
-    const uploadForm     = document.getElementById('uploadForm');
-    const analyseBtn     = document.getElementById('analyseBtn');
-    const btnText        = document.getElementById('btnText');
-    const btnIcon        = document.getElementById('btnIcon');
-
+    const dropZone        = document.getElementById('dropZone');
+    const fileInput       = document.getElementById('fileInput');
+    const fileSelected    = document.getElementById('fileSelected');
+    const fileName        = document.getElementById('fileName');
+    const dropPlaceholder = document.querySelector('.drop-placeholder');
+    const uploadForm      = document.getElementById('uploadForm');
+    const analyseBtn      = document.getElementById('analyseBtn');
+    const btnText         = document.getElementById('btnText');
+    const btnIcon         = document.getElementById('btnIcon');
     dropZone.addEventListener('click', (e) => { if (e.target !== fileInput) fileInput.click(); });
     fileInput.addEventListener('change', () => { if (fileInput.files.length > 0) showFile(fileInput.files[0].name); });
     dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
@@ -874,129 +748,189 @@
     });
 </script>
 
-<!-- ── DEMO ANIMATION CONTROLLER ── -->
+<!-- ── STAT MODAL DATA + LOGIC ── -->
 <script>
-(function() {
-    const frames     = [document.getElementById('frame1'), document.getElementById('frame2'), document.getElementById('frame3')];
-    const dots       = [document.getElementById('dot0'), document.getElementById('dot1'), document.getElementById('dot2')];
-    const stepLabel  = document.getElementById('demoStepLabel');
-    const labels     = ['Upload a crop leaf image', 'AI is analysing the image…', 'Diagnosis complete — view results'];
+(function () {
+    const STAT_DATA = {
+        classes: {
+            number: '38',
+            title:  'Disease Classes',
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`,
+            desc: 'FasalGuard AI can identify 38 distinct disease and pest conditions across 14 different crop types, covering both fungal, bacterial, viral, and pest-related issues.',
+            rows: [
+                { icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`, title: 'Fungal Diseases', text: '18 classes — including blights, rusts, mildews, leaf spots, molds, and scabs across multiple crops.' },
+                { icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`, title: 'Bacterial & Viral', text: '8 classes — bacterial spots, citrus greening, mosaic virus, yellow leaf curl virus, and more.' },
+                { icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`, title: 'Pest Infestations', text: '2 classes — spider mites (two-spotted) detected from leaf damage patterns.' },
+                { icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>`, title: 'Healthy Class', text: '10 healthy classes — one per crop so the model can confidently confirm a crop is disease-free.' },
+            ],
+            tags: ['Apple Scab','Apple Black Rot','Grape Esca','Tomato Late Blight','Potato Blight','Citrus Greening','Maize Rust','Cherry Mildew','Tomato Mosaic','Strawberry Scorch','+ 28 more']
+        },
+        crops: {
+            number: '14',
+            title: 'Crop Types',
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10S2 17.52 2 12c0-2.76 1.12-5.26 2.93-7.07"/><path d="M12 6v6l4 2"/></svg>`,
+            desc: 'The model covers 14 crop types sourced entirely from the PlantVillage benchmark dataset — one of the largest open-source plant disease image collections in the world.',
+            rows: [
+                { icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>`, title: 'Fruit Crops', text: 'Apple, Blueberry, Cherry, Grape, Orange, Peach, Raspberry, Strawberry — 8 fruit varieties covered.' },
+                { icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/></svg>`, title: 'Vegetable & Field Crops', text: 'Corn (Maize), Pepper, Potato, Soybean, Squash, Tomato — 6 staple crops including major Pakistan crops.' },
+                { icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`, title: 'Dataset Size', text: '53,114 images used after cleaning. Each crop has between 500 and 5,000+ images across its classes.' },
+            ],
+            tags: ['🍎 Apple','🫐 Blueberry','🍒 Cherry','🌽 Corn','🍇 Grape','🍊 Orange','🍑 Peach','🫑 Pepper','🥔 Potato','🫐 Raspberry','🫘 Soybean','🎃 Squash','🍓 Strawberry','🍅 Tomato']
+        },
+        accuracy: {
+            number: '99%',
+            title: 'Model Accuracy',
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+            desc: 'FasalGuard AI achieved 99.17% validation accuracy and 99.27% test accuracy — trained on 53,114 PlantVillage images using EfficientNet-B0 with ImageNet transfer learning.',
+            rows: [
+                { icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>`, title: 'Validation Accuracy — 99.17%', text: 'Measured on the held-out validation set during training. The model was not shown these images during learning.' },
+                { icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>`, title: 'Test Accuracy — 99.27%', text: 'Final evaluation on a completely separate test set. This is the most honest measure of real-world performance.' },
+                { icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>`, title: 'Model Architecture', text: 'EfficientNet-B0 pretrained on ImageNet, fine-tuned for 5 epochs on PlantVillage. 5.3M parameters.' },
+                { icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`, title: 'Known Limitation', text: 'Accuracy is high on PlantVillage-style lab images. Real field photos with complex backgrounds may reduce confidence — a planned improvement.' },
+            ],
+            tags: ['99.17% Val Acc','99.27% Test Acc','5 Epochs','EfficientNet-B0','53K Images','38 Classes','Transfer Learning','PlantVillage Dataset']
+        },
+        inference: {
+            number: '<2s',
+            title: 'Inference Speed',
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+            desc: 'From upload to full result — including classification, Grad-CAM heatmap generation, and treatment lookup — in under 2 seconds on CPU. No GPU required to run the app.',
+            rows: [
+                { icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`, title: 'Classification — ~0.3s', text: 'EfficientNet-B0 runs one forward pass on the uploaded image. Preprocessing (resize + normalise) takes under 50ms.' },
+                { icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`, title: 'Grad-CAM Heatmap — ~0.8s', text: 'Gradient-weighted Class Activation Maps computed via pytorch-grad-cam. The most computationally intensive step.' },
+                { icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>`, title: 'Treatment Lookup — ~0ms', text: 'Instant dictionary lookup — no database query, no API call. All 38 treatments are pre-loaded in memory.' },
+                { icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`, title: 'Runs on CPU', text: 'The app uses a TorchScript-exported model. No NVIDIA GPU needed — runs on any modern laptop.' },
+            ],
+            tags: ['CPU Only','No GPU Needed','< 2s Total','Flask Backend','PyTorch','Grad-CAM','TorchScript Export']
+        }
+    };
 
-    const cursor     = document.getElementById('mCursor');
-    const ripple     = document.getElementById('mRipple');
-    const dropZoneM  = document.getElementById('mDropZone');
-    const fileChosenM= document.getElementById('mFileChosen');
-    const analyseBtnM= document.getElementById('mAnalyseBtn');
-    const btnTextM   = document.getElementById('mBtnText');
-    const confFill   = document.getElementById('mConfFill');
-    const scanLine   = document.getElementById('mScanLine');
-    const backBtn    = document.getElementById('mBackBtn');
+    const backdrop = document.getElementById('statModalBackdrop');
+    const modal    = document.getElementById('statModal');
+    const modalClose = document.getElementById('modalClose');
 
-    let currentFrame = 0;
-    let loopTimer    = null;
+    function openModal(key) {
+        const d = STAT_DATA[key];
+        if (!d) return;
 
-    function showFrame(n) {
-        frames.forEach((f, i) => f.classList.toggle('active', i === n));
-        dots.forEach((d, i) => d.classList.toggle('active', i === n));
-        stepLabel.textContent = labels[n];
-        currentFrame = n;
+        document.getElementById('modalNumber').textContent = d.number;
+        document.getElementById('modalTitle').textContent  = d.title;
+        document.getElementById('modalIcon').innerHTML     = d.icon;
+        document.getElementById('modalDesc').textContent   = d.desc;
+
+        // Rows
+        const rowsEl = document.getElementById('modalRows');
+        rowsEl.innerHTML = '';
+        d.rows.forEach((r, i) => {
+            const div = document.createElement('div');
+            div.className = 'stat-modal-row';
+            div.style.animationDelay = (i * 0.07) + 's';
+            div.innerHTML = `
+                <div class="stat-modal-row-icon">${r.icon}</div>
+                <div>
+                    <div class="stat-modal-row-title">${r.title}</div>
+                    <div class="stat-modal-row-text">${r.text}</div>
+                </div>`;
+            rowsEl.appendChild(div);
+        });
+
+        // Tags
+        const tagsEl = document.getElementById('modalTags');
+        tagsEl.innerHTML = '';
+        d.tags.forEach((t, i) => {
+            const tag = document.createElement('div');
+            tag.className = 'stat-modal-tag';
+            tag.style.animationDelay = (i * 0.04) + 's';
+            tag.innerHTML = `<span></span>${t}`;
+            tagsEl.appendChild(tag);
+        });
+
+        backdrop.classList.add('open');
+        document.body.style.overflow = 'hidden';
     }
 
-    function rippleAt(el) {
-        const rect = el.getBoundingClientRect();
-        const screen = document.getElementById('laptopScreen').getBoundingClientRect();
-        ripple.style.left = (rect.left - screen.left + rect.width / 2 - 10) + 'px';
-        ripple.style.top  = (rect.top  - screen.top  + rect.height/ 2 - 10) + 'px';
-        ripple.classList.remove('pop');
-        void ripple.offsetWidth;
-        ripple.classList.add('pop');
+    function closeModal() {
+        backdrop.classList.remove('open');
+        document.body.style.overflow = '';
     }
 
-    function moveCursorTo(el, cb) {
-        const rect   = el.getBoundingClientRect();
-        const screen = document.getElementById('laptopScreen').getBoundingClientRect();
-        const x = (rect.left - screen.left + rect.width  / 2 - 6);
-        const y = (rect.top  - screen.top  + rect.height / 2 - 6);
-        cursor.style.left = x + 'px';
-        cursor.style.top  = y + 'px';
-        setTimeout(cb, 900);
-    }
+    // Bind stat boxes
+    document.querySelectorAll('.stat-box').forEach(box => {
+        box.addEventListener('click', () => openModal(box.dataset.stat));
+    });
 
-    function runPhase1() {
-        // Reset frame 1 state
-        dropZoneM.classList.remove('highlight');
-        fileChosenM.style.display = 'none';
-        dropZoneM.querySelector('.m-drop-text').style.display = '';
-        dropZoneM.querySelector('.m-drop-icon').style.display = '';
-        analyseBtnM.classList.remove('loading');
-        btnTextM.textContent = 'Analyse Image';
-        cursor.style.left = '60%';
-        cursor.style.top  = '30%';
-
-        showFrame(0);
-
-        // 1.5s pause then move cursor to drop zone
-        setTimeout(() => {
-            moveCursorTo(dropZoneM, () => {
-                // Click effect
-                rippleAt(dropZoneM);
-                dropZoneM.classList.add('highlight');
-                // Show file chosen
-                setTimeout(() => {
-                    dropZoneM.querySelector('.m-drop-text').style.display = 'none';
-                    dropZoneM.querySelector('.m-drop-icon').style.display = 'none';
-                    fileChosenM.style.display = 'flex';
-                    // Move cursor to button
-                    setTimeout(() => {
-                        moveCursorTo(analyseBtnM, () => {
-                            rippleAt(analyseBtnM);
-                            analyseBtnM.classList.add('loading');
-                            btnTextM.textContent = 'Analysing…';
-                            // Transition to frame 2
-                            setTimeout(() => runPhase2(), 600);
-                        });
-                    }, 900);
-                }, 500);
-            });
-        }, 1500);
-    }
-
-    function runPhase2() {
-        showFrame(1);
-        // Hold analysing state briefly
-        setTimeout(() => runPhase3(), 1800);
-    }
-
-    function runPhase3() {
-        showFrame(2);
-        // Trigger scan line
-        scanLine.classList.remove('scanning');
-        void scanLine.offsetWidth;
-        scanLine.classList.add('scanning');
-        // Animate confidence bar
-        confFill.style.width = '0';
-        setTimeout(() => { confFill.style.width = '91%'; }, 300);
-        // After results shown, hover over back button then loop
-        setTimeout(() => {
-            backBtn.classList.add('hovering');
-            setTimeout(() => {
-                backBtn.classList.remove('hovering');
-                // Pause then loop
-                setTimeout(() => runPhase1(), 800);
-            }, 1200);
-        }, 3500);
-    }
-
-    // Start after short delay
-    setTimeout(runPhase1, 800);
+    modalClose.addEventListener('click', closeModal);
+    backdrop.addEventListener('click', (e) => { if (e.target === backdrop) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 })();
 </script>
 
-<style>
-    @keyframes spin {
-        from { transform: rotate(0deg); }
-        to   { transform: rotate(360deg); }
+<!-- ── PARTICLES ── -->
+<script>
+(function() {
+    const canvas = document.getElementById('particle-canvas');
+    const ctx    = canvas.getContext('2d');
+    let W, H, particles = [];
+    const COLORS = ['#7fb069','#4a7c59','#c4a35a','#8faa8f','#a8c990','#6b8e6b'];
+    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+    function mkParticle() { return { x:Math.random()*W, y:Math.random()*H, r:Math.random()*2.5+0.8, vx:(Math.random()-0.5)*0.3, vy:-Math.random()*0.4-0.1, alpha:Math.random()*0.4+0.1, color:COLORS[Math.floor(Math.random()*COLORS.length)] }; }
+    function init() { resize(); particles = Array.from({length:55},mkParticle); }
+    function draw() {
+        ctx.clearRect(0,0,W,H);
+        particles.forEach(p => {
+            ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+            ctx.fillStyle=p.color; ctx.globalAlpha=p.alpha; ctx.fill();
+            p.x+=p.vx; p.y+=p.vy;
+            if(p.y<-5||p.x<-5||p.x>W+5) Object.assign(p,mkParticle(),{y:H+5,x:Math.random()*W});
+        });
+        ctx.globalAlpha=1;
+        requestAnimationFrame(draw);
     }
-</style>
+    window.addEventListener('resize',resize);
+    init(); draw();
+})();
+</script>
+
+<!-- ── DEMO ANIMATION ── -->
+<script>
+(function() {
+    const frames=[document.getElementById('frame1'),document.getElementById('frame2'),document.getElementById('frame3')];
+    const dots=[document.getElementById('dot0'),document.getElementById('dot1'),document.getElementById('dot2')];
+    const stepLabel=document.getElementById('demoStepLabel');
+    const labels=['Upload a crop leaf image','AI is analysing the image…','Diagnosis complete'];
+    const cursor=document.getElementById('mCursor'),ripple=document.getElementById('mRipple');
+    const dropZoneM=document.getElementById('mDropZone'),fileChosenM=document.getElementById('mFileChosen');
+    const analyseBtnM=document.getElementById('mAnalyseBtn'),btnTextM=document.getElementById('mBtnText');
+    const confFill=document.getElementById('mConfFill'),scanLine=document.getElementById('mScanLine');
+    const backBtn=document.getElementById('mBackBtn'),progressFill=document.getElementById('mProgressFill');
+    function showFrame(n){frames.forEach((f,i)=>f.classList.toggle('active',i===n));dots.forEach((d,i)=>d.classList.toggle('active',i===n));stepLabel.textContent=labels[n];}
+    function rippleAt(el){const r=el.getBoundingClientRect(),s=document.getElementById('laptopScreen').getBoundingClientRect();ripple.style.left=(r.left-s.left+r.width/2-8)+'px';ripple.style.top=(r.top-s.top+r.height/2-8)+'px';ripple.classList.remove('pop');void ripple.offsetWidth;ripple.classList.add('pop');}
+    function moveCursorTo(el,cb){const r=el.getBoundingClientRect(),s=document.getElementById('laptopScreen').getBoundingClientRect();cursor.style.left=(r.left-s.left+r.width/2-5)+'px';cursor.style.top=(r.top-s.top+r.height/2-5)+'px';setTimeout(cb,850);}
+    function runPhase1(){
+        dropZoneM.classList.remove('highlight');fileChosenM.style.display='none';
+        const di=dropZoneM.querySelector('.m-drop-icon'),dt=dropZoneM.querySelector('.m-drop-text');
+        if(di)di.style.display='';if(dt)dt.style.display='';
+        analyseBtnM.classList.remove('loading');btnTextM.textContent='Analyse Image';
+        cursor.style.left='62%';cursor.style.top='28%';
+        showFrame(0);
+        setTimeout(()=>{moveCursorTo(dropZoneM,()=>{rippleAt(dropZoneM);dropZoneM.classList.add('highlight');setTimeout(()=>{if(di)di.style.display='none';if(dt)dt.style.display='none';fileChosenM.style.display='flex';setTimeout(()=>{moveCursorTo(analyseBtnM,()=>{rippleAt(analyseBtnM);analyseBtnM.classList.add('loading');btnTextM.textContent='Analysing…';setTimeout(()=>runPhase2(),500);});},800);},450);});},1400);
+    }
+    function runPhase2(){showFrame(1);progressFill.style.width='0';setTimeout(()=>{progressFill.style.width='100%';},100);setTimeout(()=>runPhase3(),2000);}
+    function runPhase3(){showFrame(2);scanLine.classList.remove('scanning');void scanLine.offsetWidth;scanLine.classList.add('scanning');confFill.style.width='0';setTimeout(()=>{confFill.style.width='91%';},250);setTimeout(()=>{backBtn.classList.add('hovering');setTimeout(()=>{backBtn.classList.remove('hovering');setTimeout(()=>runPhase1(),700);},1100);},3200);}
+    setTimeout(runPhase1,700);
+})();
+</script>
+
+<!-- ── TOPBAR SCROLL ── -->
+<script>
+(function(){
+    const topbar=document.querySelector('.topbar');
+    let lastY=0,hidden=false,ticking=false,idleTimer=null;
+    function hide(){if(hidden)return;hidden=true;topbar.style.transform='translateY(-110%)';topbar.style.opacity='0';topbar.style.boxShadow='none';}
+    function show(){if(!hidden)return;hidden=false;topbar.style.transform='translateY(0)';topbar.style.opacity='1';topbar.style.boxShadow='';}
+    function resetIdle(){clearTimeout(idleTimer);idleTimer=setTimeout(show,2500);}
+    window.addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(()=>{const c=window.scrollY,d=c-lastY;if(d>4&&c>80)hide();else if(d<-4)show();lastY=c;ticking=false;resetIdle();});ticking=true;}},{passive:true});
+})();
+</script>
 </body>
 </html>
