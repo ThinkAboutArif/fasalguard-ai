@@ -6,277 +6,997 @@
     <title>FasalGuard AI — Crop Disease Detection</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-    <div class="app-shell">
-
-        <!-- ── SIDEBAR (unchanged) ── -->
-        <aside class="sidebar">
-            <div class="sidebar-logo">
-                <svg class="sidebar-logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
-                    <path d="M12 6v6l4 2"/>
-                    <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-                    <path d="M12 22c-4-4-4-10 0-14"/>
-                    <path d="M12 22c4-4 4-10 0-14"/>
-                </svg>
-                <div class="sidebar-logo-name">FasalGuard</div>
-                <div class="sidebar-logo-tag">AI Crop Intelligence</div>
-            </div>
-
-            <div class="sidebar-section">
-                <div class="sidebar-label">System Status</div>
-                <div class="status-pills">
-                    <div class="status-pill">
-                        <span class="pill-dot"></span>
-                        <span class="pill-text">FasalGuard-B0</span>
-                        <span class="pill-value">99.2%</span>
-                    </div>
-                    <div class="status-pill">
-                        <span class="pill-dot"></span>
-                        <span class="pill-text">Grad-CAM</span>
-                        <span class="pill-value">Active</span>
-                    </div>
-                    <div class="status-pill">
-                        <span class="pill-dot"></span>
-                        <span class="pill-text">Flask Server</span>
-                        <span class="pill-value">Online</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="sidebar-section">
-                <div class="sidebar-label">Performance</div>
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <div class="stat-value">38</div>
-                        <div class="stat-label">Classes</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-value">14</div>
-                        <div class="stat-label">Crops</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-value">99%</div>
-                        <div class="stat-label">Accuracy</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-value">&lt;2s</div>
-                        <div class="stat-label">Inference</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="sidebar-section">
-                <div class="sidebar-label">Supported Crops</div>
-            </div>
-            <div class="class-list">
-                <div class="class-item"><span class="class-dot" style="background:#7fb069"></span>Apple</div>
-                <div class="class-item"><span class="class-dot" style="background:#6b8e6b"></span>Blueberry</div>
-                <div class="class-item"><span class="class-dot" style="background:#c4a35a"></span>Cherry</div>
-                <div class="class-item"><span class="class-dot" style="background:#8faa8f"></span>Corn (Maize)</div>
-                <div class="class-item"><span class="class-dot" style="background:#7fb069"></span>Grape</div>
-                <div class="class-item"><span class="class-dot" style="background:#c4705a"></span>Orange</div>
-                <div class="class-item"><span class="class-dot" style="background:#d4b978"></span>Peach</div>
-                <div class="class-item"><span class="class-dot" style="background:#6b8e6b"></span>Pepper</div>
-                <div class="class-item"><span class="class-dot" style="background:#8faa8f"></span>Potato</div>
-                <div class="class-item"><span class="class-dot" style="background:#7fb069"></span>Raspberry</div>
-                <div class="class-item"><span class="class-dot" style="background:#c4a35a"></span>Soybean</div>
-                <div class="class-item"><span class="class-dot" style="background:#a8c990"></span>Squash</div>
-                <div class="class-item"><span class="class-dot" style="background:#c4705a"></span>Strawberry</div>
-                <div class="class-item"><span class="class-dot" style="background:#6b8e6b"></span>Tomato</div>
-            </div>
-        </aside>
-
-        <!-- ── MAIN ── -->
-        <div class="main-area">
-            <div class="topbar">
-                <div>
-                    <div class="topbar-title">Crop Disease Analyser</div>
-                    <div class="topbar-sub">Upload a photo → get instant AI diagnosis + full treatment advisory</div>
-                </div>
-                <div class="topbar-nav">
-                    <a href="/about" class="topbar-badge">
-                        <span class="topbar-badge-dot"></span>
-                        About
-                    </a>
-                    <a href="/" class="topbar-badge" style="background: var(--forest); color: var(--text-white);">
-                        <span class="topbar-badge-dot" style="background: var(--text-white);"></span>
-                        Home
-                    </a>
-                </div>
-            </div>
-
-            <div class="content">
-                <div class="page-header">
-                    <h1>Diagnose Your <span>Crop</span></h1>
-                    <p>Upload a clear photo of any crop leaf. Our AI identifies the disease, shows where it detected it, rates severity, and gives you a full treatment plan — in seconds.</p>
-                </div>
-
-                <!-- Upload card — structure unchanged, form unchanged -->
-                <div class="upload-card">
-                    <div class="upload-header">
-                        <div class="upload-icon-ring">
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                <polyline points="17 8 12 3 7 8"/>
-                                <line x1="12" y1="3" x2="12" y2="15"/>
-                            </svg>
-                        </div>
-                        <h2>Upload Leaf Image</h2>
-                        <p>Drag & drop or click to browse your files</p>
-                    </div>
-
-                    <form action="/predict" method="post" enctype="multipart/form-data" id="uploadForm">
-                        <div class="drop-zone" id="dropZone">
-                            <input type="file" name="image" id="fileInput" accept=".png,.jpg,.jpeg" required>
-
-                            <div class="drop-placeholder">
-                                <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="3" y="3" width="18" height="18" rx="2"/>
-                                    <circle cx="8.5" cy="8.5" r="1.5"/>
-                                    <path d="M21 15l-5-5L5 21"/>
-                                </svg>
-                                <h3>Drop crop image here</h3>
-                                <p>or click to browse · Supports PNG, JPG, JPEG</p>
-                            </div>
-
-                            <div class="file-selected" id="fileSelected">
-                                <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                    <polyline points="14 2 14 8 20 8"/>
-                                </svg>
-                                <span id="fileName">No file selected</span>
-                            </div>
-                        </div>
-
-                        {% with messages = get_flashed_messages() %}
-                            {% if messages %}
-                                <div class="flash-messages">
-                                    {% for message in messages %}
-                                        <div class="flash-error">{{ message }}</div>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                        {% endwith %}
-
-                        <button type="submit" class="analyse-btn" id="analyseBtn">
-                            <svg id="btnIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="11" cy="11" r="8"/>
-                                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                            </svg>
-                            <span id="btnText">Analyse Image</span>
-                        </button>
-                    </form>
-                </div>
-
-                <!-- Feature cards — updated descriptions to match new 7-field output -->
-                <div class="features-grid">
-                    <div class="feature-box">
-                        <div class="feature-icon-box">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                                <path d="M2 17l10 5 10-5"/>
-                                <path d="M2 12l10 5 10-5"/>
-                            </svg>
-                        </div>
-                        <h3>Disease Intelligence</h3>
-                        <p>Identifies 38 conditions across 14 crops. Tells you what the disease is, what causes it, how it spreads, and how fast you need to act.</p>
-                    </div>
-                    <div class="feature-box">
-                        <div class="feature-icon-box">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                <circle cx="12" cy="12" r="3"/>
-                            </svg>
-                        </div>
-                        <h3>Grad-CAM Heatmap</h3>
-                        <p>A red-blue overlay shows exactly which part of the leaf the AI focused on when making its diagnosis — full transparency into the decision.</p>
-                    </div>
-                    <div class="feature-box">
-                        <div class="feature-icon-box">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                            </svg>
-                        </div>
-                        <h3>Full Treatment Plan</h3>
-                        <p>Immediate action steps, specific chemical names and dosages, long-term prevention strategies, and a severity rating so you know how urgent the situation is.</p>
-                    </div>
-                </div>
-            </div>
-
-            <footer class="footer">
-                <p>FasalGuard AI — CECOS University, Peshawar</p>
-            </footer>
-        </div>
-    </div>
-
-    <script>
-        const dropZone      = document.getElementById('dropZone');
-        const fileInput     = document.getElementById('fileInput');
-        const fileSelected  = document.getElementById('fileSelected');
-        const fileName      = document.getElementById('fileName');
-        const dropPlaceholder = document.querySelector('.drop-placeholder');
-        const uploadForm    = document.getElementById('uploadForm');
-        const analyseBtn    = document.getElementById('analyseBtn');
-        const btnText       = document.getElementById('btnText');
-        const btnIcon       = document.getElementById('btnIcon');
-
-        // Click anywhere on drop zone triggers file picker
-        dropZone.addEventListener('click', (e) => {
-            if (e.target !== fileInput) fileInput.click();
-        });
-
-        // File chosen via picker
-        fileInput.addEventListener('change', () => {
-            if (fileInput.files.length > 0) {
-                showFile(fileInput.files[0].name);
-            }
-        });
-
-        // Drag events
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.classList.add('dragover');
-        });
-
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.classList.remove('dragover');
-        });
-
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('dragover');
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                fileInput.files = files;
-                showFile(files[0].name);
-            }
-        });
-
-        function showFile(name) {
-            fileName.textContent = name;
-            dropPlaceholder.style.display = 'none';
-            fileSelected.style.display = 'flex';
-            dropZone.classList.add('has-file');
-        }
-
-        // Loading state on submit — gives user feedback during inference
-        uploadForm.addEventListener('submit', () => {
-            analyseBtn.disabled = true;
-            analyseBtn.style.opacity = '0.75';
-            btnText.textContent = 'Analysing…';
-            // Swap icon to a spinner-like animation using CSS rotation
-            btnIcon.style.animation = 'spin 1s linear infinite';
-        });
-    </script>
 
     <style>
-        /* Spinner for the button icon during loading — scoped here, not in style.css */
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to   { transform: rotate(360deg); }
-        }
+    /* ═══════════════════════════════════════════
+       DEMO MOCKUP — all scoped, no conflicts
+       ═══════════════════════════════════════════ */
+
+    .demo-section {
+        max-width: 860px;
+        margin: 0 auto 40px;
+    }
+
+    .demo-label {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .demo-label-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--bg-mint);
+        border: 1px solid rgba(107,142,107,0.25);
+        border-radius: var(--radius-pill);
+        padding: 5px 14px;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--forest);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 10px;
+    }
+
+    .demo-label-eyebrow span {
+        width: 6px; height: 6px;
+        background: var(--leaf);
+        border-radius: 50%;
+        animation: pulse-dot 2s infinite;
+    }
+
+    .demo-label h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 6px;
+    }
+
+    .demo-label p {
+        font-size: 13px;
+        color: var(--text-muted);
+    }
+
+    /* Laptop shell */
+    .mockup-shell {
+        position: relative;
+        width: 100%;
+        max-width: 860px;
+        margin: 0 auto;
+    }
+
+    .laptop-outer {
+        background: #2a2a2e;
+        border-radius: 18px 18px 0 0;
+        padding: 14px 14px 0;
+        box-shadow: 0 24px 60px rgba(0,0,0,0.22), 0 4px 12px rgba(0,0,0,0.15);
+        position: relative;
+    }
+
+    .laptop-camera-bar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .laptop-camera {
+        width: 8px; height: 8px;
+        background: #444;
+        border-radius: 50%;
+    }
+
+    .laptop-screen {
+        background: #faf8f5;
+        border-radius: 8px 8px 0 0;
+        overflow: hidden;
+        aspect-ratio: 16 / 9;
+        position: relative;
+    }
+
+    .laptop-base {
+        background: linear-gradient(to bottom, #3a3a3e, #2e2e32);
+        height: 22px;
+        border-radius: 0 0 4px 4px;
+        position: relative;
+    }
+
+    .laptop-base::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 50%;
+        transform: translateX(-50%);
+        width: 30%; height: 4px;
+        background: #222;
+        border-radius: 0 0 4px 4px;
+    }
+
+    /* Step progress dots */
+    .demo-steps {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .demo-step-dot {
+        width: 8px; height: 8px;
+        border-radius: 50%;
+        background: var(--border);
+        transition: all 0.4s ease;
+        cursor: default;
+    }
+
+    .demo-step-dot.active {
+        background: var(--forest);
+        width: 24px;
+        border-radius: 4px;
+    }
+
+    .demo-step-label {
+        font-size: 12px;
+        color: var(--text-muted);
+        text-align: center;
+        margin-top: 10px;
+        height: 18px;
+        transition: opacity 0.3s;
+    }
+
+    /* ── FRAMES ── */
+    .demo-frame {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transition: opacity 0.6s ease;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        background: #faf8f5;
+        overflow: hidden;
+    }
+
+    .demo-frame.active { opacity: 1; }
+
+    /* Mini topbar inside mockup */
+    .m-topbar {
+        background: #fff;
+        border-radius: 6px;
+        border: 1px solid #e5e0d8;
+        padding: 7px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+    }
+
+    .m-topbar-title {
+        font-size: 9px;
+        font-weight: 700;
+        color: #2d3a2d;
+        font-family: 'Playfair Display', serif;
+    }
+
+    .m-topbar-badge {
+        background: #e8f0e8;
+        border-radius: 20px;
+        padding: 3px 8px;
+        font-size: 8px;
+        font-weight: 600;
+        color: #4a7c59;
+    }
+
+    /* Mini body area */
+    .m-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .m-heading {
+        font-family: 'Playfair Display', serif;
+        font-size: 13px;
+        font-weight: 700;
+        color: #2d3a2d;
+        text-align: center;
+    }
+
+    .m-heading span { color: #4a7c59; }
+
+    .m-sub {
+        font-size: 8px;
+        color: #9aaa9a;
+        text-align: center;
+        max-width: 200px;
+        line-height: 1.5;
+    }
+
+    /* Upload box in mockup */
+    .m-upload-box {
+        background: #fff;
+        border: 1px solid #e5e0d8;
+        border-radius: 10px;
+        width: 260px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(45,58,45,0.06);
+    }
+
+    .m-upload-header {
+        padding: 10px 12px 6px;
+        text-align: center;
+        border-bottom: 1px solid #f0ebe3;
+    }
+
+    .m-upload-icon {
+        width: 24px; height: 24px;
+        background: #e8f0e8;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 4px;
+        color: #6b8e6b;
+    }
+
+    .m-upload-icon svg { width: 12px; height: 12px; }
+
+    .m-upload-title {
+        font-size: 9px;
+        font-weight: 600;
+        color: #2d3a2d;
+    }
+
+    .m-drop-zone {
+        margin: 8px;
+        border: 1.5px dashed #e5e0d8;
+        border-radius: 6px;
+        padding: 14px 8px;
+        text-align: center;
+        background: #f8f4ed;
+        transition: all 0.4s ease;
+        position: relative;
+    }
+
+    .m-drop-zone.highlight {
+        border-color: #7fb069;
+        background: #e8f0e8;
+    }
+
+    .m-drop-icon {
+        width: 16px; height: 16px;
+        color: #9aaa9a;
+        margin: 0 auto 4px;
+        opacity: 0.6;
+    }
+
+    .m-drop-text {
+        font-size: 7.5px;
+        color: #9aaa9a;
+    }
+
+    .m-file-chosen {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        font-size: 7.5px;
+        color: #4a7c59;
+        font-weight: 600;
+    }
+
+    .m-file-chosen svg { width: 10px; height: 10px; color: #7fb069; }
+
+    .m-analyse-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        margin: 0 8px 8px;
+        padding: 7px;
+        background: linear-gradient(135deg, #4a7c59, #3a6347);
+        color: #fff;
+        border-radius: 6px;
+        font-size: 8px;
+        font-weight: 600;
+    }
+
+    .m-analyse-btn svg { width: 10px; height: 10px; }
+    .m-analyse-btn.loading { opacity: 0.75; }
+    .m-analyse-btn.loading svg { animation: spin 1s linear infinite; }
+
+    /* Cursor */
+    .m-cursor {
+        position: absolute;
+        width: 12px; height: 12px;
+        pointer-events: none;
+        z-index: 10;
+        transition: top 0.8s cubic-bezier(0.4,0,0.2,1),
+                    left 0.8s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .m-cursor svg { width: 12px; height: 12px; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); }
+
+    /* Click ripple */
+    .m-ripple {
+        position: absolute;
+        width: 20px; height: 20px;
+        border-radius: 50%;
+        background: rgba(74,124,89,0.3);
+        transform: scale(0);
+        pointer-events: none;
+        z-index: 9;
+    }
+
+    .m-ripple.pop {
+        animation: ripple-pop 0.5s ease forwards;
+    }
+
+    @keyframes ripple-pop {
+        0%   { transform: scale(0); opacity: 1; }
+        100% { transform: scale(2.5); opacity: 0; }
+    }
+
+    /* ── FRAME 3: Result ── */
+    .m-result-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .m-img-card {
+        background: #fff;
+        border: 1px solid #e5e0d8;
+        border-radius: 6px;
+        padding: 6px;
+        text-align: center;
+    }
+
+    .m-img-label {
+        font-size: 6.5px;
+        font-weight: 700;
+        color: #9aaa9a;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+    }
+
+    .m-img-placeholder {
+        border-radius: 4px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 7px;
+        color: #9aaa9a;
+    }
+
+    .m-img-leaf { background: #e8f0e8; }
+    .m-img-heat { background: linear-gradient(135deg, #1a237e22, #b7000022); }
+
+    .m-diag-card {
+        background: #fff;
+        border: 1px solid #e5e0d8;
+        border-radius: 6px;
+        padding: 8px;
+        grid-column: 1 / -1;
+    }
+
+    .m-diag-name {
+        font-family: 'Playfair Display', serif;
+        font-size: 10px;
+        font-weight: 700;
+        color: #2d3a2d;
+        margin-bottom: 4px;
+    }
+
+    .m-sev-badge {
+        display: inline-block;
+        background: #f5e0d8;
+        color: #a05040;
+        border-radius: 20px;
+        padding: 2px 7px;
+        font-size: 6.5px;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .m-conf-label {
+        font-size: 6.5px;
+        color: #9aaa9a;
+        margin-bottom: 3px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .m-conf-label span:last-child { color: #4a7c59; font-weight: 700; }
+
+    .m-conf-track {
+        background: #f0ebe3;
+        border-radius: 20px;
+        height: 5px;
+        overflow: hidden;
+        margin-bottom: 6px;
+    }
+
+    .m-conf-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #6b8e6b, #7fb069);
+        border-radius: 20px;
+        width: 0;
+        transition: width 1.4s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .m-treatment-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+    }
+
+    .m-treat-card {
+        background: #fdf9f3;
+        border: 1px solid #e5e0d8;
+        border-radius: 4px;
+        padding: 5px;
+    }
+
+    .m-treat-card-title {
+        font-size: 6px;
+        font-weight: 700;
+        color: #9aaa9a;
+        text-transform: uppercase;
+        margin-bottom: 2px;
+    }
+
+    .m-treat-card-text {
+        font-size: 6px;
+        color: #6b7a6b;
+        line-height: 1.4;
+    }
+
+    .m-back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        padding: 4px 10px;
+        border: 1px solid #e5e0d8;
+        border-radius: 5px;
+        font-size: 7px;
+        font-weight: 600;
+        color: #4a7c59;
+        background: #fff;
+        margin-top: 6px;
+        cursor: default;
+        transition: background 0.3s, color 0.3s;
+    }
+
+    .m-back-btn.hovering {
+        background: #4a7c59;
+        color: #fff;
+    }
+
+    .m-back-btn svg { width: 8px; height: 8px; }
+
+    /* Scanning line on result */
+    .m-scan-line {
+        position: absolute;
+        left: 0; right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #4a7c59, transparent);
+        top: 0;
+        opacity: 0;
+    }
+
+    .m-scan-line.scanning {
+        opacity: 1;
+        animation: scan-sweep 1.2s ease-in-out forwards;
+    }
+
+    @keyframes scan-sweep {
+        0%   { top: 0; opacity: 0.8; }
+        100% { top: 100%; opacity: 0; }
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
+    }
+
+    /* Divider between demo and upload */
+    .demo-divider {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin: 36px 0 32px;
+        max-width: 560px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .demo-divider-line {
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+    }
+
+    .demo-divider-text {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-light);
+        white-space: nowrap;
+    }
     </style>
+</head>
+<body>
+<div class="app-shell">
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <svg class="sidebar-logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+                <path d="M12 6v6l4 2"/>
+                <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                <path d="M12 22c-4-4-4-10 0-14"/>
+                <path d="M12 22c4-4 4-10 0-14"/>
+            </svg>
+            <div class="sidebar-logo-name">FasalGuard</div>
+            <div class="sidebar-logo-tag">AI Crop Intelligence</div>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-label">System Status</div>
+            <div class="status-pills">
+                <div class="status-pill"><span class="pill-dot"></span><span class="pill-text">FasalGuard-B0</span><span class="pill-value">99.2%</span></div>
+                <div class="status-pill"><span class="pill-dot"></span><span class="pill-text">Grad-CAM</span><span class="pill-value">Active</span></div>
+                <div class="status-pill"><span class="pill-dot"></span><span class="pill-text">Flask Server</span><span class="pill-value">Online</span></div>
+            </div>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-label">Performance</div>
+            <div class="stats-grid">
+                <div class="stat-box"><div class="stat-value">38</div><div class="stat-label">Classes</div></div>
+                <div class="stat-box"><div class="stat-value">14</div><div class="stat-label">Crops</div></div>
+                <div class="stat-box"><div class="stat-value">99%</div><div class="stat-label">Accuracy</div></div>
+                <div class="stat-box"><div class="stat-value">&lt;2s</div><div class="stat-label">Inference</div></div>
+            </div>
+        </div>
+        <div class="sidebar-section"><div class="sidebar-label">Supported Crops</div></div>
+        <div class="class-list">
+            <div class="class-item"><span class="class-dot" style="background:#7fb069"></span>Apple</div>
+            <div class="class-item"><span class="class-dot" style="background:#6b8e6b"></span>Blueberry</div>
+            <div class="class-item"><span class="class-dot" style="background:#c4a35a"></span>Cherry</div>
+            <div class="class-item"><span class="class-dot" style="background:#8faa8f"></span>Corn (Maize)</div>
+            <div class="class-item"><span class="class-dot" style="background:#7fb069"></span>Grape</div>
+            <div class="class-item"><span class="class-dot" style="background:#c4705a"></span>Orange</div>
+            <div class="class-item"><span class="class-dot" style="background:#d4b978"></span>Peach</div>
+            <div class="class-item"><span class="class-dot" style="background:#6b8e6b"></span>Pepper</div>
+            <div class="class-item"><span class="class-dot" style="background:#8faa8f"></span>Potato</div>
+            <div class="class-item"><span class="class-dot" style="background:#7fb069"></span>Raspberry</div>
+            <div class="class-item"><span class="class-dot" style="background:#c4a35a"></span>Soybean</div>
+            <div class="class-item"><span class="class-dot" style="background:#a8c990"></span>Squash</div>
+            <div class="class-item"><span class="class-dot" style="background:#c4705a"></span>Strawberry</div>
+            <div class="class-item"><span class="class-dot" style="background:#6b8e6b"></span>Tomato</div>
+        </div>
+    </aside>
+
+    <!-- ── MAIN ── -->
+    <div class="main-area">
+        <div class="topbar">
+            <div>
+                <div class="topbar-title">Crop Disease Analyser</div>
+                <div class="topbar-sub">Upload a photo → get instant AI diagnosis + full treatment advisory</div>
+            </div>
+            <div class="topbar-nav">
+                <a href="/about" class="topbar-badge"><span class="topbar-badge-dot"></span>About</a>
+                <a href="/" class="topbar-badge" style="background:var(--forest);color:var(--text-white);"><span class="topbar-badge-dot" style="background:var(--text-white);"></span>Home</a>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="page-header">
+                <h1>Diagnose Your <span>Crop</span></h1>
+                <p>Upload a clear photo of any crop leaf. Our AI identifies the disease, shows where it detected it, rates severity, and gives you a full treatment plan — in seconds.</p>
+            </div>
+
+            <!-- ═══════════════════════════════════════
+                 ANIMATED DEMO MOCKUP
+                 ═══════════════════════════════════════ -->
+            <div class="demo-section">
+                <div class="demo-label">
+                    <div class="demo-label-eyebrow"><span></span> Live Preview</div>
+                    <h2>See How It Works</h2>
+                    <p>Watch the full detection process — from upload to diagnosis</p>
+                </div>
+
+                <div class="mockup-shell">
+                    <div class="laptop-outer">
+                        <div class="laptop-camera-bar"><div class="laptop-camera"></div></div>
+
+                        <div class="laptop-screen" id="laptopScreen">
+
+                            <!-- FRAME 1: Upload ready -->
+                            <div class="demo-frame active" id="frame1">
+                                <div class="m-topbar">
+                                    <div class="m-topbar-title">FasalGuard AI</div>
+                                    <div class="m-topbar-badge">Online</div>
+                                </div>
+                                <div class="m-body">
+                                    <div class="m-heading">Diagnose Your <span>Crop</span></div>
+                                    <div class="m-sub">Upload a clear photo of any crop leaf for instant AI diagnosis</div>
+                                    <div class="m-upload-box">
+                                        <div class="m-upload-header">
+                                            <div class="m-upload-icon">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                            </div>
+                                            <div class="m-upload-title">Upload Leaf Image</div>
+                                        </div>
+                                        <div class="m-drop-zone" id="mDropZone">
+                                            <svg class="m-drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                                            <div class="m-drop-text">Drop crop image here or click to browse</div>
+                                            <div class="m-file-chosen" id="mFileChosen">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                                tomato_leaf_01.jpg
+                                            </div>
+                                        </div>
+                                        <div class="m-analyse-btn" id="mAnalyseBtn">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                                            <span id="mBtnText">Analyse Image</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Animated cursor -->
+                                <div class="m-cursor" id="mCursor" style="top:30%;left:60%;">
+                                    <svg viewBox="0 0 24 24" fill="white" stroke="#2d3a2d" stroke-width="1.5"><path d="M4 2l16 10-7 1-4 7z"/></svg>
+                                </div>
+                                <div class="m-ripple" id="mRipple"></div>
+                            </div>
+
+                            <!-- FRAME 2: Analysing -->
+                            <div class="demo-frame" id="frame2">
+                                <div class="m-topbar">
+                                    <div class="m-topbar-title">FasalGuard AI</div>
+                                    <div class="m-topbar-badge">Analysing…</div>
+                                </div>
+                                <div class="m-body">
+                                    <div class="m-heading">Diagnose Your <span>Crop</span></div>
+                                    <div class="m-upload-box">
+                                        <div class="m-upload-header">
+                                            <div class="m-upload-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+                                            <div class="m-upload-title">Upload Leaf Image</div>
+                                        </div>
+                                        <div class="m-drop-zone highlight">
+                                            <div class="m-file-chosen" style="display:flex;">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:10px;height:10px;color:#7fb069"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                                tomato_leaf_01.jpg
+                                            </div>
+                                        </div>
+                                        <div class="m-analyse-btn loading">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                                            Analysing…
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FRAME 3: Results -->
+                            <div class="demo-frame" id="frame3">
+                                <div class="m-scan-line" id="mScanLine"></div>
+                                <div class="m-topbar">
+                                    <div class="m-topbar-title">Analysis Result</div>
+                                    <div class="m-topbar-badge">Complete</div>
+                                </div>
+                                <div class="m-body" style="justify-content:flex-start;padding-top:4px;">
+                                    <div class="m-result-layout">
+                                        <div class="m-img-card">
+                                            <div class="m-img-label">Uploaded Image</div>
+                                            <div class="m-img-placeholder m-img-leaf">🍃</div>
+                                        </div>
+                                        <div class="m-img-card">
+                                            <div class="m-img-label">AI Focus Area</div>
+                                            <div class="m-img-placeholder m-img-heat">🌡</div>
+                                        </div>
+                                        <div class="m-diag-card">
+                                            <div class="m-diag-name">Tomato Late Blight</div>
+                                            <div class="m-sev-badge">⚠ High Severity</div>
+                                            <div class="m-conf-label"><span>AI Confidence</span><span>91%</span></div>
+                                            <div class="m-conf-track"><div class="m-conf-fill" id="mConfFill"></div></div>
+                                            <div class="m-treatment-row">
+                                                <div class="m-treat-card">
+                                                    <div class="m-treat-card-title">Action</div>
+                                                    <div class="m-treat-card-text">Remove infected plants immediately</div>
+                                                </div>
+                                                <div class="m-treat-card">
+                                                    <div class="m-treat-card-title">Chemical</div>
+                                                    <div class="m-treat-card-text">Ridomil Gold 2g/L every 5 days</div>
+                                                </div>
+                                                <div class="m-treat-card">
+                                                    <div class="m-treat-card-title">Prevention</div>
+                                                    <div class="m-treat-card-text">Avoid overhead irrigation</div>
+                                                </div>
+                                            </div>
+                                            <div class="m-back-btn" id="mBackBtn">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                                                Analyse Another Image
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div><!-- /laptop-screen -->
+                    </div><!-- /laptop-outer -->
+                    <div class="laptop-base"></div>
+                </div>
+
+                <!-- Step indicator -->
+                <div class="demo-steps">
+                    <div class="demo-step-dot active" id="dot0"></div>
+                    <div class="demo-step-dot" id="dot1"></div>
+                    <div class="demo-step-dot" id="dot2"></div>
+                </div>
+                <div class="demo-step-label" id="demoStepLabel">Upload a crop leaf image</div>
+            </div>
+            <!-- ═══ END DEMO ═══ -->
+
+            <!-- Divider -->
+            <div class="demo-divider">
+                <div class="demo-divider-line"></div>
+                <div class="demo-divider-text">Try it yourself below</div>
+                <div class="demo-divider-line"></div>
+            </div>
+
+            <!-- ── UPLOAD CARD (unchanged) ── -->
+            <div class="upload-card">
+                <div class="upload-header">
+                    <div class="upload-icon-ring">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                    </div>
+                    <h2>Upload Leaf Image</h2>
+                    <p>Drag & drop or click to browse your files</p>
+                </div>
+                <form action="/predict" method="post" enctype="multipart/form-data" id="uploadForm">
+                    <div class="drop-zone" id="dropZone">
+                        <input type="file" name="image" id="fileInput" accept=".png,.jpg,.jpeg" required>
+                        <div class="drop-placeholder">
+                            <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                <path d="M21 15l-5-5L5 21"/>
+                            </svg>
+                            <h3>Drop crop image here</h3>
+                            <p>or click to browse · Supports PNG, JPG, JPEG</p>
+                        </div>
+                        <div class="file-selected" id="fileSelected">
+                            <svg class="file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                            </svg>
+                            <span id="fileName">No file selected</span>
+                        </div>
+                    </div>
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <div class="flash-messages">
+                                {% for message in messages %}
+                                    <div class="flash-error">{{ message }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                    <button type="submit" class="analyse-btn" id="analyseBtn">
+                        <svg id="btnIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <span id="btnText">Analyse Image</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Feature cards -->
+            <div class="features-grid">
+                <div class="feature-box">
+                    <div class="feature-icon-box">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h3>Disease Intelligence</h3>
+                    <p>Identifies 38 conditions across 14 crops. Tells you what the disease is, what causes it, how it spreads, and how fast you need to act.</p>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-icon-box">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </div>
+                    <h3>Grad-CAM Heatmap</h3>
+                    <p>A red-blue overlay shows exactly which part of the leaf the AI focused on when making its diagnosis — full transparency into the decision.</p>
+                </div>
+                <div class="feature-box">
+                    <div class="feature-icon-box">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                    </div>
+                    <h3>Full Treatment Plan</h3>
+                    <p>Immediate action steps, specific chemical names and dosages, long-term prevention strategies, and a severity rating so you know how urgent the situation is.</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>FasalGuard AI — CECOS University, Peshawar</p>
+        </footer>
+    </div>
+</div>
+
+<!-- ── REAL UPLOAD SCRIPTS (unchanged) ── -->
+<script>
+    const dropZone       = document.getElementById('dropZone');
+    const fileInput      = document.getElementById('fileInput');
+    const fileSelected   = document.getElementById('fileSelected');
+    const fileName       = document.getElementById('fileName');
+    const dropPlaceholder= document.querySelector('.drop-placeholder');
+    const uploadForm     = document.getElementById('uploadForm');
+    const analyseBtn     = document.getElementById('analyseBtn');
+    const btnText        = document.getElementById('btnText');
+    const btnIcon        = document.getElementById('btnIcon');
+
+    dropZone.addEventListener('click', (e) => { if (e.target !== fileInput) fileInput.click(); });
+    fileInput.addEventListener('change', () => { if (fileInput.files.length > 0) showFile(fileInput.files[0].name); });
+    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('dragover'); });
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault(); dropZone.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) { fileInput.files = files; showFile(files[0].name); }
+    });
+    function showFile(name) {
+        fileName.textContent = name;
+        dropPlaceholder.style.display = 'none';
+        fileSelected.style.display = 'flex';
+        dropZone.classList.add('has-file');
+    }
+    uploadForm.addEventListener('submit', () => {
+        analyseBtn.disabled = true;
+        analyseBtn.style.opacity = '0.75';
+        btnText.textContent = 'Analysing…';
+        btnIcon.style.animation = 'spin 1s linear infinite';
+    });
+</script>
+
+<!-- ── DEMO ANIMATION CONTROLLER ── -->
+<script>
+(function() {
+    const frames     = [document.getElementById('frame1'), document.getElementById('frame2'), document.getElementById('frame3')];
+    const dots       = [document.getElementById('dot0'), document.getElementById('dot1'), document.getElementById('dot2')];
+    const stepLabel  = document.getElementById('demoStepLabel');
+    const labels     = ['Upload a crop leaf image', 'AI is analysing the image…', 'Diagnosis complete — view results'];
+
+    const cursor     = document.getElementById('mCursor');
+    const ripple     = document.getElementById('mRipple');
+    const dropZoneM  = document.getElementById('mDropZone');
+    const fileChosenM= document.getElementById('mFileChosen');
+    const analyseBtnM= document.getElementById('mAnalyseBtn');
+    const btnTextM   = document.getElementById('mBtnText');
+    const confFill   = document.getElementById('mConfFill');
+    const scanLine   = document.getElementById('mScanLine');
+    const backBtn    = document.getElementById('mBackBtn');
+
+    let currentFrame = 0;
+    let loopTimer    = null;
+
+    function showFrame(n) {
+        frames.forEach((f, i) => f.classList.toggle('active', i === n));
+        dots.forEach((d, i) => d.classList.toggle('active', i === n));
+        stepLabel.textContent = labels[n];
+        currentFrame = n;
+    }
+
+    function rippleAt(el) {
+        const rect = el.getBoundingClientRect();
+        const screen = document.getElementById('laptopScreen').getBoundingClientRect();
+        ripple.style.left = (rect.left - screen.left + rect.width / 2 - 10) + 'px';
+        ripple.style.top  = (rect.top  - screen.top  + rect.height/ 2 - 10) + 'px';
+        ripple.classList.remove('pop');
+        void ripple.offsetWidth;
+        ripple.classList.add('pop');
+    }
+
+    function moveCursorTo(el, cb) {
+        const rect   = el.getBoundingClientRect();
+        const screen = document.getElementById('laptopScreen').getBoundingClientRect();
+        const x = (rect.left - screen.left + rect.width  / 2 - 6);
+        const y = (rect.top  - screen.top  + rect.height / 2 - 6);
+        cursor.style.left = x + 'px';
+        cursor.style.top  = y + 'px';
+        setTimeout(cb, 900);
+    }
+
+    function runPhase1() {
+        // Reset frame 1 state
+        dropZoneM.classList.remove('highlight');
+        fileChosenM.style.display = 'none';
+        dropZoneM.querySelector('.m-drop-text').style.display = '';
+        dropZoneM.querySelector('.m-drop-icon').style.display = '';
+        analyseBtnM.classList.remove('loading');
+        btnTextM.textContent = 'Analyse Image';
+        cursor.style.left = '60%';
+        cursor.style.top  = '30%';
+
+        showFrame(0);
+
+        // 1.5s pause then move cursor to drop zone
+        setTimeout(() => {
+            moveCursorTo(dropZoneM, () => {
+                // Click effect
+                rippleAt(dropZoneM);
+                dropZoneM.classList.add('highlight');
+                // Show file chosen
+                setTimeout(() => {
+                    dropZoneM.querySelector('.m-drop-text').style.display = 'none';
+                    dropZoneM.querySelector('.m-drop-icon').style.display = 'none';
+                    fileChosenM.style.display = 'flex';
+                    // Move cursor to button
+                    setTimeout(() => {
+                        moveCursorTo(analyseBtnM, () => {
+                            rippleAt(analyseBtnM);
+                            analyseBtnM.classList.add('loading');
+                            btnTextM.textContent = 'Analysing…';
+                            // Transition to frame 2
+                            setTimeout(() => runPhase2(), 600);
+                        });
+                    }, 900);
+                }, 500);
+            });
+        }, 1500);
+    }
+
+    function runPhase2() {
+        showFrame(1);
+        // Hold analysing state briefly
+        setTimeout(() => runPhase3(), 1800);
+    }
+
+    function runPhase3() {
+        showFrame(2);
+        // Trigger scan line
+        scanLine.classList.remove('scanning');
+        void scanLine.offsetWidth;
+        scanLine.classList.add('scanning');
+        // Animate confidence bar
+        confFill.style.width = '0';
+        setTimeout(() => { confFill.style.width = '91%'; }, 300);
+        // After results shown, hover over back button then loop
+        setTimeout(() => {
+            backBtn.classList.add('hovering');
+            setTimeout(() => {
+                backBtn.classList.remove('hovering');
+                // Pause then loop
+                setTimeout(() => runPhase1(), 800);
+            }, 1200);
+        }, 3500);
+    }
+
+    // Start after short delay
+    setTimeout(runPhase1, 800);
+})();
+</script>
+
+<style>
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
+    }
+</style>
 </body>
 </html>
