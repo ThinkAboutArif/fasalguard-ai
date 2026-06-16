@@ -14,6 +14,7 @@ import torch
 from torch import nn
 from torchvision import transforms
 import torchvision.models as models
+import torchvision.models as models_tv   # for MobileNetV3-Small leaf validator
 from PIL import Image
 import torch.nn.functional as F
 from pytorch_grad_cam import GradCAM
@@ -75,6 +76,24 @@ print(f"[MODEL] Model is ready for inference on CPU.")
 device = torch.device('cpu')
 model = model.to(device)
 
+# ============================================================
+# STEP 3b: LEAF VALIDATOR MODEL LOADING
+# ============================================================
+
+VALIDATOR_PATH = os.path.join(BASE_DIR, 'validator', 'leaf_validator.pt')
+VALIDATOR_CLASSES = ['leaf', 'not_leaf']  # ImageFolder sorts alphabetically
+
+validator_model = models_tv.mobilenet_v3_small(pretrained=False)
+in_features = validator_model.classifier[3].in_features
+validator_model.classifier[3] = torch.nn.Linear(in_features, 2)
+validator_model.load_state_dict(torch.load(VALIDATOR_PATH, map_location='cpu'))
+validator_model.eval()
+print('[VALIDATOR] Leaf validator loaded successfully.')
+
+validator_model = validator_model.to(device)
+print('[VALIDATOR] Validator model moved to CPU and is ready.')
+
+
 print("[MODEL] Finding target layer for Grad-CAM...")
 target_layer_name = None
 target_layer_module = None
@@ -121,6 +140,24 @@ def generate_heatmap(image_path, predicted_idx, output_path):
     except Exception as e:
         print(f"Grad-CAM generation failed: {e}")
         return False
+
+
+# ============================================================
+# STEP 4b: LEAF VALIDATOR FUNCTION
+# ============================================================
+
+def is_leaf(image_tensor):
+    """
+    Returns True if the image is a leaf, False if not.
+    image_tensor: the same preprocessed tensor used by the main model.
+    """
+    with torch.no_grad():
+        output = validator_model(image_tensor)
+        probs = torch.softmax(output, dim=1)
+        # Class index 0 = 'leaf', Class index 1 = 'not_leaf'
+        leaf_confidence = probs[0][0].item()
+    return leaf_confidence >= 0.70   # 70% threshold - adjust if needed
+
 
 
 # ============================================================
@@ -609,6 +646,16 @@ def predict():
 
         image = Image.open(filepath).convert('RGB')
         input_tensor = transform(image).unsqueeze(0).to(device)
+
+        # --------------------------------------------------------
+        # LEAF VALIDATOR GATE
+        # --------------------------------------------------------
+        validator_enabled = request.form.get('validator_enabled', 'true') == 'true'
+        if validator_enabled and not is_leaf(input_tensor):
+            return render_template('index.html',
+                                   error='Warning: Please upload a clear crop leaf image. Non-leaf images cannot be analysed.',
+                                   validator_enabled=True)
+
 
         with torch.no_grad():
             output = model(input_tensor)
