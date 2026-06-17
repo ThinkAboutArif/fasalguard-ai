@@ -333,6 +333,7 @@ body {
     margin: 0 auto;
     overflow: hidden;
     transition: var(--transition);
+    animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .upload-card:hover { box-shadow: var(--shadow-lg); }
@@ -440,6 +441,110 @@ body {
 }
 
 .flash-messages { margin: 0 32px 20px; }
+
+/* ── Sample image gallery ── */
+.sample-gallery {
+    margin: 0 32px 24px;
+}
+
+.sample-gallery-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-light);
+    text-align: center;
+    margin-bottom: 14px;
+}
+
+.sample-gallery-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.sample-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 64px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
+    animation: sample-pop 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.sample-card:nth-child(1) { animation-delay: 0.05s; }
+.sample-card:nth-child(2) { animation-delay: 0.10s; }
+.sample-card:nth-child(3) { animation-delay: 0.15s; }
+.sample-card:nth-child(4) { animation-delay: 0.20s; }
+.sample-card:nth-child(5) { animation-delay: 0.25s; }
+.sample-card:nth-child(6) { animation-delay: 0.30s; }
+
+@keyframes sample-pop {
+    from { opacity: 0; transform: translateY(6px) scale(0.92); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.sample-card-thumb {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--border);
+    background: var(--bg-warm);
+    transition: var(--transition);
+}
+
+.sample-card-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.sample-card:hover .sample-card-thumb {
+    border-color: var(--sage-light);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.sample-card.selected .sample-card-thumb {
+    border-color: var(--forest);
+    box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.18);
+}
+
+.sample-card-placeholder {
+    display: none;
+    position: absolute;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--text-light);
+    background: var(--bg-warm);
+}
+
+.sample-card.sample-missing .sample-card-thumb { border-style: dashed; }
+.sample-card.sample-missing .sample-card-placeholder { display: flex; }
+
+.sample-card-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.2;
+    transition: var(--transition);
+}
+
+.sample-card:hover .sample-card-label,
+.sample-card.selected .sample-card-label { color: var(--forest); }
 
 .flash-error {
     background: #fdf2f0;
@@ -727,6 +832,122 @@ body {
     width: 20px; height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5));
     border-radius: 0 var(--radius-pill) var(--radius-pill) 0;
+}
+
+/* ── Top 3 Predictions panel ── */
+.top3-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 20px 22px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
+}
+
+.top3-panel-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.top3-panel-header svg {
+    width: 15px;
+    height: 15px;
+    color: var(--sage);
+    flex-shrink: 0;
+}
+
+.top3-panel-header span {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-light);
+}
+
+.top3-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.top3-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.top3-rank {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--bg-warm);
+    color: var(--text-light);
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.top3-row--lead .top3-rank {
+    background: var(--forest);
+    color: var(--text-white);
+}
+
+.top3-info { flex: 1; min-width: 0; }
+
+.top3-name-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.top3-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.top3-row--lead .top3-name {
+    color: var(--text);
+    font-weight: 600;
+}
+
+.top3-pct {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-light);
+    flex-shrink: 0;
+}
+
+.top3-row--lead .top3-pct { color: var(--forest); }
+
+.top3-track {
+    width: 100%;
+    height: 7px;
+    background: var(--bg-hover);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+}
+
+.top3-fill {
+    height: 100%;
+    width: 0;
+    border-radius: var(--radius-pill);
+    background: linear-gradient(90deg, var(--border), var(--sage-light));
+    transition: width 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.top3-row--lead .top3-fill {
+    background: linear-gradient(90deg, var(--sage), var(--leaf));
 }
 
 /* ── Pathogen + Urgency row ── */
@@ -1223,6 +1444,11 @@ body {
     .about-grid,
     .about-info-grid { grid-template-columns: 1fr; }
 }
+
+/* ============================================
+   ADD THESE TO THE BOTTOM OF style.css
+   BEFORE the closing @media block
+   ============================================ */
 
 /* ── Remove sidebar scrollbar (all browsers) ── */
 .sidebar {

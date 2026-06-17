@@ -472,19 +472,19 @@
             <div class="sidebar-label">Performance</div>
             <div class="stats-grid">
                 <div class="stat-box" data-stat="classes">
-                    <div class="stat-value">38</div>
+                    <div class="stat-value" data-count="38">0</div>
                     <div class="stat-label">Classes</div>
                 </div>
                 <div class="stat-box" data-stat="crops">
-                    <div class="stat-value">14</div>
+                    <div class="stat-value" data-count="14">0</div>
                     <div class="stat-label">Crops</div>
                 </div>
                 <div class="stat-box" data-stat="accuracy">
-                    <div class="stat-value">99%</div>
+                    <div class="stat-value" data-count="99" data-suffix="%">0%</div>
                     <div class="stat-label">Accuracy</div>
                 </div>
                 <div class="stat-box" data-stat="inference">
-                    <div class="stat-value">&lt;2s</div>
+                    <div class="stat-value" data-count="2" data-prefix="&lt;" data-suffix="s">0s</div>
                     <div class="stat-label">Inference</div>
                 </div>
             </div>
@@ -672,6 +672,56 @@
                             <span id="fileName">No file selected</span>
                         </div>
                     </div>
+
+                    <script>function markSampleMissing(img){img.style.display='none';var c=img.closest('.sample-card');if(c)c.classList.add('sample-missing');}</script>
+                    <div class="sample-gallery">
+                        <div class="sample-gallery-label">Or try a sample image</div>
+                        <div class="sample-gallery-row">
+                            <button type="button" class="sample-card" data-src="{{ url_for('static', filename='samples/tomato_late_blight.jpg') }}" data-name="tomato_late_blight.jpg" title="Tomato · Late Blight">
+                                <span class="sample-card-thumb">
+                                    <img src="{{ url_for('static', filename='samples/tomato_late_blight.jpg') }}" alt="Tomato Late Blight sample" onerror="markSampleMissing(this)">
+                                    <span class="sample-card-placeholder">+</span>
+                                </span>
+                                <span class="sample-card-label">Tomato Blight</span>
+                            </button>
+                            <button type="button" class="sample-card" data-src="{{ url_for('static', filename='samples/apple_scab.jpg') }}" data-name="apple_scab.jpg" title="Apple · Scab">
+                                <span class="sample-card-thumb">
+                                    <img src="{{ url_for('static', filename='samples/apple_scab.jpg') }}" alt="Apple Scab sample" onerror="markSampleMissing(this)">
+                                    <span class="sample-card-placeholder">+</span>
+                                </span>
+                                <span class="sample-card-label">Apple Scab</span>
+                            </button>
+                            <button type="button" class="sample-card" data-src="{{ url_for('static', filename='samples/potato_early_blight.jpg') }}" data-name="potato_early_blight.jpg" title="Potato · Early Blight">
+                                <span class="sample-card-thumb">
+                                    <img src="{{ url_for('static', filename='samples/potato_early_blight.jpg') }}" alt="Potato Early Blight sample" onerror="markSampleMissing(this)">
+                                    <span class="sample-card-placeholder">+</span>
+                                </span>
+                                <span class="sample-card-label">Potato Blight</span>
+                            </button>
+                            <button type="button" class="sample-card" data-src="{{ url_for('static', filename='samples/grape_black_rot.jpg') }}" data-name="grape_black_rot.jpg" title="Grape · Black Rot">
+                                <span class="sample-card-thumb">
+                                    <img src="{{ url_for('static', filename='samples/grape_black_rot.jpg') }}" alt="Grape Black Rot sample" onerror="markSampleMissing(this)">
+                                    <span class="sample-card-placeholder">+</span>
+                                </span>
+                                <span class="sample-card-label">Grape Rot</span>
+                            </button>
+                            <button type="button" class="sample-card" data-src="{{ url_for('static', filename='samples/maize_common_rust.jpg') }}" data-name="maize_common_rust.jpg" title="Maize · Common Rust">
+                                <span class="sample-card-thumb">
+                                    <img src="{{ url_for('static', filename='samples/maize_common_rust.jpg') }}" alt="Maize Common Rust sample" onerror="markSampleMissing(this)">
+                                    <span class="sample-card-placeholder">+</span>
+                                </span>
+                                <span class="sample-card-label">Maize Rust</span>
+                            </button>
+                            <button type="button" class="sample-card" data-src="{{ url_for('static', filename='samples/tomato_healthy.jpg') }}" data-name="tomato_healthy.jpg" title="Tomato · Healthy">
+                                <span class="sample-card-thumb">
+                                    <img src="{{ url_for('static', filename='samples/tomato_healthy.jpg') }}" alt="Healthy tomato sample" onerror="markSampleMissing(this)">
+                                    <span class="sample-card-placeholder">+</span>
+                                </span>
+                                <span class="sample-card-label">Healthy</span>
+                            </button>
+                        </div>
+                    </div>
+
                     {% with messages = get_flashed_messages() %}
                         {% if messages %}
                             <div class="flash-messages">
@@ -745,19 +795,22 @@
     const btnText         = document.getElementById('btnText');
     const btnIcon         = document.getElementById('btnIcon');
     dropZone.addEventListener('click', (e) => { if (e.target !== fileInput) fileInput.click(); });
-    fileInput.addEventListener('change', () => { if (fileInput.files.length > 0) showFile(fileInput.files[0].name); });
+    fileInput.addEventListener('change', () => { if (fileInput.files.length > 0) { clearSampleSelection(); showFile(fileInput.files[0].name); } });
     dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
     dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('dragover'); });
     dropZone.addEventListener('drop', (e) => {
         e.preventDefault(); dropZone.classList.remove('dragover');
         const files = e.dataTransfer.files;
-        if (files.length > 0) { fileInput.files = files; showFile(files[0].name); }
+        if (files.length > 0) { fileInput.files = files; clearSampleSelection(); showFile(files[0].name); }
     });
     function showFile(name) {
         fileName.textContent = name;
         dropPlaceholder.style.display = 'none';
         fileSelected.style.display = 'flex';
         dropZone.classList.add('has-file');
+    }
+    function clearSampleSelection() {
+        document.querySelectorAll('.sample-card.selected').forEach(c => c.classList.remove('selected'));
     }
     uploadForm.addEventListener('submit', () => {
         analyseBtn.disabled = true;
@@ -784,6 +837,53 @@
         }
     });
 
+    // Sample gallery — click loads it straight into the real file input
+    document.querySelectorAll('.sample-card').forEach(card => {
+        card.addEventListener('click', async () => {
+            if (card.classList.contains('sample-missing')) return;
+            const src  = card.dataset.src;
+            const name = card.dataset.name;
+            try {
+                const res  = await fetch(src);
+                if (!res.ok) throw new Error('sample not found');
+                const blob = await res.blob();
+                const file = new File([blob], name, { type: blob.type || 'image/jpeg' });
+                const dt   = new DataTransfer();
+                dt.items.add(file);
+                fileInput.files = dt.files;
+                clearSampleSelection();
+                card.classList.add('selected');
+                showFile(name);
+            } catch (err) {
+                console.error('Could not load sample image:', err);
+            }
+        });
+    });
+
+</script>
+
+<!-- ── SIDEBAR STAT COUNT-UP ── -->
+<script>
+(function() {
+    function animateStat(el, delay) {
+        const target = parseInt(el.dataset.count, 10);
+        const prefix = el.dataset.prefix || '';
+        const suffix = el.dataset.suffix || '';
+        const duration = 1000;
+        setTimeout(() => {
+            const start = performance.now();
+            function tick(now) {
+                const progress = Math.min((now - start) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const value = Math.round(eased * target);
+                el.textContent = (progress >= 1 ? prefix : '') + value + suffix;
+                if (progress < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+        }, delay);
+    }
+    document.querySelectorAll('.stat-value[data-count]').forEach((el, i) => animateStat(el, i * 120));
+})();
 </script>
 
 <!-- ── STAT MODAL DATA + LOGIC ── -->

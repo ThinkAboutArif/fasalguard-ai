@@ -193,6 +193,34 @@
                         </div>
                     </div>
 
+                    <!-- ── SECTION 2.5: TOP 3 PREDICTIONS ── -->
+                    {% if result.top3 and result.top3|length > 1 %}
+                    <div class="top3-panel">
+                        <div class="top3-panel-header">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+                            </svg>
+                            <span>Model Confidence Breakdown</span>
+                        </div>
+                        <div class="top3-list">
+                            {% for item in result.top3 %}
+                            <div class="top3-row{% if loop.first %} top3-row--lead{% endif %}">
+                                <div class="top3-rank">{{ loop.index }}</div>
+                                <div class="top3-info">
+                                    <div class="top3-name-row">
+                                        <span class="top3-name">{{ item.common_name }}</span>
+                                        <span class="top3-pct">{{ item.confidence }}%</span>
+                                    </div>
+                                    <div class="top3-track">
+                                        <div class="top3-fill" data-confidence="{{ item.confidence }}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
                     <!-- ── SECTION 3: PATHOGEN + URGENCY ROW ── -->
                     {% if result.severity != 'None' %}
                     <div class="info-row">
@@ -346,6 +374,14 @@
                 confidenceBar.style.width = confidence + '%';
             }, 150);
         }
+
+        // Animate the top-3 breakdown bars, staggered after the main bar
+        document.querySelectorAll('.top3-fill').forEach((fill, i) => {
+            const conf = fill.getAttribute('data-confidence');
+            setTimeout(() => {
+                fill.style.width = conf + '%';
+            }, 350 + i * 150);
+        });
     </script>
 </body>
 </html>
