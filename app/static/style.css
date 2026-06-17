@@ -1224,11 +1224,6 @@ body {
     .about-info-grid { grid-template-columns: 1fr; }
 }
 
-/* ============================================
-   ADD THESE TO THE BOTTOM OF style.css
-   BEFORE the closing @media block
-   ============================================ */
-
 /* ── Remove sidebar scrollbar (all browsers) ── */
 .sidebar {
     scrollbar-width: none;        /* Firefox */
