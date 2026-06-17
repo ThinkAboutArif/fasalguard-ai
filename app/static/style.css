@@ -1252,82 +1252,109 @@ body {
    LEAF VALIDATOR TOGGLE & ERROR BANNER
    ============================================ */
 
-.validator-toggle-container {
+.analyse-row {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin: 0 32px 20px;
-    padding: 14px 18px;
-    background: var(--bg-warm);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
+    margin: 0 32px 32px;
 }
 
-.validator-label {
-    display: flex;
-    flex-direction: column;
+.analyse-row .analyse-btn {
     flex: 1;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--forest);
+    width: auto;
+    margin: 0;
 }
 
-.toggle-description {
-    font-size: 0.78rem;
-    font-weight: 400;
-    color: var(--text-light);
-    margin-top: 2px;
+.validator-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 14px;
+    height: 52px;
+    background: var(--bg-mint);
+    border: 1px solid rgba(107, 142, 107, 0.3);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    user-select: none;
+    flex-shrink: 0;
+    transition: var(--transition);
 }
 
-.toggle-switch {
+.validator-chip:hover {
+    border-color: var(--sage-light);
+}
+
+.validator-chip.is-off {
+    background: var(--bg-warm);
+    border-color: var(--border);
+}
+
+.validator-chip-switch {
     position: relative;
     display: inline-block;
-    width: 52px;
-    height: 28px;
+    width: 36px;
+    height: 20px;
     flex-shrink: 0;
 }
 
-.toggle-switch input {
+.validator-chip-switch input {
     opacity: 0;
     width: 0;
     height: 0;
 }
 
-.toggle-slider {
+.validator-chip-slider {
     position: absolute;
-    cursor: pointer;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-color: #ccc;
-    border-radius: 28px;
+    inset: 0;
+    background-color: var(--border);
+    border-radius: 20px;
     transition: 0.3s;
 }
 
-.toggle-slider:before {
+.validator-chip-slider::before {
     position: absolute;
     content: "";
-    height: 20px;
-    width: 20px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: #fff;
     border-radius: 50%;
     transition: 0.3s;
+    box-shadow: 0 1px 2px rgba(45, 58, 45, 0.25);
 }
 
-input:checked + .toggle-slider {
+.validator-chip-switch input:checked + .validator-chip-slider {
     background-color: var(--forest);
 }
 
-input:checked + .toggle-slider:before {
-    transform: translateX(24px);
+.validator-chip-switch input:checked + .validator-chip-slider::before {
+    transform: translateX(16px);
 }
 
-.toggle-status {
-    font-size: 0.85rem;
-    font-weight: 700;
+.validator-chip-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+    white-space: nowrap;
+}
+
+.validator-chip-label {
+    font-size: 12px;
+    font-weight: 600;
     color: var(--forest);
-    width: 28px;
-    flex-shrink: 0;
+}
+
+.validator-chip-status {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--sage);
+}
+
+.validator-chip.is-off .validator-chip-label,
+.validator-chip.is-off .validator-chip-status {
+    color: var(--text-light);
 }
 
 .error-banner {

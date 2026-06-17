@@ -423,7 +423,6 @@
                     box-shadow 0.4s ease;
     }
     </style>
-<base target="_blank">
 </head>
 <body>
 
@@ -687,29 +686,26 @@
                     <div class="error-banner">{{ error }}</div>
                     {% endif %}
 
-                    <button type="submit" class="analyse-btn" id="analyseBtn">
-                    <!-- Leaf Validator Toggle -->
-                    <div class="validator-toggle-container">
-                        <label class="validator-label">
-                            <span>Leaf Validator</span>
-                            <span class="toggle-description">Blocks non-leaf uploads</span>
+                    <div class="analyse-row">
+                        <label class="validator-chip{{ '' if validator_enabled|default(true) else ' is-off' }}" id="validatorChip" title="Blocks photos that aren't crop leaves">
+                            <span class="validator-chip-switch">
+                                <input type="checkbox" id="validatorToggle" {% if validator_enabled|default(true) %}checked{% endif %}>
+                                <span class="validator-chip-slider"></span>
+                            </span>
+                            <span class="validator-chip-text">
+                                <span class="validator-chip-label">Leaf Check</span>
+                                <span class="validator-chip-status" id="toggleStatus">{{ 'ON' if validator_enabled|default(true) else 'OFF' }}</span>
+                            </span>
                         </label>
-                        <label class="toggle-switch">
-                            <input type="checkbox"
-                                   name="validator_enabled"
-                                   value="true"
-                                   id="validatorToggle"
-                                   {% if validator_enabled|default(true) %}checked{% endif %}>
-                            <span class="toggle-slider"></span>
-                        </label>
-                        <span class="toggle-status" id="toggleStatus">ON</span>
-                    </div>
+                        <input type="hidden" name="validator_enabled" id="validatorEnabledHidden" value="{{ 'true' if validator_enabled|default(true) else 'false' }}">
 
-                        <svg id="btnIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                        </svg>
-                        <span id="btnText">Analyse Image</span>
-                    </button>
+                        <button type="submit" class="analyse-btn" id="analyseBtn">
+                            <svg id="btnIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            </svg>
+                            <span id="btnText">Analyse Image</span>
+                        </button>
+                    </div>
                 </form>
             </div>
 
@@ -769,9 +765,16 @@
         btnText.textContent = 'Analysing…';
         btnIcon.style.animation = 'spin 1s linear infinite';
     });
-    // Leaf Validator Toggle - update ON/OFF label
-    document.getElementById('validatorToggle').addEventListener('change', function() {
-        document.getElementById('toggleStatus').textContent = this.checked ? 'ON' : 'OFF';
+    // Leaf Validator Toggle - sync chip visuals + hidden form field
+    const validatorToggle       = document.getElementById('validatorToggle');
+    const validatorChip         = document.getElementById('validatorChip');
+    const toggleStatus          = document.getElementById('toggleStatus');
+    const validatorEnabledHidden = document.getElementById('validatorEnabledHidden');
+    validatorToggle.addEventListener('change', function() {
+        const isOn = this.checked;
+        toggleStatus.textContent = isOn ? 'ON' : 'OFF';
+        validatorChip.classList.toggle('is-off', !isOn);
+        validatorEnabledHidden.value = isOn ? 'true' : 'false';
     });
     // Auto-scroll to error banner if present
     window.addEventListener('load', function() {
